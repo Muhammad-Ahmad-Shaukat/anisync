@@ -20,7 +20,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('C:\Users\Dell\anisync\frontend\src\images\bg1.jpg');
+    background: url('./src/images/bg1.jpg');
     background-size: cover;
     filter: brightness(50%); /* Darkens the image */
     z-index: -1; /* Sends the background behind content */
