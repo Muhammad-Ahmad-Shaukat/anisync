@@ -12,7 +12,6 @@
   overflow: hidden;
 }
 
-/* Background image with overlay */
 .login-container::before {
     content: "";
     position: absolute;
@@ -20,17 +19,16 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('./src/images/bg1.jpg');
+    background: url('./src/images/bg1.webp');
     background-size: cover;
-    filter: brightness(50%); /* Darkens the image */
-    z-index: -1; /* Sends the background behind content */
+    filter: brightness(50%);
+    z-index: -1; 
 }
 
-/* Login box */
 .login-box {
     position: relative;
     z-index: 2;
-    background: rgba(0, 0, 0, 0.75); /* Semi-transparent black */
+    background: rgba(0, 0, 0, 0.75); 
     padding: 50px;
     border-radius: 5px;
     width: 350px;
