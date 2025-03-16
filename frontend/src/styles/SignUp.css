@@ -1,0 +1,98 @@
+/* Full-page background */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+   
+    overflow: hidden;
+}
+
+/* Background image with overlay */
+.signup-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('C:\Users\Dell\anisync\frontend\src\images\bg1.jpg');
+    background-size: cover;
+    filter: brightness(50%); /* Darkens the image */
+    z-index: -1; /* Sends the background behind content */
+}
+
+/* Signup box (same as Login) */
+.signup-box {
+    position: relative;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.75); /* Semi-transparent black */
+    padding: 50px;
+    border-radius: 5px;
+    width: 350px;
+    text-align: center;
+    color: #fff;
+}
+
+.signup-box h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Input fields */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group input {
+    width: 300px;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(39, 38, 38, 0.5); 
+    color: #fff;
+    font-size: 16px;
+}
+
+/* Signup button */
+#signup-btn {
+    width: 320px;
+    padding: 12px;
+    background: #B20710; /* Deep Red */
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+#signup-btn:hover {
+    background: #8B0000; /* Darker Red */
+}
+
+#signup-btn:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+/* Form footer */
+.signup-footer {
+    margin-top: 15px;
+}
+
+.signup-footer a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signup-footer a:hover {
+    text-decoration: underline;
+}
