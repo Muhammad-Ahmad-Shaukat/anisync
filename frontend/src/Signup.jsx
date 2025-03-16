@@ -16,7 +16,7 @@ const Signup = () => {
         body: JSON.stringify({ username, email, password }),
       });
   
-      const data = await response.json(); // Parse response
+      const data = await response.json();
   
       if (!response.ok) {
         throw new Error(data.message || "Signup failed");
@@ -25,8 +25,8 @@ const Signup = () => {
       console.log("Signup successful:", data);
       navigate("/login");
     } catch (error) {
-      console.error("❌ Signup Error:", error.message);
-      alert(error.message); // Show error alert to user
+      console.error("Signup Error:", error.message);
+      alert(error.message);
     }
   };
   
