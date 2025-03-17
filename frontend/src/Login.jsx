@@ -26,7 +26,7 @@ const Login = () => {
       }
 
       alert("Login successful");
-      navigate("/Login"); // Redirect to dashboard
+      navigate("/Login"); 
     } catch (error) {
       console.error("Login Error:", error.message);
       alert(error.message);
