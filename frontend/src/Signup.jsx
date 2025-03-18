@@ -8,6 +8,34 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const sendotp = async (e) => {
+    e.preventDefault();
+    if (!email){
+      alert("Please enter email address");
+      return;
+    }
+    try{
+      const response = await fetch("http://localhost:5000/api/auth/sendotp",{
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if(!response.ok){
+        alert(data.message || "Email verification failed");
+        return;
+      }
+      else{
+        alert("OTP sent to email");
+      }
+    }catch(error){
+      console.error("Email Verification Error:", error.message);
+      alert(error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -16,13 +44,10 @@ const Signup = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.message || "Signup failed");
       }
-
       console.log("Signup successful:", data);
       navigate("/login");
     } catch (error) {
@@ -53,6 +78,7 @@ const Signup = () => {
       console.error("Email Verification Error:", error.message);
       alert(error.message);
     }
+
   }
 
   return (
@@ -74,9 +100,9 @@ const Signup = () => {
           <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter Password"required />
           </div>
 
-          <button id="otp-button" onClick={verifyEmail}>Verify Email</button>
+          <button id="otp-button" onClick={sendotp}>Verify Email</button>
           <input type="text" placeholder="Enter OTP" id="otp-text"/>
-          <button id="otp-verify">Verify OTP</button>
+          <button id="otp-verify" onClick={verifyEmail}>Verify OTP</button>
 
           <button id="signup-btn" type="submit">Sign Up</button>
 
