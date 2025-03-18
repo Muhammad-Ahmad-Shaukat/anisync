@@ -7,6 +7,7 @@ const Signup = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [otp, setOtp] = useState('');
 
   const sendotp = async (e) => {
     e.preventDefault();
@@ -56,26 +57,26 @@ const Signup = () => {
     }
   };
 
-  const verifyEmail = async (e) => {
+  const verifyotp = async (e) => {
     e.preventDefault();
-    if (email === null || email === "") {
-      alert("Please enter email address");
+    if (email === null || email === "" || otp === null || otp === "") {
+      alert("Please enter email and otp");
       return;
     }
     try{
-      const response = await fetch ("http://localhost:5000/api/auth/verify-email", {
+      const response = await fetch ("http://localhost:5000/api/auth/verifyotp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, otp }),
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Email verification failed");
+        throw new Error(data.message || "OTP verification failed");
       }else{
         alert("OTP SENT TO EMAIL");
       }
     }catch(error){
-      console.error("Email Verification Error:", error.message);
+      console.error("Otp Verification Error:", error.message);
       alert(error.message);
     }
 
@@ -101,8 +102,8 @@ const Signup = () => {
           </div>
 
           <button id="otp-button" onClick={sendotp}>Verify Email</button>
-          <input type="text" placeholder="Enter OTP" id="otp-text"/>
-          <button id="otp-verify" onClick={verifyEmail}>Verify OTP</button>
+          <input type="text" placeholder="Enter OTP" id="otp-text" value={otp} onChange={(e) => setOtp(e.target.value)}/>
+          <button id="otp-verify" onClick={verifyotp}>Verify OTP</button>
 
           <button id="signup-btn" type="submit">Sign Up</button>
 

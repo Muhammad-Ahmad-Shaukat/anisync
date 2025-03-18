@@ -1,14 +1,14 @@
 import express from "express";
 import { signup } from "../Controllers/authController.js";
 import { login } from "../Controllers/logincontroller.js";
-import { verifyemail } from "../Controllers/verifyEmail.js";
+import { verifyotp } from "../Controllers/verifyOtp.js";
 import { sendotp } from "../Controllers/sentotp.js";
 
 const router = express.Router();
 
 router.post("/signup", signup);
 router.post("/login", login);
-router.post("/verify-email", verifyemail);
+router.post("/verifyotp", verifyotp);
 router.post("/sendotp", sendotp);
 
 
