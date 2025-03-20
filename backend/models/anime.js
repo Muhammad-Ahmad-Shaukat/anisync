@@ -14,3 +14,7 @@ const animeschema = new mongoose.Schema({
     source: { type: String, required: true },
     character: { type: String, required: true },  
 }, { timestamps: true });
+
+const anime = mongoose.model("Anime", animeschema);
+
+export default anime;
