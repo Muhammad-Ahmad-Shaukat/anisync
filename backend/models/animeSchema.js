@@ -12,7 +12,7 @@ const animeSchema = new mongoose.Schema({
     status: { type: String, required: true },
     season: { type: String, required: true },
     source: { type: String, required: true },
-    character: { type: String, required: true },  
+    character: { type: [String], required: true },  
 }, { timestamps: true });
 const Anime = mongoose.model("Anime", animeSchema);
 export default Anime;
