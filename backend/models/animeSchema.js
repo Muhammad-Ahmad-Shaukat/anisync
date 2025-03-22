@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-
-const animeschema = new mongoose.Schema({
+const animeSchema = new mongoose.Schema({
     animeid: { type: Number, required: true, unique: true },
     animename: { type: String, required : true, unique: true },
     genre: { type: String, required: true },
@@ -15,7 +14,5 @@ const animeschema = new mongoose.Schema({
     source: { type: String, required: true },
     character: { type: String, required: true },  
 }, { timestamps: true });
-
-const anime = mongoose.model("Anime", animeschema);
-
-export default anime;
+const Anime = mongoose.model("Anime", animeSchema);
+export default Anime;
