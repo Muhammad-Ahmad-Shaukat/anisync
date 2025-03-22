@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const animeschema = new mongoose.Schema({
+    animeid: { type: Number, required: true, unique: true },
     animename: { type: String, required : true, unique: true },
     genre: { type: String, required: true },
     rating: { type: Number, required: true },
