@@ -2,9 +2,9 @@ import Anime from "../models/animeSchema.js";
 
 export const findAnime = async (req, res) => {
     try {
-        const { name, id } = req.body;
+        const { name, animeid } = req.body;
 
-        if (!name && !id) {
+        if (!name && !animeid) {
             return res.status(400).json({ message: "Name or ID required" });
         }
 
@@ -12,8 +12,8 @@ export const findAnime = async (req, res) => {
 
         if (name) {
             existingAnime = await Anime.findOne({ name: new RegExp("^" + name + "$", "i") });
-        } else if (id) {
-            existingAnime = await Anime.findOne({ id });
+        } else if (animeid) {
+            existingAnime = await Anime.findOne({ animeid });
         }
 
         if (existingAnime) {
