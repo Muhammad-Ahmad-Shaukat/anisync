@@ -2,7 +2,15 @@ import React from "react";
 
 const Header = () =>{
     return(
-        <h1>heading</h1>
+        <>
+        <div>
+            <p>=</p>
+        </div>
+        <div>
+            <img src="" alt="" />
+        </div>
+        
+        </>
     );
 };
 
