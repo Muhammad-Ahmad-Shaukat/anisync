@@ -14,4 +14,5 @@ router.post("/sendotp", sendotp);
 router.post("/findanime", findAnime)
 
 
+
 export default router;
