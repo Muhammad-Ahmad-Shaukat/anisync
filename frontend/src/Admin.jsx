@@ -6,4 +6,4 @@ const Admin = () =>{
             
         </div>
     );
-}; 
+};
