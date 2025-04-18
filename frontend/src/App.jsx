@@ -4,11 +4,16 @@ import Login from './LoginPage/Login';
 import Navbar from './NavBar/Navbar';
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import Anime from './Anime';
+import Header from './Header';
+
 function App() {
   return (
     <>
-    <Header />
-    <BrowserRouter>
+    
+    
+    <Navbar/>
+    {/* <Header /> */}
+     <BrowserRouter>
       <Navbar/>
       <Routes>
         <Route path="/signup" element={<Signup />} />
