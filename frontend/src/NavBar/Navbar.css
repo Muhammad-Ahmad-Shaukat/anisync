@@ -1,0 +1,80 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1e1e2f;
+    padding: 10px 20px;
+    color: white;
+    flex-wrap: wrap;
+  }
+  
+  .left-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #2e2e40;
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 250px;
+  }
+  
+  .search-bar input {
+    border: none;
+    background: transparent;
+    color: white;
+    padding: 5px;
+    outline: none;
+    width: 270px;
+  }
+  .icon:hover{
+    cursor:pointer;
+  }
+  
+  .center-links {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex: 1;
+    margin-right: 100px;
+  }
+  
+  .right-links {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #ccc;
+    transition: color 0.3s;
+  }
+  
+  .nav-links a:hover {
+    color: white;
+  }
+  
+  /* Responsive for smaller screens */
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .center-links, .right-links {
+      margin-top: 10px;
+      justify-content: flex-start;
+    }
+  }
+  
