@@ -12,6 +12,7 @@ router.post("/login", login);
 router.post("/verifyotp", verifyotp);
 router.post("/sendotp", sendotp);
 router.post("/findanime", findAnime)
+router.get()
 
 
 
