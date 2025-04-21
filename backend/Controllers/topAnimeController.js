@@ -12,12 +12,10 @@ export const getTopAnime = async (req, res) => {
         romaji: anime.title,
       },
       description: anime.synopsis,
-      bannerImage: anime.trailer?.images?.webp?.large_image_url || anime.images?.webp?.large_image_url || anime.images?.jpg?.large_image_url,
+      bannerImage: anime.trailer?.images?.maximum_image_url || anime.images?.jpg?.large_image_url,
       coverImage: {
-        large: anime.images?.webp?.large_image_url || anime.images?.jpg?.large_image_url,
+        large: anime.images?.jpg?.large_image_url,
       },
-      
-
     }));
 
     res.json(animeList);
