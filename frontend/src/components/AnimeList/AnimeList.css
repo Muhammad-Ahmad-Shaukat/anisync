@@ -12,12 +12,12 @@
   .anime-slide {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* cover to fill, contain if needed */
+    /* cover to fill, contain if needed */
     position: absolute;
     top: 0;
     left: 0;
-    filter: brightness(50%);
-    transition: opacity 0.5s ease-in-out;
+    filter: brightness(30%);
+    transition: opacity 2s ease-in-out;
   }
   
   /* Ensure no body scroll (optional in global CSS) */
@@ -26,13 +26,17 @@
     overflow-x: hidden;
     background-color:hsla(240, 22%, 15%, 0.98); ;
   }
-  
   .anime-list-content {
-    position: relative;
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
     z-index: 1;
-    padding: 2rem;
     max-width: 800px;
+   /* optional: dark background for readability */
+    padding: 1.5rem;
+    border-radius: 12px;
   }
+  
   
   .anime-list-content h1 {
     font-size: 3rem;
