@@ -14,7 +14,7 @@ export const videoStream = async (req, res) => {
   }
 
   const bucketParams = {
-    Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: process.env.S3_BUCKET_NAME,
     Key: name,
   };
 
