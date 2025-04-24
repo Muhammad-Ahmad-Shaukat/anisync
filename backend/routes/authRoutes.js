@@ -5,6 +5,7 @@ import { verifyotp } from "../Controllers/verifyOtp.js";
 import { sendotp } from "../Controllers/sentotp.js";
 import { findAnime } from "../Controllers/animecontroller.js";
 import { getTopAnime } from "../Controllers/topAnimeController.js";
+import { videoStream } from "../Controllers/videoStream.js";
 const router = express.Router();
 
 router.post("/signup", signup);
@@ -13,7 +14,8 @@ router.post("/verifyotp", verifyotp);
 router.post("/sendotp", sendotp);
 router.post("/findanime", findAnime);
 router.get("/top-anime", getTopAnime);
-// router.get()
+router.get("/video-stream", videoStream);
+
 
 
 
