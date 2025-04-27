@@ -6,6 +6,7 @@ import { sendotp } from "../Controllers/sentotp.js";
 import { findAnime } from "../Controllers/animecontroller.js";
 import { getTopAnime } from "../Controllers/topAnimeController.js";
 import { videoStream } from "../Controllers/videoStream.js";
+import { addFriend } from "../Controllers/addfriend.js";
 const router = express.Router();
 
 router.post("/signup", signup);
@@ -15,8 +16,6 @@ router.post("/sendotp", sendotp);
 router.post("/findanime", findAnime);
 router.get("/top-anime", getTopAnime);
 router.get("/video-stream", videoStream);
-
-
-
+router.post("/add-friend", addFriend);
 
 export default router;
