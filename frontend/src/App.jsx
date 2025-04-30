@@ -4,14 +4,12 @@ import Login from './Pages/LoginPage/Login';
 import Navbar from './components/NavBar/Navbar';
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import AnimeList from './components/AnimeList/AnimeList';
-import VideoPlayer from './Video';'./Video'
-
+import ChatSidebar from './components/ChatSidebar';
 function App() {
   return (
     
     <>
      <BrowserRouter>
-     < VideoPlayer/>
       <Navbar/>
       <AnimeList/>
       <Routes>

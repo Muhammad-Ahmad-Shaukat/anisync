@@ -24,7 +24,7 @@
   body {
     margin: 0;
     overflow-x: hidden;
-    background-color:hsla(240, 22%, 15%, 0.98); ;
+    background-color:hsla(240, 22%, 15%, 0.98); 
   }
   .anime-list-content {
     position: absolute;
