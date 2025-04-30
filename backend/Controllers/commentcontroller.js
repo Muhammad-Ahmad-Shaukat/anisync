@@ -1,85 +1,69 @@
 import Comment from "../models/comment.js";
 import User from "../models/User.js";
+import Episode from "../models/Episode.js";
 
-export const allcomments = async (req, res) => {
-    const { episodeId } = req.body;
-
-    if (!episodeId) {
-        return res.status(400).json({ message: "Error Occurred: All fields are required" });
+const createcomment = async (req, res) => {
+    const { userid, comment, episodeid } = req.body;
+    if (!userid || !comment || !episodeid) {
+        return res.status(400).json({ message: "All fields are required" });
     }
-
     try {
-        const comments = await Comment.find({ episodeId, parentCommentId: null })
-            .populate("userId", "username")
-            .sort({ createdAt: -1 });
-
-        const commentIds = comments.map(comment => comment._id);
-
-        const replies = await Comment.find({ parentCommentId: { $in: commentIds } })
-            .populate("userId", "username")
-            .sort({ createdAt: 1 });
-
-        const commentMap = {};
-        comments.forEach(comment => {
-            commentMap[comment._id] = { ...comment._doc, replies: [] };
+        const userExists = await User.findById(userid);
+        if (!userExists) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        const episodeExists = await Episode.findById(episodeid);
+        if (!episodeExists) {
+            return res.status(404).json({ message: "Episode not found" });
+        }
+        const newComment = new Comment({
+            userId: userid,
+            episodeId: episodeid,
+            comment: comment,
         });
-
-        replies.forEach(reply => {
-            if (commentMap[reply.parentCommentId]) {
-                commentMap[reply.parentCommentId].replies.push(reply);
-            }
-        });
-
-        return res.status(200).json({ success: true, comments: Object.values(commentMap) });
+        const savedComment = await newComment.save();
+        const populatedComment = await Comment.findById(savedComment._id)
+            .populate("userId", "username profilePicSrc");
+        return res.status(201).json(populatedComment);
     } catch (error) {
-        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+        console.error("Error creating comment:", error);
+        return res.status(500).json({ message: "Server error" });
     }
 };
 
-export const addcomment = async (req, res) => {
-    const { episodeId, username, comment } = req.body;
-    if (!episodeId || !username || !comment){
-        return res.status(400).json({message: "Error All fields Required"});
+const createreplycomment = async (req, res) => {
+    const { userid, comment, episodeid, parentCommentId } = req.body;
+    if (!userid || !comment || !episodeid || !parentCommentId) {
+        return res.status(400).json({ message: "All fields are required" });
     }
-    try{
-        const checkuser = await User.findOne({username});
-        if (!checkuser){
-            return res.status(400).json({message: "You have to login to comment"})
+    try {
+        const userExists = await User.findById(userid);
+        if (!userExists) {
+            return res.status(404).json({ message: "User not found" });
         }
-        newcomment = new Comment({
-            userId: checkuser._id,
-            episodeId,
-            comment,
-            parentCommentId: null
-        });
-        await newcomment.save;
-        res.status(200).json({message: "comment added"});
-
-    }catch(error){
-        return res.status(500).json({message: "Internal Server Error", error: error.message});
-    }
-};
-
-export const addreply = async (req, res) =>{
-    const { episodeId, username, comment, parentCommentId } = req.body;
-    if (!episodeId || !username || !comment || !parentCommentId){
-        return res.status(400).json({message: "Error All fields Required"});
-    }
-    try{
-        const checkuser = await User.findOne({username});
-        if (!checkuser){
-            return res.status(400).json({message: "You have to login to comment"})
+        const episodeExists = await Episode.findById(episodeid);
+        if (!episodeExists) {
+            return res.status(404).json({ message: "Episode not found" });
         }
-        newcomment = new Comment({
-            userId: checkuser._id,
-            episodeId,
-            comment,
-            parentCommentId: parentCommentId
+        const parentCommentExists = await Comment.findById(parentCommentId);
+        if (!parentCommentExists) {
+            return res.status(404).json({ message: "Parent comment not found" });
+        }
+        const newReplyComment = new Comment({
+            userId: userid,
+            episodeId: episodeid,
+            comment: comment,
+            parentCommentId: parentCommentId,
+            depth: parentCommentExists.depth + 1,
         });
-        await newcomment.save;
-        res.status(201).json({message: "comment added"});
-
-    }catch(error){
-        return res.status(500).json({message: "Internal Server Error", error: error.message});
+        const savedReplyComment = await newReplyComment.save();
+        const populatedReplyComment = await Comment.findById(savedReplyComment._id)
+            .populate("userId", "username profilePicSrc");
+        return res.status(201).json(populatedReplyComment);
+    }catch (error) {
+        console.error("Error creating reply comment:", error);
+        return res.status(500).json({ message: "Server error" });
     }
-};
+}
+
+export default createcomment;
