@@ -28,11 +28,10 @@ function VideoStream({ apiUrl }) {
     };
 
     fetchVideoUrl();
-  }, [apiUrl]); // Re-run effect if apiUrl prop changes
+  }, [apiUrl]);
 
   return (
     <div className="video-stream-container">
-      <h2>Video Stream</h2>
       {error && <div className="error-message">{error}</div>}
       {videoUrl && (
         <div className="video-player">
