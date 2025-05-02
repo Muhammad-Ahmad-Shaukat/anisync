@@ -7,9 +7,11 @@ import { findAnime } from "../Controllers/animecontroller.js";
 import { getTopAnime } from "../Controllers/topAnimeController.js";
 import { videoStream } from "../Controllers/videoStream.js";
 import { addFriend } from "../Controllers/addfriend.js";
+import { getcomment } from "../Controllers/getcommentcontroller.js";
 const router = express.Router();
 
 router.post("/signup", signup);
+router.get("/getcomment/:episodeid", getcomment);
 router.post("/login", login);
 router.post("/verifyotp", verifyotp);
 router.post("/sendotp", sendotp);

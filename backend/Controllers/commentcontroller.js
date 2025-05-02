@@ -31,39 +31,4 @@ const createcomment = async (req, res) => {
     }
 };
 
-const createreplycomment = async (req, res) => {
-    const { userid, comment, episodeid, parentCommentId } = req.body;
-    if (!userid || !comment || !episodeid || !parentCommentId) {
-        return res.status(400).json({ message: "All fields are required" });
-    }
-    try {
-        const userExists = await User.findById(userid);
-        if (!userExists) {
-            return res.status(404).json({ message: "User not found" });
-        }
-        const episodeExists = await Episode.findById(episodeid);
-        if (!episodeExists) {
-            return res.status(404).json({ message: "Episode not found" });
-        }
-        const parentCommentExists = await Comment.findById(parentCommentId);
-        if (!parentCommentExists) {
-            return res.status(404).json({ message: "Parent comment not found" });
-        }
-        const newReplyComment = new Comment({
-            userId: userid,
-            episodeId: episodeid,
-            comment: comment,
-            parentCommentId: parentCommentId,
-            depth: parentCommentExists.depth + 1,
-        });
-        const savedReplyComment = await newReplyComment.save();
-        const populatedReplyComment = await Comment.findById(savedReplyComment._id)
-            .populate("userId", "username profilePicSrc");
-        return res.status(201).json(populatedReplyComment);
-    }catch (error) {
-        console.error("Error creating reply comment:", error);
-        return res.status(500).json({ message: "Server error" });
-    }
-}
-
 export default createcomment;
