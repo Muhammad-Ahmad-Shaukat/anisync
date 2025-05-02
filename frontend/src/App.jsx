@@ -5,20 +5,22 @@ import Navbar from './components/NavBar/Navbar';
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import AnimeList from './components/AnimeList/AnimeList';
 import VideoPlayer from './components/VideoSComponent/Video';
-import CommentsSection from './components/comments/CommentsSection';
+
+import { dummyComments } from './components/comments/dummy';
+import CommentSection from './components/comments/CommentsSection';
 function App() {
   return (
     
     <>
      <BrowserRouter>
-     <VideoPlayer/>
-      <CommentsSection videoName="abc.mp4" />
-      {/* <Navbar/>
-      <AnimeList/>
+     
+      <Navbar/>
+      <VideoPlayer/>
+      <CommentSection comments={dummyComments}/>
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-      </Routes> */}
+      </Routes>
     </BrowserRouter>
     </>
   );

@@ -1,75 +1,51 @@
-import React, { useState } from "react";
+import React from "react";
 import "./CommentsSection.css";
 
-const CommentsSection = ({ videoName }) => {
-  const [comments, setComments] = useState([
-    { userName: "John Doe", text: "Great video!", timestamp: "2025-05-01 10:00", profilePic: "" },
-    { userName: "Jane Smith", text: "Very informative, thanks for sharing.", timestamp: "2025-05-01 09:45", profilePic: "" },
-  ]);
-  const [newComment, setNewComment] = useState("");
-  const [error, setError] = useState(null);
-
-  // Handle new comment submission
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-
-    if (newComment.trim()) {
-      const newCommentData = {
-        userName: "Guest", // Hardcoded as "Guest" for now
-        text: newComment,
-        timestamp: new Date().toLocaleString(),
-        profilePic: "", // No profile pic for guest
-      };
-      setComments([newCommentData, ...comments]);
-      setNewComment(""); // Clear the input field
-    } else {
-      setError("Comment cannot be empty.");
-    }
-  };
-
+const Comment = ({ comment }) => {
   return (
-    <div className="comments-section">
-      <h3>Comments on {videoName}</h3>
-
-      {error && <p className="error-message">{error}</p>}
-
-      <div className="comment-list">
-        {comments.length > 0 ? (
-          comments.map((comment, index) => (
-            <div key={index} className="comment">
-              <div className="user-info">
-                <div className="user-profile-pic">
-                  {comment.profilePic ? (
-                    <img src={comment.profilePic} alt="User Profile" />
-                  ) : (
-                    <span className="fallback-avatar">U</span>
-                  )}
-                </div>
-                <div className="user-name">
-                  <strong>{comment.userName}</strong>
-                  <p className="timestamp">{comment.timestamp}</p>
-                </div>
-              </div>
-              <p className="comment-text">{comment.text}</p>
-            </div>
-          ))
-        ) : (
-          <p>No comments yet. Be the first to comment!</p>
-        )}
+    <div className="comment">
+      <div className="comment-header-line">
+        <span className="comment-username">{comment.userId?.username || "Unknown User"}</span>
+        <span className="comment-time">{new Date(comment.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
       </div>
 
-      <form onSubmit={handleCommentSubmit} className="comment-form">
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Write a comment..."
-          rows="3"
-          className="comment-input"
-        ></textarea>
-        <button type="submit" className="submit-comment-button">Post Comment</button>
-      </form>
+      <div className="comment-body">
+        <p dangerouslySetInnerHTML={{ __html: comment.comment }} />
+      </div>
+
+      <div className="comment-footer">
+        <button>↩️ Reply</button>
+        <button>👍</button>
+        <button>👎</button>
+        <button>⋯ More</button>
+      </div>
     </div>
   );
 };
 
-export default CommentsSection;
+const CommentSection = ({ comments }) => {
+  return (
+    <div className="comment-section">
+      <div className="comment-top-bar">
+        <h2>📺 Episode 1127</h2>
+        <h3>💬 2,574 Comments</h3>
+      </div>
+
+      <div className="comment-box">
+        <img className="avatar" src="/default-avatar.png" alt="avatar" />
+        <div className="input-block">
+          <p className="login-warning">You must be <span className="login-link">login</span> to post a comment</p>
+          <textarea placeholder="Leave a comment" disabled></textarea>
+        </div>
+      </div>
+
+      <div className="comments-list">
+        {comments.map((c) => (
+          <Comment key={c._id} comment={c} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default CommentSection;
