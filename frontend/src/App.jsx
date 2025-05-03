@@ -14,7 +14,7 @@ function App() {
      <BrowserRouter>
      
       <Navbar/>
-
+      <AnimeList/>
       <VideoPlayer/>
       <CommentSection comments={dummyComments}/>
       <Routes>
