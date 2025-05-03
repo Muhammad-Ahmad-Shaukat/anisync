@@ -6,6 +6,8 @@ import { Server as SocketIOServer } from "socket.io";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import connectS3 from "./config/aws_s3.js";
+import { syncAnime } from "./Scripts/syncAnime.js";
+
 
 dotenv.config();
 connectDB();
@@ -43,3 +45,12 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+(async () => {
+  try {
+    await syncAnime(); // Initial
+    setInterval(syncAnime, 12 * 60 * 60 * 1000); // Every 12 hours
+  } catch (err) {
+    console.error("Sync failed:", err);
+  }
+})();
