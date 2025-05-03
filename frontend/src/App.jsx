@@ -5,7 +5,6 @@ import Navbar from './components/NavBar/Navbar';
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import AnimeList from './components/AnimeList/AnimeList';
 import VideoPlayer from './components/VideoSComponent/Video';
-
 import CommentSection from './components/comments/CommentsSection';
 import HomePage from './Pages/Homepage/HomePage';
 function App() {

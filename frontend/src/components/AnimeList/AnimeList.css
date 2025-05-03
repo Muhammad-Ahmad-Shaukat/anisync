@@ -1,3 +1,9 @@
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background-color: hsla(240, 22%, 15%, 0.98);
+}
+
 .anime-list-container {
   position: relative;
   width: 100vw;
@@ -16,12 +22,7 @@
   filter: brightness(30%);
   transition: opacity 2s ease-in-out;
   object-fit: cover;
-}
-
-body {
-  margin: 0;
-  overflow-x: hidden;
-  background-color: hsla(240, 22%, 15%, 0.98);
+  object-position: center;
 }
 
 .anime-list-content {
@@ -32,18 +33,27 @@ body {
   max-width: 800px;
   padding: 1.5rem;
   border-radius: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 
 .anime-list-content h1 {
-  font-size: 3rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  font-size: 2.2rem; /* adjusted from 3rem */
+  font-weight: 700;
+  margin-bottom: 0.8rem;
 }
 
 .anime-list-content p {
-  max-height: 150px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  font-size: 1rem;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .anime-list-content button {
@@ -54,6 +64,7 @@ body {
   border-radius: 5px;
   color: white;
   cursor: pointer;
+  font-size: 1rem;
 }
 
 .dot-container {
@@ -79,6 +90,7 @@ body {
   background-color: white;
 }
 
+/* Skeleton mode enhancements */
 .skeleton-mode .anime-list-content {
   background-color: transparent;
 }
@@ -86,4 +98,45 @@ body {
 .skeleton-mode .dot-container span {
   margin: 0 6px;
   display: inline-block;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .anime-list-content {
+    padding: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+  }
+
+  .anime-list-content h1 {
+    font-size: 1.4rem;
+  }
+
+  .anime-list-content p {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    margin-top: 0.3rem;
+  }
+
+  .anime-list-content button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .anime-list-content h1 {
+    font-size: 1.2rem;
+  }
+
+  .anime-list-content p {
+    font-size: 0.8rem;
+  }
+
+  .dot {
+    height: 8px;
+    width: 8px;
+    margin: 0 4px;
+  }
 }

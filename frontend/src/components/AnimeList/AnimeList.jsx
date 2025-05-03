@@ -12,7 +12,7 @@ const AnimeList = () => {
     const fetchAnime = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/auth/findanime?id=trending&limit=5`  
+          `http://localhost:5000/api/auth/findanime?id=new_releases&limit=5`  
         );
         const data = await response.json();
 
