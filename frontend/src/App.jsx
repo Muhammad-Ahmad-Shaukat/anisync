@@ -5,7 +5,6 @@ import Navbar from './components/NavBar/Navbar';
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import AnimeList from './components/AnimeList/AnimeList';
 import VideoPlayer from './components/VideoSComponent/Video';
-
 import { dummyComments } from './components/comments/dummy';
 import CommentSection from './components/comments/CommentsSection';
 function App() {
@@ -15,6 +14,7 @@ function App() {
      <BrowserRouter>
      
       <Navbar/>
+      <AnimeList/>
       <VideoPlayer/>
       <CommentSection comments={dummyComments}/>
       <Routes>
