@@ -1,0 +1,24 @@
+.anime-card {
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    padding: 10px;
+    background: #222;
+    color: white;
+  }
+  .anime-rank {
+    font-size: 18px;
+    font-weight: bold;
+    color: gold;
+  }
+  .anime-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  .anime-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  
