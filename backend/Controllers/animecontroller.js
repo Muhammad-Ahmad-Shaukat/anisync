@@ -2,38 +2,34 @@ import Anime from "../models/animeSchema.js";
 
 export const findAnime = async (req, res) => {
   try {
-    const { name, animeid } = req.body;
+    const { id, limit } = req.query;
 
-    if (!name && !animeid) {
-      return res.status(400).json({ message: "Name or animeid is required" });
+    if (!id) {
+      return res.status(400).json({ message: "Search ID is required (anime name, genre, or category)." });
     }
 
+    const query = id.toLowerCase();
+    const resultLimit = parseInt(limit) > 0 ? parseInt(limit) : 10; 
     let result = [];
 
-    if (animeid) {
-      const anime = await Anime.findOne({ animeid });
-      if (anime) result.push(anime);
-    }
-
-    if (name) {
-      const query = name.toLowerCase();
-      if (["trending", "top", "popular"].includes(query)) {
-        result = await Anime.find({}).sort({ popularity: -1 }).limit(5);
-      } else if (query === "new" || query === "newest" || query === "latest") {
-        result = await Anime.find({}).sort({ createdAt: -1 }).limit(5);
-      } else {
-        result = await Anime.find({
-          $or: [
-            { anime_name: { $regex: query, $options: "i" } },
-            { genre: { $regex: query, $options: "i" } }
-          ]
-        });
-      }
+    if (["trending", "top", "popular"].includes(query)) {
+      result = await Anime.find({}).sort({ popularity: -1 }).limit(resultLimit);
+    } else if (["new", "newest", "latest"].includes(query)) {
+      result = await Anime.find({}).sort({ createdAt: -1 }).limit(resultLimit);
+    } else {
+      result = await Anime.find({
+        $or: [
+          { anime_name: { $regex: query, $options: "i" } },
+          { genres: { $elemMatch: { $regex: query, $options: "i" } } },
+          { categories: { $elemMatch: { $regex: query, $options: "i" } } }
+        ]
+      }).limit(resultLimit);
     }
 
     if (!result.length) {
       return res.status(404).json({ message: "No matching anime found." });
     }
+
     return res.status(200).json({ result });
 
   } catch (error) {

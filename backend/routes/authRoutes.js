@@ -11,11 +11,11 @@ import { getcomment } from "../Controllers/getcommentcontroller.js";
 const router = express.Router();
 
 router.post("/signup", signup);
-router.get("/getcomment/:episodeid", getcomment);
+router.get("/getcomment", getcomment);
 router.post("/login", login);
 router.post("/verifyotp", verifyotp);
 router.post("/sendotp", sendotp);
-router.post("/findanime", findAnime);
+router.get("/findanime", findAnime);
 router.get("/top-anime", getTopAnime);
 router.get("/video-stream", videoStream);
 router.post("/add-friend", addFriend);

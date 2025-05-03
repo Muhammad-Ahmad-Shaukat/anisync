@@ -8,7 +8,7 @@ function HomePage(){
     return<>
     
         <AnimeList/>
-        <AnimeCard anime={anime}/>
+        {/* <AnimeCard anime={anime}/> */}
     
     </>
 }

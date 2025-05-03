@@ -48,8 +48,8 @@ server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 (async () => {
   try {
-    await syncAnime(); // Initial
-    setInterval(syncAnime, 12 * 60 * 60 * 1000); // Every 12 hours
+    await syncAnime(); 
+    setInterval(syncAnime, 12 * 60 * 60 * 1000);
   } catch (err) {
     console.error("Sync failed:", err);
   }

@@ -1,53 +1,59 @@
 import React, { useEffect, useState } from "react";
-import "./AnimeList.css"; // Make sure this file contains your styles
+import "./AnimeList.css";
 
 const AnimeList = () => {
   const [animeList, setAnimeList] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch top anime from your API
   useEffect(() => {
     const fetchAnime = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/auth/top-anime");
+        const response = await fetch(`http://localhost:5000/api/auth/findanime?id=trending&limit=5`);
         const data = await response.json();
-        setAnimeList(data);
+  
+        if (data.result) {
+          setAnimeList(data.result);
+        } else {
+          throw new Error(data.message || "No anime found.");
+        }
       } catch (error) {
         console.error("Error fetching anime:", error);
+      } finally {
+        setLoading(false);
       }
     };
-
+  
     fetchAnime();
   }, []);
-
-  // Auto slide every 5 seconds
+  
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % animeList.length);
+      setCurrentSlide((prev) => (animeList.length ? (prev + 1) % animeList.length : 0));
     }, 5000);
 
     return () => clearInterval(interval);
   }, [animeList]);
 
-  if (animeList.length === 0) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
+  if (!animeList.length) return <div>No anime found.</div>;
 
   const anime = animeList[currentSlide];
 
   return (
     <div className="anime-list-container">
       <img
-        src={anime.bannerImage || anime.coverImage.large}
-        alt={anime.title.romaji}
+        src={anime.image}
+        alt={anime.anime_name}
         className="anime-slide fade-in"
       />
 
       <div className="anime-list-content">
-        <h1>{anime.title.english || anime.title.romaji}</h1>
-        <p>{anime.description}</p>
+        <h1>{anime.anime_name}</h1>
+        <p>{anime.description || "No description available."}</p>
         <button>View Details</button>
       </div>
 
-      {/* Dot navigation */}
       <div className="dot-container">
         {animeList.map((_, index) => (
           <span
