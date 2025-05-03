@@ -7,6 +7,7 @@ import AnimeList from './components/AnimeList/AnimeList';
 import VideoPlayer from './components/VideoSComponent/Video';
 import { dummyComments } from './components/comments/dummy';
 import CommentSection from './components/comments/CommentsSection';
+import HomePage from './Pages/Homepage/HomePage';
 function App() {
   return (
     
@@ -14,10 +15,8 @@ function App() {
      <BrowserRouter>
      
       <Navbar/>
-      <AnimeList/>
-      <VideoPlayer/>
-      <CommentSection comments={dummyComments}/>
       <Routes>
+        <Route path='/' element= {<HomePage/>}/>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
       </Routes>
