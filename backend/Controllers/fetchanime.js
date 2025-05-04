@@ -9,20 +9,31 @@ export const fetchAnime = async (req, res) => {
 
     switch (type) {
       case "top":
-        sort = { rating: -1 };
-        break;
-
-      case "top_airing":
-        query.status = "Currently Airing";
+        query.categories = "top";
         sort = { rating: -1 };
         break;
 
       case "trending":
+        query.categories = "trending";
         sort = { popularity: -1 };
         break;
 
+      case "new":
+        query.categories = "new";
+        sort = { rating: -1 };
+        break;
+
+      case "airing":
+      case "Currently Airing":
+        query.categories = "airing";
+        sort = { rating: -1 };
+        break;
+
       case "genre":
-        if (genre) query.genres = genre;
+        if (!genre) {
+          return res.status(400).json({ error: "Genre must be provided when type is 'genre'" });
+        }
+        query.genres = genre;
         break;
 
       default:
@@ -34,22 +45,22 @@ export const fetchAnime = async (req, res) => {
     const response = animeList.map(anime => ({
       id: anime.animeid,
       title: {
-        english: anime.anime_name,
-        romaji: anime.anime_name,
+        english: anime.anime_name || "Unknown Title",
+        romaji: anime.anime_name || "Unknown Title",
       },
-      description: anime.description,
-      bannerImage: anime.image,
+      description: anime.description || "",
+      bannerImage: anime.trailer || anime.image || "fallback.jpg",
       coverImage: {
-        large: anime.image,
+        large: anime.image || "fallback.jpg",
       },
-      genres: anime.genres,
-      rating: anime.rating,
-      episodes: anime.episodes,
-      popularity: anime.popularity,
-      trailer: anime.trailer,
-      status: anime.status,
-      season: anime.season,
-      source: anime.source,
+      genres: anime.genres || [],
+      rating: anime.rating || 0,
+      episodes: anime.episodes || 0,
+      popularity: anime.popularity || 0,
+      trailer: anime.trailer || "",
+      status: anime.status || "Unknown",
+      season: anime.season || "Unknown",
+      source: anime.source || "Unknown",
     }));
 
     res.json(response);

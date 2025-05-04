@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import "./AnimeSlider.css";  // Your updated CSS file
+import "./AnimeSlider.css";
 
 const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
   const [animeList, setAnimeList] = useState([]);
@@ -11,6 +11,7 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
+  // Fetch Anime
   useEffect(() => {
     const fetchAnime = async () => {
       try {
@@ -22,8 +23,8 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
         const res = await fetch(url);
         const data = await res.json();
 
-        const uniqueAnime = data.filter((anime, index, self) =>
-          index === self.findIndex((a) => a.id === anime.id)
+        const uniqueAnime = data.filter(
+          (anime, index, self) => index === self.findIndex((a) => a.id === anime.id)
         );
 
         setAnimeList(uniqueAnime);
@@ -37,7 +38,7 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
     fetchAnime();
   }, [type, limit, genre]);
 
-
+  // Scroll Button Enable/Disable Logic
   useEffect(() => {
     const checkScroll = () => {
       const el = scrollRef.current;
@@ -47,25 +48,30 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
     };
 
     checkScroll();
-    scrollRef.current?.addEventListener("scroll", checkScroll);
+    const scrollElement = scrollRef.current;
+
+    scrollElement?.addEventListener("scroll", checkScroll);
     window.addEventListener("resize", checkScroll);
+
     return () => {
-      scrollRef.current?.removeEventListener("scroll", checkScroll);
+      scrollElement?.removeEventListener("scroll", checkScroll);
       window.removeEventListener("resize", checkScroll);
     };
   }, [animeList]);
 
+  // Scroll Function
   const scroll = (dir) => {
-    if (scrollRef.current) {
-      const scrollAmount = scrollRef.current.clientWidth / 1.2;
-      scrollRef.current.scrollBy({
-        left: dir === "right" ? scrollAmount : -scrollAmount,
-        behavior: "smooth",
-      });
-    }
+    const el = scrollRef.current;
+    if (!el) return;
+    const scrollAmount = el.clientWidth / 1.2;
+    el.scrollBy({
+      left: dir === "right" ? scrollAmount : -scrollAmount,
+      behavior: "smooth",
+    });
   };
 
-  if (loading)
+  // Loading Skeleton
+  if (loading) {
     return (
       <SkeletonTheme baseColor="#202020" highlightColor="#444">
         <div className="slider-wrapper skeleton-mode">
@@ -78,11 +84,12 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
         </div>
       </SkeletonTheme>
     );
+  }
 
+  // Empty List Fallback
   if (!animeList.length) return <div>No anime found.</div>;
 
-  const anime = animeList[currentSlide];
-
+  // Rendered Content
   return (
     <div className="slider-wrapper">
       <h2 className="slider-heading">
@@ -95,26 +102,24 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
             <div
               className={`anime-card ${index === currentSlide ? "fade-in" : ""}`}
               key={anime.id}
-            > <div className="anime-info">
-            <div className="anime-title">
-              {anime.title.english || anime.title.romaji}
-            </div>
-            <div className="anime-index">
-              {String(index + 1).padStart(2, "0")}
-            </div>
-          </div>
+            >
+              <div className="anime-info">
+                <div className="anime-title">
+                  {anime.title.english || anime.title.romaji}
+                </div>
+                <div className="anime-index">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+              </div>
               <img
                 src={anime.coverImage.large}
                 alt={anime.title.english || anime.title.romaji}
                 className="anime-img"
               />
-              
             </div>
           ))}
         </div>
       </div>
-
-     
     </div>
   );
 };
