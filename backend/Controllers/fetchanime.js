@@ -1,79 +1,60 @@
-import fetch from 'node-fetch';
-
-const fetchWithRetry = async (url, retries = 3, delay = 1000) => {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Network response was not ok");
-      return await response.json();
-    } catch (err) {
-      console.error(`Fetch attempt ${i + 1} failed:`, err);
-      if (i === retries - 1) throw new Error("All fetch attempts failed");
-      await new Promise(resolve => setTimeout(resolve, delay));
-    }
-  }
-};
+import Anime from "../models/animeSchema.js";
 
 export const fetchAnime = async (req, res) => {
   const { type = "top", genre, limit = 5 } = req.query;
-  const baseUrl = "https://api.jikan.moe/v4/";
-  const params = new URLSearchParams();
-  let url = "";
 
   try {
+    let query = {};
+    let sort = {};
+
     switch (type) {
       case "top":
-        url = `${baseUrl}top/anime`;
-        params.append("limit", limit);
+        sort = { rating: -1 };
         break;
 
       case "top_airing":
-        url = `${baseUrl}anime`;
-        params.append("status", "airing");
-        params.append("order_by", "score");
-        params.append("sort", "desc");
-        params.append("limit", limit);
+        query.status = "Currently Airing";
+        sort = { rating: -1 };
         break;
 
       case "trending":
-        url = `${baseUrl}anime`;
-        params.append("order_by", "popularity");
-        params.append("sort", "desc");
-        params.append("limit", limit);
+        sort = { popularity: -1 };
         break;
 
       case "genre":
-        url = `${baseUrl}anime`;
-        if (genre) {
-          params.append("genres", genre);
-        }
-        params.append("limit", limit);
+        if (genre) query.genres = genre;
         break;
 
       default:
         return res.status(400).json({ error: "Invalid type parameter" });
     }
 
-    const fullUrl = `${url}?${params.toString()}`;
-    const data = await fetchWithRetry(fullUrl);
+    const animeList = await Anime.find(query).sort(sort).limit(Number(limit));
 
-    const animeList = data.data.map((anime) => ({
-      id: anime.mal_id,
+    const response = animeList.map(anime => ({
+      id: anime.animeid,
       title: {
-        english: anime.title_english,
-        romaji: anime.title,
+        english: anime.anime_name,
+        romaji: anime.anime_name,
       },
-      description: anime.synopsis,
-      bannerImage:
-        anime.trailer?.images?.maximum_image_url || anime.images?.jpg?.large_image_url,
+      description: anime.description,
+      bannerImage: anime.image,
       coverImage: {
-        large: anime.images?.jpg?.large_image_url,
+        large: anime.image,
       },
+      genres: anime.genres,
+      rating: anime.rating,
+      episodes: anime.episodes,
+      popularity: anime.popularity,
+      trailer: anime.trailer,
+      status: anime.status,
+      season: anime.season,
+      source: anime.source,
     }));
 
-    res.json(animeList);
+    res.json(response);
   } catch (error) {
-    console.error("Failed to fetch anime:", error.message);
-    res.status(500).json({ error: "Failed to fetch anime" });
+    console.error("Failed to fetch anime from DB:", error.message);
+    res.status(500).json({ error: "Failed to fetch anime from database" });
   }
 };

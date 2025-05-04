@@ -5,32 +5,33 @@ export const findAnime = async (req, res) => {
     const { id, limit } = req.query;
 
     if (!id) {
-      return res.status(400).json({ message: "Search ID is required (anime name, genre, or category)." });
+      return res.status(400).json({ message: "Query parameter 'id' is required." });
     }
 
     const query = id.toLowerCase();
-    const resultLimit = parseInt(limit) > 0 ? parseInt(limit) : 1; 
-    let result = [];
+    const resultLimit = parseInt(limit) > 0 ? parseInt(limit) : 10;
 
-    if (["trending", "top", "popular"].includes(query)) {
-      result = await Anime.find({}).sort({ popularity: -1 }).limit(resultLimit);
-    } else if (["new", "newest", "latest"].includes(query)) {
-      result = await Anime.find({}).sort({ createdAt: -1 }).limit(resultLimit);
-    } else {
-      result = await Anime.find({
-        $or: [
-          { anime_name: { $regex: query, $options: "i" } },
-          { genres: { $elemMatch: { $regex: query, $options: "i" } } },
-          { categories: { $elemMatch: { $regex: query, $options: "i" } } }
-        ]
-      }).limit(resultLimit);
-    }
+    let sortField = null;
+    if (query === "top" || query === "trending") sortField = { popularity: -1 };
+    else if (query === "new") sortField = { createdAt: -1 };
+    else return res.status(400).json({ message: "Only 'top', 'trending', and 'new' are supported." });
 
-    if (!result.length) {
-      return res.status(404).json({ message: "No matching anime found." });
-    }
+    const animeList = await Anime.find({ categories: query }).sort(sortField).limit(resultLimit);
 
-    return res.status(200).json({ result });
+    const formatted = animeList.map(anime => ({
+      id: anime.animeid,
+      title: {
+        english: anime.anime_name,
+        romaji: anime.anime_name,
+      },
+      description: anime.description,
+      bannerImage: anime.trailer || anime.image,
+      coverImage: {
+        large: anime.image,
+      },
+    }));
+
+    return res.status(200).json(formatted);
 
   } catch (error) {
     console.error("Anime Error:", error);
