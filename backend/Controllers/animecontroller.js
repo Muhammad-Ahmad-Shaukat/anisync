@@ -9,7 +9,7 @@ export const findAnime = async (req, res) => {
     }
 
     const query = id.toLowerCase();
-    const resultLimit = parseInt(limit) > 0 ? parseInt(limit) : 10; 
+    const resultLimit = parseInt(limit) > 0 ? parseInt(limit) : 1; 
     let result = [];
 
     if (["trending", "top", "popular"].includes(query)) {
