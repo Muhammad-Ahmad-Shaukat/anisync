@@ -1,14 +1,53 @@
-.edit-profile-container {
+/* Wrapper for background animation */
+.edit-profile-wrapper {
+    position: relative;
     min-height: 100vh;
-    background-color: #111827;
-    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: #0d0d1a;
+  }
+  
+  /* Animated background */
+  .animated-dots-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(#ffffff22 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: moveDots 6s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  @keyframes moveDots {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 20px 20px;
+    }
+  }
+  
+  /* Main container above background */
+  .edit-profile-container {
+    position: relative;
+    z-index: 1;
+    background: transparent; /* transparent, no background card look */
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
     font-family: 'Segoe UI', sans-serif;
   }
   
+  /* Header */
   .edit-header {
     display: flex;
     align-items: center;
@@ -24,8 +63,10 @@
   
   .icon {
     font-size: 1.5rem;
+    color: #00acee;
   }
   
+  /* Form container */
   .edit-form-box {
     background-color: #1f2937;
     padding: 30px;
@@ -36,8 +77,12 @@
     width: 100%;
     max-width: 500px;
     align-items: center;
+    /* Removed any border/shadow to look plain */
+    box-shadow: none;
+    border: none;
   }
   
+  /* Form */
   .edit-form {
     display: flex;
     flex-direction: column;
@@ -47,6 +92,7 @@
   
   .edit-form label {
     font-size: 1rem;
+    font-weight: bold;
     color: #d1d5db;
   }
   
@@ -57,6 +103,7 @@
     background-color: #f3f4f6;
     color: #111827;
     font-size: 1rem;
+    width: 100%;
   }
   
   .email-readonly {
@@ -68,20 +115,17 @@
     user-select: none;
     pointer-events: none;
     cursor: not-allowed;
-  }
-  
-  .email-readonly:hover {
-    cursor: not-allowed;
+    margin-top: 0.5rem;
   }
   
   .change-password-btn {
     cursor: pointer;
-    color: #f9fafb;
+    color: #00acee;
     font-weight: 500;
     display: flex;
     align-items: center;
     gap: 6px;
-    margin-top: 5px;
+    margin-top: 1rem;
   }
   
   .show-password-toggle {
@@ -89,10 +133,11 @@
     display: flex;
     align-items: center;
     gap: 5px;
+    margin-top: 0.5rem;
   }
   
   .save-btn {
-    margin-top: 10px;
+    margin-top: 2rem;
     padding: 12px;
     background-color: #f9a8d4;
     border: none;
@@ -100,15 +145,18 @@
     font-weight: bold;
     color: #111827;
     cursor: pointer;
+    width: 100%;
   }
   
   .save-btn:hover {
     background-color: #f472b6;
   }
   
+  /* Avatar Section */
   .profile-picture-box {
     display: flex;
     justify-content: center;
+    margin-top: 2rem;
   }
   
   .avatar-wrapper {
@@ -129,11 +177,11 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    background: #f3f4f6;
-    color: #111827;
+    background: #00acee;
+    color: white;
     border-radius: 50%;
     padding: 5px;
-    cursor: pointer;
     font-size: 0.9rem;
+    cursor: pointer;
   }
   
