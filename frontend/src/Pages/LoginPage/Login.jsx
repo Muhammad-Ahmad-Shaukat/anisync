@@ -22,20 +22,12 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
       }
-
-      // ✅ Save JWT token to localStorage
       localStorage.setItem("token", data.token);
-
-      // ✅ Save user info in Redux
       dispatch(loginSuccess({ username: data.user.username }));
-
-      alert("Login successful");
       navigate("/profile");
     } catch (error) {
       console.error("Login Error:", error.message);
