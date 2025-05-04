@@ -9,6 +9,7 @@ import CommentSection from './components/comments/CommentsSection';
 import HomePage from './Pages/Homepage/HomePage';
 import ProfilePage from './Pages/Profilepage/Profilepage';
 import AnimeDetails from './components/AnimeDetails/AnimeDetails';
+import Footer from './components/Footer/Footer';
 function App() {
   return (
     
@@ -22,6 +23,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
     </>
   );

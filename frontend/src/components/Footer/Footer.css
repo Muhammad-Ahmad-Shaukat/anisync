@@ -1,0 +1,90 @@
+/* Basic footer styling */
+.footer {
+    background-color: #111827;
+    color: #d1d5db;
+    padding: 20px 0;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .footer-about,
+  .footer-links {
+    flex: 1;
+  }
+  
+  .footer-logo {
+    font-size: 22px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .footer-description {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  
+  footer nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex; /* Makes the links horizontal */
+    gap: 20px; /* Adds space between each link */
+    justify-content: center; /* Centers the links horizontally */
+  }
+  
+  footer nav ul li {
+    margin: 0;
+  }
+  
+  footer nav ul li a {
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  footer nav ul li a:hover {
+    color: white;
+    text-decoration: underline;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 20px;
+    border-top: 1px solid #374151;
+    padding-top: 10px;
+  }
+  
+  /* Mobile responsive styling */
+  @media (max-width: 768px) {
+    .footer-content {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .footer-logo {
+      font-size: 20px;
+    }
+  
+    .footer-description {
+      font-size: 12px;
+    }
+  
+    footer nav ul {
+      flex-direction: column; /* Stack links vertically on small screens */
+      gap: 10px;
+    }
+  
+    footer nav ul li a {
+      font-size: 12px;
+    }
+  }
+  
