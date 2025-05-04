@@ -11,15 +11,16 @@ const AnimeList = () => {
   useEffect(() => {
     const fetchAnime = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/auth/findanime?id=new_releases&limit=5`  
-        );
+        const response = await fetch("http://localhost:5000/api/auth/topanime");
         const data = await response.json();
 
-        if (data.result) {
-          setAnimeList(data.result);
+        // Adjusted to directly use the array if backend returns plain array
+        if (Array.isArray(data)) {
+          setAnimeList(data);
+        } else if (Array.isArray(data.result)) {
+          setAnimeList(data.result); // if backend wraps in { result: [...] }
         } else {
-          throw new Error(data.message || "No anime found.");
+          throw new Error("Invalid anime data format.");
         }
       } catch (error) {
         console.error("Error fetching anime:", error);
@@ -77,13 +78,13 @@ const AnimeList = () => {
   return (
     <div className="anime-list-container">
       <img
-        src={anime.image}
-        alt={anime.anime_name}
+        src={anime.bannerImage}
+        alt={anime.title?.romaji || anime.title?.english || "Anime"}
         className="anime-slide fade-in"
       />
 
       <div className="anime-list-content">
-        <h1>{anime.anime_name}</h1>
+        <h1>{anime.title?.english || anime.title?.romaji}</h1>
         <p>{anime.description || "No description available."}</p>
         <button>View Details</button>
       </div>

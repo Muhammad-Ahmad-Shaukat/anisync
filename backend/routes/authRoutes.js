@@ -17,7 +17,7 @@ router.post("/login", login);
 router.post("/verifyotp", verifyotp);
 router.post("/sendotp", sendotp);
 router.get("/findanime", findAnime);
-router.get("/top-anime", getTopAnime);
+router.get("/topanime", getTopAnime);
 router.get("/video-stream", videoStream);
 router.post("/add-friend", addFriend);
 router.get("/fetchAnime", fetchAnime)

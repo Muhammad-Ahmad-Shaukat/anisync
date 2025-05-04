@@ -10,8 +10,9 @@ function HomePage(){
     
         <AnimeList/>
         <AnimeSlider type="Trending" limit={10} />
-        <AnimeSlider type="Top" limit={10} airing= {true}/>
-      
+        <AnimeSlider type="top" limit={10} />
+        <AnimeSlider type="top_airing" limit={10} />
+
     
     </>
 }

@@ -1,8 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./AnimeSlider.css";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import "./AnimeSlider.css";  // Your updated CSS file
 
-const AnimeSlider = ({ type = "trending", limit = 6, airing = false }) => {
+const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
   const [animeList, setAnimeList] = useState([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [loading, setLoading] = useState(true);
   const scrollRef = useRef();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -10,10 +14,14 @@ const AnimeSlider = ({ type = "trending", limit = 6, airing = false }) => {
   useEffect(() => {
     const fetchAnime = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/auth/fetchAnime?type=${type.toLowerCase()}&limit=${limit}&airing=${airing}`);
+        let url = `http://localhost:5000/api/auth/fetchAnime?type=${type.toLowerCase()}&limit=${limit}`;
+        if (type === "genre" && genre) {
+          url += `&genre=${genre}`;
+        }
+
+        const res = await fetch(url);
         const data = await res.json();
 
-        // Filter out duplicate anime based on id
         const uniqueAnime = data.filter((anime, index, self) =>
           index === self.findIndex((a) => a.id === anime.id)
         );
@@ -21,11 +29,14 @@ const AnimeSlider = ({ type = "trending", limit = 6, airing = false }) => {
         setAnimeList(uniqueAnime);
       } catch (err) {
         console.error("Fetch error:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchAnime();
-  }, [type, limit]);
+  }, [type, limit, genre]);
+
 
   useEffect(() => {
     const checkScroll = () => {
@@ -54,29 +65,56 @@ const AnimeSlider = ({ type = "trending", limit = 6, airing = false }) => {
     }
   };
 
+  if (loading)
+    return (
+      <SkeletonTheme baseColor="#202020" highlightColor="#444">
+        <div className="slider-wrapper skeleton-mode">
+          <Skeleton height="100%" width="100%" />
+          <div className="slider-content">
+            <Skeleton width={300} height={40} />
+            <Skeleton count={3} />
+            <Skeleton width={120} height={40} />
+          </div>
+        </div>
+      </SkeletonTheme>
+    );
+
+  if (!animeList.length) return <div>No anime found.</div>;
+
+  const anime = animeList[currentSlide];
+
   return (
     <div className="slider-wrapper">
-      <h2 className="slider-heading">{type}</h2>
+      <h2 className="slider-heading">
+        {type.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+      </h2>
 
       <div className="slider-container">
         <div className="slider" ref={scrollRef}>
           {animeList.map((anime, index) => (
-            <div className="anime-card" key={anime.id}>
-              <div className="anime-info">
-                <div className="anime-title">
-                  {anime.title.english || anime.title.romaji}
-                </div>
-                <div className="anime-index">{String(index + 1).padStart(2, "0")}</div>
-              </div>
+            <div
+              className={`anime-card ${index === currentSlide ? "fade-in" : ""}`}
+              key={anime.id}
+            > <div className="anime-info">
+            <div className="anime-title">
+              {anime.title.english || anime.title.romaji}
+            </div>
+            <div className="anime-index">
+              {String(index + 1).padStart(2, "0")}
+            </div>
+          </div>
               <img
                 src={anime.coverImage.large}
                 alt={anime.title.english || anime.title.romaji}
                 className="anime-img"
               />
+              
             </div>
           ))}
         </div>
       </div>
+
+     
     </div>
   );
 };
