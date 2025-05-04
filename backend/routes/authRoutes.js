@@ -8,6 +8,7 @@ import { getTopAnime } from "../Controllers/topAnimeController.js";
 import { videoStream } from "../Controllers/videoStream.js";
 import { addFriend } from "../Controllers/addfriend.js";
 import { getcomment } from "../Controllers/getcommentcontroller.js";
+import { fetchAnime } from "../Controllers/fetchanime.js";
 const router = express.Router();
 
 router.post("/signup", signup);
@@ -19,5 +20,6 @@ router.get("/findanime", findAnime);
 router.get("/top-anime", getTopAnime);
 router.get("/video-stream", videoStream);
 router.post("/add-friend", addFriend);
+router.get("/fetchAnime", fetchAnime)
 
 export default router;

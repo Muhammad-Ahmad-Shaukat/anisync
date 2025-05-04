@@ -7,6 +7,7 @@ import AnimeList from './components/AnimeList/AnimeList';
 import VideoPlayer from './components/VideoSComponent/Video';
 import CommentSection from './components/comments/CommentsSection';
 import HomePage from './Pages/Homepage/HomePage';
+import AnimeDetails from './components/AnimeDetails/AnimeDetails';
 function App() {
   return (
     
@@ -18,6 +19,7 @@ function App() {
         <Route path='/' element= {<HomePage/>}/>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+      
       </Routes>
     </BrowserRouter>
     </>

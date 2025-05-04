@@ -1,6 +1,6 @@
-import AnimeCard from "../../components/AnimeCard/AnimeCard";
+
 import AnimeList from "../../components/AnimeList/AnimeList";
-import AnimeCardParent from "../../components/AnimeCard/AnimeCardParent";
+import AnimeSlider from "../../components/AnimeSlider/AnimeSlider";
 
 function HomePage(){
 
@@ -9,8 +9,9 @@ function HomePage(){
     return<>
     
         <AnimeList/>
-        <AnimeCardParent limit={5} categoryId="top" />
-        {/* <AnimeCard anime={anime}/> */}
+        <AnimeSlider type="Trending" limit={10} />
+        <AnimeSlider type="Top" limit={10} airing= {true}/>
+      
     
     </>
 }
