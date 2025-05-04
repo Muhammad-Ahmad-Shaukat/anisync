@@ -17,7 +17,7 @@ export const updateUser = async (req, res) => {
   try {
     const conditions = [];
     if (mongoose.Types.ObjectId.isValid(id)) {
-        conditions.push({ _id: id });
+      conditions.push({ _id: id });
     }
     conditions.push({ username: id }, { email: id });
 
@@ -32,24 +32,17 @@ export const updateUser = async (req, res) => {
     }
 
     if (file && file.buffer) {
-      const fileKey = `${id}/profile-${Date.now()}-${file.originalname}`;
-
+      const fileKey = `${id}`;
       const params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: process.env.S3_BUCKET_NAME,
         Key: fileKey,
         Body: file.buffer,
         ContentType: file.mimetype,
       };
 
-      try {
-        await s3.send(new PutObjectCommand(params));
-
-        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`;
-        existingUser.profilepic = fileUrl;
-      } catch (error) {
-        console.error("Error uploading profile picture:", error);
-        return res.status(500).json({ message: "Failed to upload profile picture" });
-      }
+      await s3.send(new PutObjectCommand(params));
+      const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`;
+      existingUser.profilepic = fileUrl;
     }
 
     await existingUser.save();

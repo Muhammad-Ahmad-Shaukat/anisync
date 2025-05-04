@@ -1,4 +1,5 @@
 import express from "express";
+import multer from 'multer';
 import { signup } from "../Controllers/authController.js";
 import { login } from "../Controllers/logincontroller.js";
 import { verifyotp } from "../Controllers/verifyOtp.js";
@@ -11,6 +12,7 @@ import { getcomment } from "../Controllers/getcommentcontroller.js";
 import { fetchAnime } from "../Controllers/fetchanime.js";
 import { updateUser } from "../Controllers/updateuser.js";
 const router = express.Router();
+const upload = multer();
 
 router.post("/signup", signup);
 router.get("/getcomment", getcomment);
@@ -22,7 +24,7 @@ router.get("/topanime", getTopAnime);
 router.get("/video-stream", videoStream);
 router.post("/add-friend", addFriend);
 router.get("/fetchAnime", fetchAnime)
-router.patch("/updateuser", updateUser);
+router.patch('/updateuser', upload.single('avatar'), updateUser);
 
 
 export default router;
