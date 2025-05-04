@@ -9,6 +9,7 @@ import { videoStream } from "../Controllers/videoStream.js";
 import { addFriend } from "../Controllers/addfriend.js";
 import { getcomment } from "../Controllers/getcommentcontroller.js";
 import { fetchAnime } from "../Controllers/fetchanime.js";
+import { updateUser } from "../Controllers/updateuser.js";
 const router = express.Router();
 
 router.post("/signup", signup);
@@ -21,5 +22,7 @@ router.get("/topanime", getTopAnime);
 router.get("/video-stream", videoStream);
 router.post("/add-friend", addFriend);
 router.get("/fetchAnime", fetchAnime)
+router.patch("/updateuser", updateUser);
+
 
 export default router;

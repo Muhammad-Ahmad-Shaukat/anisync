@@ -7,7 +7,7 @@ const PrfilePage = () => {
         <><ProfileBanner username="Ahmad" />
 <EditProfile
   user={{
-    username: "Ahmad",
+    username: "a",
     email: "ahmadshoukat132@gmail.com",
     avatarUrl: "https://api.dicebear.com/7.x/pixel-art/svg?seed=ahmad"
   }}

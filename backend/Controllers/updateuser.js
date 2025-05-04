@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import connectS3 from "../config/aws_s3.js";
 import User from "../models/User.js";
+import mongoose from "mongoose";
 
 const s3 = connectS3();
 
@@ -14,7 +15,13 @@ export const updateUser = async (req, res) => {
   }
 
   try {
-    const existingUser = await User.findById(id);
+    const conditions = [];
+    if (mongoose.Types.ObjectId.isValid(id)) {
+        conditions.push({ _id: id });
+    }
+    conditions.push({ username: id }, { email: id });
+
+    const existingUser = await User.findOne({ $or: conditions });
     if (!existingUser) {
       return res.status(400).json({ message: "User does not exist" });
     }
