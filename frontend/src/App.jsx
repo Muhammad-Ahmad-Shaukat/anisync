@@ -7,9 +7,10 @@ import AnimeList from './components/AnimeList/AnimeList';
 import VideoPlayer from './components/VideoSComponent/Video';
 import CommentSection from './components/comments/CommentsSection';
 import HomePage from './Pages/Homepage/HomePage';
-import ProfilePage from './Pages/Profilepage/Profilepage';
+import ProfilePage from './Pages/Profilepage/ProfilePage';
 import AnimeDetails from './components/AnimeDetails/AnimeDetails';
 import Footer from './components/Footer/Footer';
+
 function App() {
   return (
     

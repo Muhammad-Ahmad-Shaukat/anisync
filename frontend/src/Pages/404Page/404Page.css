@@ -1,0 +1,103 @@
+.notfound-wrapper {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #0d0d1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .animated-dots-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(#ffffff22 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: moveDots 6s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  @keyframes moveDots {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 20px 20px;
+    }
+  }
+  
+  .notfound-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1000px;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 40px;
+  }
+  
+  .notfound-text {
+    flex: 1;
+    text-align: left;
+    min-width: 300px;
+  }
+  
+  .notfound-text h3 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .notfound-text h4,
+  .notfound-text h5,
+  .notfound-text p {
+    margin-bottom: 10px;
+  }
+  
+  .notfound-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 280px;
+  }
+  
+  .notfound-image img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    display: block;
+  }
+  
+  /* Mobile view fix */
+  @media screen and (max-width: 768px) {
+    .notfound-container {
+      flex-direction: column-reverse;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .notfound-text {
+      text-align: center;
+    }
+  
+    .notfound-image {
+      width: 100%;
+      margin-top: 20px;
+    }
+  
+    .notfound-image img {
+      max-width: 300px;
+      height: auto;
+    }
+  }
+  
