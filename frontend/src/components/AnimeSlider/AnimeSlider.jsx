@@ -1,7 +1,11 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./AnimeSlider.css";
+import ViewDetails from "../../components/AnimeViewDetails/ViewDetails";
+import { useNavigate } from "react-router-dom";
+//const navigate = useNavigate();
 
 const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
   const [animeList, setAnimeList] = useState([]);
@@ -11,7 +15,6 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
-  // Fetch Anime
   useEffect(() => {
     const fetchAnime = async () => {
       try {
@@ -38,7 +41,6 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
     fetchAnime();
   }, [type, limit, genre]);
 
-  // Scroll Button Enable/Disable Logic
   useEffect(() => {
     const checkScroll = () => {
       const el = scrollRef.current;
@@ -59,7 +61,6 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
     };
   }, [animeList]);
 
-  // Scroll Function
   const scroll = (dir) => {
     const el = scrollRef.current;
     if (!el) return;
@@ -70,7 +71,6 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
     });
   };
 
-  // Loading Skeleton
   if (loading) {
     return (
       <SkeletonTheme baseColor="#202020" highlightColor="#444">
@@ -86,17 +86,19 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
     );
   }
 
-  // Empty List Fallback
+  const handleclickx = (e) => {
+
+  }
+
   if (!animeList.length) return <div>No anime found.</div>;
 
-  // Rendered Content
   return (
     <div className="slider-wrapper">
       <h2 className="slider-heading">
         {type.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())}
       </h2>
 
-      <div className="slider-container">
+      <div className="slider-container" onClick={handleclickx}>
         <div className="slider" ref={scrollRef}>
           {animeList.map((anime, index) => (
             <div

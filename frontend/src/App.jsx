@@ -43,6 +43,7 @@ import Footer from './components/Footer/Footer';
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />
             <Route path='/profile' element={<ProfilePage />} />
+            
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
           <Footer />

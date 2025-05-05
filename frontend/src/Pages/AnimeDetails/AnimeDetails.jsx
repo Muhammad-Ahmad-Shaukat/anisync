@@ -1,10 +1,8 @@
 /* eslint-disable no-unused-vars */
 
-import AnimeList from "../../components/AnimeList/AnimeList";
-import AnimeSlider from "../../components/AnimeSlider/AnimeSlider";
 import ViewDetails from "../../components/AnimeViewDetails/ViewDetails";
 
-function HomePage(){
+function AnimeDetails(){
 
     const dummyDetails = {
         title: "Me & Roboco Movie",
@@ -26,15 +24,9 @@ function HomePage(){
 
     return<>
     
-        <AnimeList/>
-        <AnimeSlider type="Trending" limit={10} />
-        <AnimeSlider type="top" limit={10} />
-        <AnimeSlider type="airing" limit={10} />
-        {/* <ViewDetails details={dummyDetails} onClose={handleClose} /> */}
+       <ViewDetails details={dummyDetails} onClose={handleClose} />
 
-
-       
     </>
 }
 
-export default HomePage;
+export default AnimeDetails;
