@@ -13,7 +13,7 @@ const uploadtoS3 = async (req, res) => {
 
     try {
         const fileExtension = file.originalname.split('.').pop();
-        const key = `UserPics/${name}.${fileExtension}`;
+        const key = `${name}.${fileExtension}`;
         const listParams = {
             Bucket: process.env.AWS_BUCKET_NAME,
             Prefix: key, 
