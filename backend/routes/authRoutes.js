@@ -11,6 +11,7 @@ import { addFriend } from "../Controllers/addfriend.js";
 import { getcomment } from "../Controllers/getcommentcontroller.js";
 import { fetchAnime } from "../Controllers/fetchanime.js";
 import { updateUser } from "../Controllers/updateuser.js";
+import { healthCheck } from "../Controllers/health.js";
 const router = express.Router();
 const upload = multer();
 
@@ -25,6 +26,7 @@ router.get("/video-stream", videoStream);
 router.post("/add-friend", addFriend);
 router.get("/fetchAnime", fetchAnime)
 router.patch('/updateuser', upload.single('avatar'), updateUser);
+router.get("/health", healthCheck);
 
 
 export default router;
