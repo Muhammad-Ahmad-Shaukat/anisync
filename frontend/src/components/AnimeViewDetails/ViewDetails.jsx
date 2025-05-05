@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./ViewDetails.css"; // Import the CSS file
+import "./ViewDetails.css";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const ViewDetails = ({ animeName }) => {
   const [anime, setAnime] = useState(null);
@@ -26,7 +28,44 @@ const ViewDetails = ({ animeName }) => {
     fetchAnime();
   }, [animeName]);
 
-  if (loading) return <div className="loading">Loading...</div>;
+  if (loading) {
+    return (
+      <SkeletonTheme baseColor="#303030" highlightColor="#505050">
+        <div className="details-container">
+          <div className="details-card">
+            <div className="details-header">
+              <h2 className="details-title">
+                <Skeleton width={200} />
+              </h2>
+            </div>
+            <div className="details-content">
+              <div className="left-column">
+                <Skeleton height={400} width={300} />
+              </div>
+              <div className="right-column">
+                {[...Array(6)].map((_, idx) => (
+                  <p className="info" key={idx}>
+                    <Skeleton width={`80%`} />
+                  </p>
+                ))}
+                <div className="actions">
+                  <Skeleton width={120} height={40} style={{ borderRadius: "4px" }} />
+                  <Skeleton width={100} height={40} style={{ borderRadius: "4px" }} />
+                </div>
+                <p className="description">
+                  <Skeleton count={5} />
+                </p>
+                <div className="trailer-link">
+                  <Skeleton width={150} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </SkeletonTheme>
+    );
+  }
+  
   if (!anime) return <div className="not-found">Anime not found.</div>;
 
   return (
