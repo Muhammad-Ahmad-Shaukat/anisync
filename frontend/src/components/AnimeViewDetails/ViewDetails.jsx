@@ -1,159 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./ViewDetails.css"; // Import the CSS file
 
-const ViewDetails = ({ details, onClose }) => {
+const ViewDetails = ({ animeName }) => {
+  const [anime, setAnime] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAnime = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/auth/findanime?q=${animeName}`);
+        if (res.data.length > 0) {
+          setAnime(res.data[0]);
+          console.log(res.data[0]);
+        } else {
+          setAnime(null);
+        }
+      } catch (err) {
+        console.error("Error fetching anime details:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnime();
+  }, [animeName]);
+
+  if (loading) return <div className="loading">Loading...</div>;
+  if (!anime) return <div className="not-found">Anime not found.</div>;
+
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        {/* Header */}
-        <div style={styles.header}>
-          <h2 style={styles.title}>{details.title}</h2>
-          <button style={styles.closeButton} onClick={onClose}>
-            &times;
-          </button>
+    <div className="details-container">
+      <div className="details-card">
+        <div className="details-header">
+          <h2 className="details-title">{anime.anime_name}</h2>
         </div>
-        {/* Content */}
-        <div style={styles.content}>
-          <div style={styles.leftColumn}>
-            <img
-              src={details.posterUrl}
-              alt={`${details.title} Poster`}
-              style={styles.poster}
-            />
+        <div className="details-content">
+          <div className="left-column">
+            <img src={anime.image} alt={`${anime.anime_name} Poster`} className="poster" />
           </div>
-          <div style={styles.rightColumn}>
-            <p style={styles.info}>
-              <span style={styles.label}>Rating:</span> {details.rating}
-            </p>
-            <p style={styles.info}>
-              <span style={styles.label}>Format:</span> {details.format}
-            </p>
-            <p style={styles.info}>
-              <span style={styles.label}>Type:</span> {details.type}
-            </p>
-            <p style={styles.info}>
-              <span style={styles.label}>Duration:</span> {details.duration}
-            </p>
-            <p style={styles.info}>
-              <span style={styles.label}>Aired:</span> {details.aired}
-            </p>
-            <p style={styles.info}>
-              <span style={styles.label}>Premiered:</span> {details.premiered}
-            </p>
-            <p style={styles.info}>
-              <span style={styles.label}>Genres:</span> {details.genres.join(", ")}
-            </p>
-            <p style={styles.info}>
-              <span style={styles.label}>Studios:</span> {details.studios.join(", ")}
-            </p>
-            <p style={styles.info}>
-              <span style={styles.label}>Producers:</span> {details.producers.join(", ")}
-            </p>
-            <div style={styles.actions}>
-              <button style={styles.actionButton}>Add to List</button>
-              <button style={styles.actionButton}>Share</button>
+          <div className="right-column">
+            <p className="info"><span className="label">Rating:</span> {anime.rating}</p>
+            <p className="info"><span className="label">Episodes:</span> {anime.episodes}</p>
+            <p className="info"><span className="label">Status:</span> {anime.status}</p>
+            {anime.season && <p className="info"><span className="label">Season:</span> {anime.season}</p>}
+            {anime.source && <p className="info"><span className="label">Source:</span> {anime.source}</p>}
+            <p className="info"><span className="label">Popularity:</span> {anime.popularity}</p>
+            <p className="info"><span className="label">Genres:</span> {anime.genres.join(", ")}</p>
+            {anime.categories?.length > 0 && (
+              <p className="info"><span className="label">Categories:</span> {anime.categories.join(", ")}</p>
+            )}
+            <div className="actions">
+              <button className="action-button">Add to List</button>
+              <button className="action-button">Share</button>
             </div>
-            <p style={styles.description}>
-               AniSync is the best site to watch Me &amp; Roboco Movie SUB online, or even watch Me &amp; Roboco Movie DUB in HD quality.
-            </p>
+            <p className="description">{anime.description}</p>
+            {anime.trailer && (
+              <div className="trailer-link">
+                <a href={anime.trailer} target="_blank" rel="noopener noreferrer">
+                  Watch Trailer
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    width: "100vw",
-    minHeight: "100vh",
-    background: "linear-gradient(135deg, #1f1c2c, #928dab)", // Dark gradient background
-    paddingTop: "70px", // Leave room for the navbar that already exists
-    boxSizing: "border-box",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-start",
-  },
-  card: {
-    backgroundColor: "#242424",
-    borderRadius: "8px",
-    padding: "30px",
-    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.8)",
-    maxWidth: "1000px",
-    width: "90%",
-    color: "#e0e0e0",
-    marginBottom: "40px",
-  },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottom: "1px solid #444",
-    paddingBottom: "15px",
-    marginBottom: "25px",
-  },
-  title: {
-    fontSize: "24px",
-    margin: 0,
-  },
-  closeButton: {
-    backgroundColor: "transparent",
-    border: "none",
-    fontSize: "28px",
-    color: "#e0e0e0",
-    cursor: "pointer",
-    lineHeight: "1",
-    transition: "color 0.3s ease",
-  },
-  content: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "30px",
-  },
-  leftColumn: {
-    flex: "1 1 300px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  poster: {
-    width: "100%",
-    maxWidth: "300px",
-    borderRadius: "6px",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.6)",
-  },
-  rightColumn: {
-    flex: "2 1 300px",
-    fontSize: "16px",
-    lineHeight: "1.6",
-  },
-  info: {
-    margin: "8px 0",
-  },
-  label: {
-    fontWeight: "bold",
-    color: "#fff",
-    marginRight: "8px",
-  },
-  actions: {
-    marginTop: "20px",
-    display: "flex",
-    gap: "15px",
-  },
-  actionButton: {
-    padding: "10px 20px",
-    backgroundColor: "#3f51b5",
-    border: "none",
-    borderRadius: "4px",
-    color: "#fff",
-    fontSize: "14px",
-    cursor: "pointer",
-    transition: "background-color 0.3s ease",
-  },
-  description: {
-    marginTop: "25px",
-    fontSize: "14px",
-    color: "#ccc",
-  },
 };
 
 export default ViewDetails;
