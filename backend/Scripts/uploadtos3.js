@@ -12,20 +12,15 @@ const uploadtoS3 = async (req, res) => {
     }
 
     try {
-        // Construct the full key, including the "UserPics/" prefix.  This is crucial.
         const fileExtension = file.originalname.split('.').pop();
         const key = `UserPics/${name}.${fileExtension}`;
-
-        // List objects with the same prefix (filename) to delete the old one.
         const listParams = {
             Bucket: process.env.AWS_BUCKET_NAME,
-            Prefix: key, // Use the full key as the prefix
+            Prefix: key, 
         };
-
         const listResult = await s3.send(new ListObjectsV2Command(listParams));
 
         if (listResult.Contents && listResult.Contents.length > 0) {
-            // Delete all versions of the file.
              const deleteParams = {
                 Bucket: process.env.AWS_BUCKET_NAME,
                 Delete: {
@@ -34,21 +29,15 @@ const uploadtoS3 = async (req, res) => {
             };
             await s3.send(new DeleteObjectsCommand(deleteParams));
         }
-
-        // Upload the new file.
         const uploadParams = {
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: key, // Use the constructed key
+            Key: key, 
             Body: file.buffer,
             ContentType: file.mimetype,
         };
 
-        await s3.send(new PutObjectCommand(uploadParams));
-
-        // Construct the file URL.  Make sure "UserPics" is in the path.
-        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
-
-        res.status(200).json({ message: "File uploaded successfully", url: fileUrl });
+        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`;
+    existingUser.profilePic = fileUrl;
     } catch (error) {
         console.error("Error in upload process:", error);
         res.status(500).json({ error: "Failed to update profile picture" });

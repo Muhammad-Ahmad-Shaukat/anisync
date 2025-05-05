@@ -40,9 +40,11 @@ export const updateUser = async (req, res) => {
         ContentType: file.mimetype,
       };
 
-      await s3.send(new PutObjectCommand(params));
-      const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`;
-      existingUser.profilepic = fileUrl;
+      const responses = await s3.send(new PutObjectCommand(params));
+        if (responses.$metadata.httpStatusCode !== 200) {
+            return res.status(500).json({ message: "Failed to upload file" });
+        }
+      existingUser.profilePic = responses.fileUrl;
     }
 
     await existingUser.save();
