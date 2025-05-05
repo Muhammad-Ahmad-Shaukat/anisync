@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-content">
         <section className="footer-about">
-          <h2 className="footer-logo">AnimeWorld</h2>
+          <h2 className="footer-logo">Anisync</h2>
           <p className="footer-description">
             Dive into the world of anime! Stream, review, and discover your next favorite show.
           </p>
@@ -27,7 +27,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} AnimeWorld. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Anisync. All rights reserved.</p>
       </div>
     </footer>
   );
