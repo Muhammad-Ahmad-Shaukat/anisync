@@ -13,12 +13,10 @@ const AnimeList = () => {
       try {
         const response = await fetch("http://localhost:5000/api/auth/topanime");
         const data = await response.json();
-
-        // Adjusted to directly use the array if backend returns plain array
         if (Array.isArray(data)) {
           setAnimeList(data);
         } else if (Array.isArray(data.result)) {
-          setAnimeList(data.result); // if backend wraps in { result: [...] }
+          setAnimeList(data.result); 
         } else {
           throw new Error("Invalid anime data format.");
         }

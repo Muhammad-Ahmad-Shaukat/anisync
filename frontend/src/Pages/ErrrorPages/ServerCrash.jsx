@@ -20,8 +20,7 @@ const ServerCrash = ({ setServerOn }) => {
   };
 
   useEffect(() => {
-    checkServer(); // Run immediately on mount
-
+    checkServer(); 
     const interval = setInterval(() => {
       checkServer();
     }, 5000);

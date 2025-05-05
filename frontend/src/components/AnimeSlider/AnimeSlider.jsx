@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./AnimeSlider.css";
+import { useNavigate } from "react-router-dom";
 
 const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
   const [animeList, setAnimeList] = useState([]);
@@ -10,8 +12,8 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
   const scrollRef = useRef();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const navigate = useNavigate();
 
-  // Fetch Anime
   useEffect(() => {
     const fetchAnime = async () => {
       try {
@@ -24,7 +26,8 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
         const data = await res.json();
 
         const uniqueAnime = data.filter(
-          (anime, index, self) => index === self.findIndex((a) => a.id === anime.id)
+          (anime, index, self) =>
+            index === self.findIndex((a) => a.id === anime.id)
         );
 
         setAnimeList(uniqueAnime);
@@ -38,7 +41,6 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
     fetchAnime();
   }, [type, limit, genre]);
 
-  // Scroll Button Enable/Disable Logic
   useEffect(() => {
     const checkScroll = () => {
       const el = scrollRef.current;
@@ -59,7 +61,6 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
     };
   }, [animeList]);
 
-  // Scroll Function
   const scroll = (dir) => {
     const el = scrollRef.current;
     if (!el) return;
@@ -70,7 +71,11 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
     });
   };
 
-  // Loading Skeleton
+  const handleAnimeClick = (anime) => {
+    const animeName = encodeURIComponent(anime.title.english || anime.title.romaji);
+    navigate(`/anime/${animeName}`);
+  };
+
   if (loading) {
     return (
       <SkeletonTheme baseColor="#202020" highlightColor="#444">
@@ -86,10 +91,8 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
     );
   }
 
-  // Empty List Fallback
   if (!animeList.length) return <div>No anime found.</div>;
 
-  // Rendered Content
   return (
     <div className="slider-wrapper">
       <h2 className="slider-heading">
@@ -102,6 +105,8 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
             <div
               className={`anime-card ${index === currentSlide ? "fade-in" : ""}`}
               key={anime.id}
+              onClick={() => handleAnimeClick(anime)}
+              style={{ cursor: "pointer" }}
             >
               <div className="anime-info">
                 <div className="anime-title">

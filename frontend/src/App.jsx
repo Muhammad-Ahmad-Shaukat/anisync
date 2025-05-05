@@ -10,7 +10,7 @@ import ProfilePage from './Pages/Profilepage/ProfilePage';
 import NotFoundPage from "./Pages/ErrrorPages/404Page.jsx";
 import ServerCrash from './Pages/ErrrorPages/ServerCrash.jsx';
 import Footer from './components/Footer/Footer';
-
+import AnimeDetails from './Pages/AnimeDetails/AnimeDetails.jsx';
  function App() {
 //   const [serveron, setServerOn] = useState(true);
 //   const [checked, setChecked] = useState(false);
@@ -43,6 +43,7 @@ import Footer from './components/Footer/Footer';
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />
             <Route path='/profile' element={<ProfilePage />} />
+            <Route path='/anime/:animeName' element={<AnimeDetails />} />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
           <Footer />
