@@ -6,6 +6,7 @@ import VideoPlayer from "../../components/VideoSComponent/VideoPlayer";
 
 function HomePage(){
 
+    // const animeName = "Jujutsu Kaisen";
 
     return<>
     
@@ -13,10 +14,10 @@ function HomePage(){
         <AnimeSlider type="Trending" limit={10} />
         <AnimeSlider type="top" limit={10} />
         <AnimeSlider type="airing" limit={10} /> */}
-        {/* <ViewDetails details={dummyDetails} onClose={handleClose} /> */}
+
+        {/* <ViewDetails animeName={animeName} />        */}
 
         <VideoPlayer/>
-       
     </>
 }
 

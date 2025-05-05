@@ -1,149 +1,214 @@
-/* Main container: neutral dark gradient background with minimal top padding */
+/* ── ROOT & PAGE BACKGROUND ── */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  position: relative;
+  font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1e1e2dfa, #13162c);
+  background-attachment: fixed;
+  color: #d0d0d8;
+}
+
+/* ── GLASS‑PANEL CONTAINER ── */
 .video-episode-container {
   display: flex;
-  width: 100%;
-  min-height: calc(100vh - 70px);
-  background: linear-gradient(135deg, #414157, #1e222f); /* very dark, neutral */
-  padding-top: 20px; /* minimal top padding to reduce empty space */
+  flex-wrap: wrap;
+  margin: 24px auto;
+  width: 95%;                /* was 90% → now wider */
+  max-width: 1400px;          /* was 1200px → now wider */
+  min-height: calc(100vh - 100px);
+  background: rgba(19,22,34,0.3);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
   box-sizing: border-box;
-  color: #e0e0e0;
-  gap: 0;
 }
 
-/* Episodes Sidebar (Left) */
+/* ── SIDEBAR ── */
 .episodes-list {
-  width: 300px;
-  background: linear-gradient(to bottom, #181818, #1b1b1b); /* neutral dark gradient */
-  padding: 10px 15px;
-  height: calc(100vh - 20px); /* Fills available height */
+  position: relative;
+  flex: 0 0 260px;
+  padding: 60px 12px 12px;   /* was 40px top → now 60px for extra gap */
+  background: transparent;
+  border-right: 1px solid rgba(255,255,255,0.1);
   overflow-y: auto;
-  border-right: 1px solid #282828;
-  margin: 0;
-}
-
-/* Episode Items Style */
-.episode-item {
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  background: #1e1e1e;
-  color: #b0b0b0;
-  transition: background 0.3s, transform 0.2s;
-}
-
-.episode-item:hover {
-  background: #282828;
-  transform: translateX(3px);
-}
-
-/* Active episode: using a blue accent that tends to work with dark/navy navbars */
-.episode-item.active {
-  background: #414d8f;
-  color: #ffffff;
-}
-
-.episode-number {
-  font-weight: bold;
-  margin-bottom: 4px;
-  font-size: 14px;
-}
-
-.episode-title {
-  font-size: 14px;
-}
-
-/* Player Area (Right side) */
-.player-area {
-  flex: 1;
-  padding: 10px;
   display: flex;
   flex-direction: column;
+  max-height: calc(100vh - 140px);
+}
+
+/* “List of episodes” header */
+.episodes-list::before {
+  content: "List of episodes";
+  position: absolute;
+  top: 12px; left: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #acadcf;
+  letter-spacing: 0.5px;
+}
+
+/* custom scrollbar */
+.episodes-list::-webkit-scrollbar {
+  width: 6px;
+}
+.episodes-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.episodes-list::-webkit-scrollbar-thumb {
+  background: rgba(42, 42, 64, 0.6);
+  border-radius: 3px;
+}
+
+/* ── EPISODE ITEMS ── */
+.episode-item {
+  position: relative;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  background: rgba(20, 24, 38, 0.3);
+  border-radius: 4px;
+  color: #aaadb8;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.episode-item:hover {
+  background: rgba(29, 32, 50, 0.4);
+  transform: translateX(3px);
+}
+.episode-item.active {
+  background: rgba(31, 39, 80, 0.6);
+  color: #fff;
+  transform: translateX(3px) scale(1.02);
+  box-shadow: 0 0 12px rgba(255,121,198,0.6);
+  border: 1px solid #ff79c6;
+}
+.episode-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: #ff79c6;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.episode-number {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.episode-title {
+  font-size: 12px;
+}
+
+/* ── PLAYER AREA ── */
+.player-area {
+  flex: 1 1 0;
+  padding: 16px;
+  background: transparent;
+  display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 300px;
 }
 
-/* Video Player Card */
+/* ── VIDEO CARD ── */
 .player-wrapper {
   width: 100%;
-  max-width: 800px;
-  background: linear-gradient(135deg, #1e1e1e, #242424); /* darker card */
-  border-radius: 10px;
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+  max-width: 840px;
+  background: rgba(20, 24, 38, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.7);
   overflow: hidden;
-  margin: 0;
 }
 
-/* Video element styling */
+/* video element */
 .video-player {
   width: 100%;
   display: block;
-  border: none;
-  outline: none;
+  background: #000;
 }
 
-/* Custom Control Buttons */
+/* ── CONTROLS ── */
 .custom-controls {
-  margin: 8px;
   display: flex;
   justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
+  gap: 12px;
+  padding: 8px;
+  background: rgba(26, 28, 45, 0.3);
+  backdrop-filter: blur(6px);
 }
-
 .custom-controls button {
-  padding: 8px 16px;
-  font-size: 15px;
-  background: #2a2a2a;
-  color: #e0e0e0;
-  border: none;
-  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  background: rgba(34, 36, 58, 0.3);
+  border: 1px solid rgba(51,51,74,0.6);
+  border-radius: 4px;
+  color: #ddd;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  transition: background 0.2s, transform 0.1s;
 }
-
 .custom-controls button:hover {
-  background: #3a3a3a;
-  transform: translateY(-2px);
+  background: rgba(42, 44, 90, 0.4);
+  transform: translateY(-1px);
 }
 
-/* Loading and Error Screens */
+/* ── LOADING / ERROR ── */
 .loading-screen,
 .error-screen {
-  width: 90%;
-  max-width: 800px;
-  height: 300px;
-  background: #1a1a1a;
-  border-radius: 10px;
+  width: 100%;
+  max-width: 840px;
+  height: 260px;
+  background: rgba(20, 24, 38, 0.3);
+  backdrop-filter: blur(6px);
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 18px;
-  color: #e0e0e0;
-  padding: 15px;
-  margin: 10px 0;
+  justify-content: center;
+  color: #bbb;
+  font-size: 16px;
 }
 
-/* Loading Waves */
+/* ── LOADING WAVES ── */
 .waves {
   display: flex;
   gap: 8px;
 }
-
 .wave {
-  width: 6px;
-  height: 35px;
-  background: linear-gradient(to top, #173893, #4477cf);
+  width: 5px;
+  height: 30px;
+  background: #5a72c4;
   animation: waveAnim 1s infinite ease-in-out;
-  border-radius: 4px;
+  border-radius: 3px;
 }
-
-.wave1 { animation-delay: 0s; }
+.wave1 { animation-delay: 0; }
 .wave2 { animation-delay: 0.2s; }
 .wave3 { animation-delay: 0.4s; }
-
 @keyframes waveAnim {
-  0%, 100% { transform: scaleY(0.5); }
-  50% { transform: scaleY(1.2); }
+  0%,100%   { transform: scaleY(0.4); }
+  50%       { transform: scaleY(1.2); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .video-episode-container {
+    flex-direction: column;
+    padding: 12px;
+    min-height: auto;
+  }
+  .episodes-list {
+    width: 100%;
+    max-height: 200px;
+    padding-top: 30px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .player-area {
+    padding: 12px 0;
+  }
 }
