@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+//import { useLocation } from "react-router-dom";
 import "./VideoPlayer.css";
 
 const VideoPlayer = () => {
@@ -7,7 +7,7 @@ const VideoPlayer = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const videoRef = useRef();
-  const location = useLocation();
+  //const location = useLocation();
 
   // Optional: Extract video name from URL like /video/abc
   // const pathParts = location.pathname.split("/");

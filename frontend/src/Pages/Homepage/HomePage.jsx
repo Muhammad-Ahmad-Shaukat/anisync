@@ -3,6 +3,7 @@
 import AnimeList from "../../components/AnimeList/AnimeList";
 import AnimeSlider from "../../components/AnimeSlider/AnimeSlider";
 import ViewDetails from "../../components/AnimeViewDetails/ViewDetails";
+import VideoPlayer  from "../../components/VideoSComponent/Video";
 
 function HomePage(){
 
@@ -31,6 +32,7 @@ function HomePage(){
         <AnimeSlider type="top" limit={10} />
         <AnimeSlider type="airing" limit={10} />
         {/* <ViewDetails details={dummyDetails} onClose={handleClose} /> */}
+        <VideoPlayer/>
 
 
        
