@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import AnimeList from "../../components/AnimeList/AnimeList";
 import AnimeSlider from "../../components/AnimeSlider/AnimeSlider";
 import VideoPlayer  from "../../components/VideoSComponent/Video";

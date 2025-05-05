@@ -1,13 +1,14 @@
-/* eslint-disable no-unused-vars */
-
+import { useParams } from "react-router-dom";
 import ViewDetails from "../../components/AnimeViewDetails/ViewDetails";
 
-function AnimeDetails(Anime){
-
-
-    return<>    
-    <ViewDetails animeName={Anime} />
+function AnimeDetails() {
+  const { animeName } = useParams();
+  
+  return (
+    <>
+      <ViewDetails animeName={animeName} />
     </>
+  );
 }
 
 export default AnimeDetails;
