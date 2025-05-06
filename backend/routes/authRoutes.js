@@ -12,6 +12,7 @@ import { getcomment } from "../Controllers/getcommentcontroller.js";
 import { fetchAnime } from "../Controllers/fetchanime.js";
 import { updateUser } from "../Controllers/updateuser.js";
 import { healthCheck } from "../Controllers/health.js";
+import { searchanime } from "../Controllers/searchanime.js";
 const router = express.Router();
 const upload = multer();
 
@@ -27,6 +28,7 @@ router.post("/add-friend", addFriend);
 router.get("/fetchAnime", fetchAnime)
 router.patch('/updateuser', upload.single('avatar'), updateUser);
 router.get("/health", healthCheck);
+router.get("/searchanime", searchanime);
 
 
 export default router;

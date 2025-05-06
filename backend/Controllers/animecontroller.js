@@ -9,8 +9,6 @@ export const findAnime = async (req, res) => {
     }
 
     q = q.trim();
-
-    // Exact name match
     let anime = await Anime.find({
       anime_name: { $regex: `^${q}$`, $options: "i" }
     });
@@ -18,8 +16,6 @@ export const findAnime = async (req, res) => {
     if (anime.length > 0) {
       return res.status(200).json(anime);
     }
-
-    // Loose match: genre or description
     const regex = new RegExp(q, "i");
     const results = await Anime.find({
       $or: [
@@ -32,13 +28,11 @@ export const findAnime = async (req, res) => {
       return res.status(200).json(results);
     }
 
-    // Fetch from Jikan API
     const jikanRes = await axios.get(`https://api.jikan.moe/v4/anime`, {
-      params: { q, limit: 3 }, // get more results for better match checking
+      params: { q, limit: 3 }, 
     });
 
     if (jikanRes.data?.data?.length > 0) {
-      // Try to find an exact title match
       const animeFromApi = jikanRes.data.data.find(
         (item) => item.title.trim().toLowerCase() === q.toLowerCase()
       );
@@ -71,7 +65,6 @@ export const findAnime = async (req, res) => {
       }
     }
 
-    // Fallback
     let fallbackAnime = await Anime.findOne({ anime_name: "404 Not Found" });
 
     if (!fallbackAnime) {

@@ -10,14 +10,11 @@ function HomePage(){
 
     return<>
     
-        {/* <AnimeList/>
+        <AnimeList/>
         <AnimeSlider type="Trending" limit={10} />
         <AnimeSlider type="top" limit={10} />
-        <AnimeSlider type="airing" limit={10} /> */}
+        <AnimeSlider type="airing" limit={10} />
 
-        {/* <ViewDetails animeName={animeName} />        */}
-
-        <VideoPlayer/>
     </>
 }
 
