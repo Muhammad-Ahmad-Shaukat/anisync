@@ -1,4 +1,4 @@
-// import React, { useEffect, useState } from 'react';
+//import React, { useEffect } from 'react';
 import React from 'react';
 //import axios from 'axios';
 import Signup from './Pages/SignUpPage/Signup';
@@ -11,6 +11,8 @@ import NotFoundPage from "./Pages/ErrrorPages/404Page.jsx";
 import ServerCrash from './Pages/ErrrorPages/ServerCrash.jsx';
 import Footer from './components/Footer/Footer';
 import AnimeDetails from './Pages/AnimeDetails/AnimeDetails.jsx';
+
+
  function App() {
 //   const [serveron, setServerOn] = useState(true);
 //   const [checked, setChecked] = useState(false);
@@ -29,6 +31,7 @@ import AnimeDetails from './Pages/AnimeDetails/AnimeDetails.jsx';
 //     checkServer();
 //   }, []);
 
+   
   return (
     <BrowserRouter>
       {/* {!checked ? (
@@ -42,7 +45,7 @@ import AnimeDetails from './Pages/AnimeDetails/AnimeDetails.jsx';
             <Route path='/' element={<HomePage />} />
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/profile' element={<ProfilePage />} />
+            <Route path='/profile'element={<ProfilePage />}/>
             <Route path='/anime/:animeName' element={<AnimeDetails />} />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>

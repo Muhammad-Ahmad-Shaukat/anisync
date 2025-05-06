@@ -1,0 +1,101 @@
+.advanced-search-container {
+    padding: 1.5rem;
+    background-color: #1f2937;
+    color: white;
+    border-radius: 0.5rem;
+    width: 100%;
+    max-width: 80rem;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-sizing: border-box;
+  }
+  
+  .advanced-search-container h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  .genre-section h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+  
+  .genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  
+  .genre-tag {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    border-radius: 9999px;
+    border: 1px solid #374151;
+    background-color: #2d3748;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .genre-tag.selected {
+    background-color: #f472b6;
+    border-color: #f472b6;
+    color: white;
+  }
+  
+  .filter-button-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 1rem;
+  }
+  
+  .filter-button {
+    background-color: #f472b6;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .filter-button:hover {
+    background-color: #ec4899;
+  }
+  
+  @media (max-width: 768px) {
+    .genre-tag {
+      font-size: 0.75rem;
+      padding: 0.4rem 0.8rem;
+    }
+  
+    .filter-button {
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .genre-tag {
+      font-size: 0.7rem;
+      padding: 0.3rem 0.7rem;
+    }
+  
+    .advanced-search-container {
+      padding: 1rem;
+    }
+  
+    .genre-section h3,
+    .advanced-search-container h2 {
+      font-size: 1.1rem;
+    }
+  }
+  

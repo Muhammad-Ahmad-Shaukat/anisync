@@ -1,0 +1,96 @@
+.popular-anime-container {
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    color: white;
+    width: 100%;
+    max-width: 22rem;
+  }
+  
+  .popular-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f9a8d4;
+    margin-bottom: 1rem;
+  }
+  
+  .anime-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .anime-card {
+    display: flex;
+    background-color: #2d3748;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    align-items: center;
+    gap: 0.75rem;
+    position: relative;
+  }
+  
+  .anime-image {
+    width: 50px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+  }
+  
+  .anime-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .anime-title {
+    font-weight: 500;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .anime-meta {
+    font-size: 0.8rem;
+    color: #9ca3af;
+  }
+  
+  .anime-badges {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.25rem;
+    color: white;
+  }
+  
+  .badge.green {
+    background-color: #059669;
+  }
+  
+  .badge.blue {
+    background-color: #2563eb;
+  }
+  
+  .badge.gray {
+    background-color: #4b5563;
+  }
+  
+  .add-button {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  
+  .add-button:hover {
+    color: #f9a8d4;
+  }
+  

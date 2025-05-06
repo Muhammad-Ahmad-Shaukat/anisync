@@ -3,20 +3,17 @@ import { useLocation } from "react-router-dom";
 import "./VideoPlayer.css";
 
 const VideoPlayer = () => {
-  // State for episodes (replace dummy API call with your real API if needed)
+
   const [episodes, setEpisodes] = useState([]);
-  // Selected episode object
   const [selectedEpisode, setSelectedEpisode] = useState(null);
-  // Video URL blob (fetched from API)
   const [videoUrl, setVideoUrl] = useState(null);
-  // Loading and error states for episodes and video
   const [loadingEpisodes, setLoadingEpisodes] = useState(true);
   const [errorEpisodes, setErrorEpisodes] = useState(null);
   const [loadingVideo, setLoadingVideo] = useState(false);
   const [errorVideo, setErrorVideo] = useState(null);
 
   const videoRef = useRef(null);
-  const location = useLocation();
+  //const location = useLocation();
 
   // Fetch the list of episodes from your API (dummy data is used here for illustration)
   useEffect(() => {
