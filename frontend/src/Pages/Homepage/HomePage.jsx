@@ -14,8 +14,6 @@ function HomePage(){
         <AnimeSlider type="Trending" limit={10} />
         <AnimeSlider type="top" limit={10} />
         <AnimeSlider type="airing" limit={10} />
-
-
     </>
 }
 
