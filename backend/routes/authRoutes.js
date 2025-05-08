@@ -16,6 +16,8 @@ import { searchanime } from "../Controllers/searchanime.js";
 import { addToWishlist } from "../Controllers/addtowishlist.js";
 import { verifyToken } from "../middleware/auth.js";
 import { getUser } from "../Controllers/getuser.js";
+import { getWishlist } from "../Controllers/getwishlist.js";
+import { deleteFromWishlist } from "../Controllers/removefromwishlist.js";
 const router = express.Router();
 const upload = multer();
 
@@ -34,6 +36,8 @@ router.get("/health", healthCheck);
 router.get("/searchanime", searchanime);
 router.post("/addtowishlist", verifyToken,addToWishlist);
 router.get("/getuser", verifyToken, getUser);
+router.get("/getwislist" , verifyToken, getWishlist);
+router.patch("/removefromwishlist", verifyToken, deleteFromWishlist);
 
 
 export default router;
