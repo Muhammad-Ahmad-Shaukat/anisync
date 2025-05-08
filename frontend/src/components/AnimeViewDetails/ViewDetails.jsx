@@ -14,12 +14,12 @@ const ViewDetails = ({ animeName }) => {
         const res = await axios.get(`http://localhost:5000/api/auth/findanime?q=${animeName}`);
         if (res.data.length > 0) {
           setAnime(res.data[0]);
-          console.log(res.data[0]);
         } else {
           setAnime(null);
         }
       } catch (err) {
         console.error("Error fetching anime details:", err);
+        alert("Failed to load anime details. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -27,6 +27,39 @@ const ViewDetails = ({ animeName }) => {
 
     fetchAnime();
   }, [animeName]);
+
+  const handlewishlist = async () => {
+    if (!anime || !anime._id) {
+      alert("Anime data is not available.");
+      return;
+    }
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You must be logged in to add to your wishlist.");
+      return;
+    }
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/addtowishlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ animeid: anime._id })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Anime added to your wishlist successfully!");
+      } else {
+        alert(`Failed to add to wishlist: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+      alert("Something went wrong while adding to wishlist.");
+    }
+  };
 
   if (loading) {
     return (
@@ -65,7 +98,7 @@ const ViewDetails = ({ animeName }) => {
       </SkeletonTheme>
     );
   }
-  
+
   if (!anime) return <div className="not-found">Anime not found.</div>;
 
   return (
@@ -90,7 +123,7 @@ const ViewDetails = ({ animeName }) => {
               <p className="info"><span className="label">Categories:</span> {anime.categories.join(", ")}</p>
             )}
             <div className="actions">
-              <button className="action-button">Add to List</button>
+              <button className="action-button" onClick={handlewishlist}>Add to List</button>
               <button className="action-button">Share</button>
             </div>
             <p className="description">{anime.description}</p>

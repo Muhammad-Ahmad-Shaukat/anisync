@@ -17,6 +17,8 @@ import AnimeDetails from './Pages/AnimeDetails/AnimeDetails.jsx';
 //   const [serveron, setServerOn] = useState(true);
 //   const [checked, setChecked] = useState(false);
 
+
+    //const isloogedIn = localStorage.getItem("token") ? true : false;
 //   useEffect(() => {
 //     const checkServer = async () => {
 //       try {
