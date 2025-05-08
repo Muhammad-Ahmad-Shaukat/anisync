@@ -15,6 +15,7 @@ import { healthCheck } from "../Controllers/health.js";
 import { searchanime } from "../Controllers/searchanime.js";
 import { addToWishlist } from "../Controllers/addtowishlist.js";
 import { verifyToken } from "../middleware/auth.js";
+import { getUser } from "../Controllers/getuser.js";
 const router = express.Router();
 const upload = multer();
 
@@ -32,6 +33,7 @@ router.patch('/updateuser', upload.single('avatar'), updateUser);
 router.get("/health", healthCheck);
 router.get("/searchanime", searchanime);
 router.post("/addtowishlist", verifyToken,addToWishlist);
+router.get("/getuser", verifyToken, getUser);
 
 
 export default router;
