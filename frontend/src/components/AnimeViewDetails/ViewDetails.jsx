@@ -61,6 +61,10 @@ const ViewDetails = ({ animeName }) => {
     }
   };
 
+  const watchanime = () => {
+    console.log(anime._id);
+  }
+
   if (loading) {
     return (
       <SkeletonTheme baseColor="#303030" highlightColor="#505050">
@@ -124,7 +128,7 @@ const ViewDetails = ({ animeName }) => {
             )}
             <div className="actions">
               <button className="action-button" onClick={handlewishlist}>Add to List</button>
-              <button className="action-button">Share</button>
+              <button className="action-button" onClick={watchanime}>Watch Now</button>
             </div>
             <p className="description">{anime.description}</p>
             {anime.trailer && (
