@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import "./AnimeList.css";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useNavigate } from "react-router-dom";
 
 const AnimeList = () => {
-  const [animeList, setAnimeList] = useState([]);
+  const [fetchedAnimeList, setFetchedAnimeList] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAnime = async () => {
@@ -14,9 +17,9 @@ const AnimeList = () => {
         const response = await fetch("http://localhost:5000/api/auth/topanime");
         const data = await response.json();
         if (Array.isArray(data)) {
-          setAnimeList(data);
+          setFetchedAnimeList(data);
         } else if (Array.isArray(data.result)) {
-          setAnimeList(data.result); 
+          setFetchedAnimeList(data.result);
         } else {
           throw new Error("Invalid anime data format.");
         }
@@ -29,6 +32,8 @@ const AnimeList = () => {
 
     fetchAnime();
   }, []);
+
+  const animeList = useMemo(() => fetchedAnimeList, [fetchedAnimeList]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -73,6 +78,11 @@ const AnimeList = () => {
 
   const anime = animeList[currentSlide];
 
+  const viewdetails = () => {
+    const animeName = encodeURIComponent(anime.title.english || anime.title.romaji);
+    navigate(`/anime/${animeName}`);
+  };
+
   return (
     <div className="anime-list-container">
       <img
@@ -84,7 +94,7 @@ const AnimeList = () => {
       <div className="anime-list-content">
         <h1>{anime.title?.english || anime.title?.romaji}</h1>
         <p>{anime.description || "No description available."}</p>
-        <button>View Details</button>
+        <button onClick={viewdetails}>View Details</button>
       </div>
 
       <div className="dot-container">
