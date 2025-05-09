@@ -12,8 +12,8 @@ const Navbar = () => {
         <SearchBar />
       </div>
       <div className="nav-links center-links">
-        <Link to="/Top Anime">Top Airing</Link>
-        <Link to="/SignUp">Trending</Link>
+        <Link to="/top">Top Airing</Link>
+        <Link to="/trending">Trending</Link>
         <Link to="/Friends">Friends</Link>
         <Link to="/watchTogether">Watch Together</Link>
       </div>
