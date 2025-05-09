@@ -11,6 +11,8 @@ import NotFoundPage from "./Pages/ErrrorPages/404Page.jsx";
 import ServerCrash from './Pages/ErrrorPages/ServerCrash.jsx';
 import Footer from './components/Footer/Footer';
 import AnimeDetails from './Pages/AnimeDetails/AnimeDetails.jsx';
+import TrendingPage from './Pages/TrendingPage/TrendingPage.jsx';
+import TopAiringPage from './Pages/TopAiringPage/TopAiringPage.jsx';
 
 
  function App() {
@@ -49,6 +51,8 @@ import AnimeDetails from './Pages/AnimeDetails/AnimeDetails.jsx';
             <Route path='/login' element={<Login />} />
             <Route path='/profile'element={<ProfilePage />}/>
             <Route path='/anime/:animeName' element={<AnimeDetails />} />
+            <Route path='/trending' element={<TrendingPage />} />
+            <Route path='/top' element={<TopAiringPage />} />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
           <Footer />

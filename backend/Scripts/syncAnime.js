@@ -1,6 +1,7 @@
 // ✅ syncAnime.js
 import fetch from "node-fetch";
 import Anime from "../models/animeSchema.js";
+import Episode from "../models/Episode.js";
 import SyncLog from "../models/SyncLog.js";
 
 const CATEGORY_ENDPOINTS = {
@@ -17,7 +18,7 @@ const fetchWithRetry = async (url, retries = 3, delay = 1000) => {
       if (!response.ok) throw new Error("Network response was not ok");
       return await response.json();
     } catch (err) {
-      console.error(`Fetch attempt ${i + 1} failed:`, err);
+      console.error(`Fetch attempt ${i + 1} failed:`, err.message);
       if (i === retries - 1) throw new Error("All fetch attempts failed");
       await new Promise(resolve => setTimeout(resolve, delay));
     }
@@ -33,11 +34,54 @@ const normalizeStatus = (status) => {
   return status;
 };
 
+// 🔄 Fetch and store all episodes for a given anime
+const syncEpisodesForAnime = async (anime) => {
+  try {
+    const existingCount = await Episode.countDocuments({ animeId: anime._id });
+    if (existingCount > 0) {
+      console.log(`⏩ Episodes already exist for: ${anime.anime_name}`);
+      return;
+    }
+
+    console.log(`📥 Syncing episodes for: ${anime.anime_name}`);
+
+    let hasNextPage = true;
+    let page = 1;
+
+    while (hasNextPage) {
+      const url = `https://api.jikan.moe/v4/anime/${anime.animeid}/episodes?page=${page}`;
+      const json = await fetchWithRetry(url);
+      const episodes = json.data || [];
+
+      for (const ep of episodes) {
+        await Episode.create({
+          animeId: anime._id,
+          episode_number: ep.mal_id,
+          episode_title: ep.title || `Episode ${ep.mal_id}`,
+          video_src: "https://anisyncweb.s3.eu-north-1.amazonaws.com/commingsoonvideo.webm",
+          episode_pic_src: ep.images?.jpg?.image_url || anime.image,
+        });
+      }
+
+      hasNextPage = json.pagination?.has_next_page;
+      page += 1;
+
+      // Respect Jikan's rate limits
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
+    console.log(`✅ Episodes synced for: ${anime.anime_name}`);
+  } catch (error) {
+    console.error(`❌ Error syncing episodes for ${anime.anime_name}:`, error.message);
+  }
+};
+
+// 🔁 Master sync function
 export const syncAnime = async () => {
   const log = await SyncLog.findOne({ source: "jikan_cache" });
   const hoursSinceLastSync = log ? (Date.now() - log.lastSyncedAt.getTime()) / (1000 * 60 * 60) : Infinity;
 
-  if (hoursSinceLastSync < 12) {
+  if (hoursSinceLastSync < 0) {
     console.log("⏩ Skipping sync (last updated recently)");
     return;
   }
@@ -66,11 +110,11 @@ export const syncAnime = async () => {
           characters: [],
         };
 
-        const existing = await Anime.findOne({ animeid: animeData.animeid });
+        let anime = await Anime.findOne({ animeid: animeData.animeid });
 
-        if (existing) {
-          const updatedCategories = Array.from(new Set([...(existing.categories || []), category]));
-          const updatedGenres = Array.from(new Set([...(existing.genres || []), ...animeData.genres]));
+        if (anime) {
+          const updatedCategories = Array.from(new Set([...(anime.categories || []), category]));
+          const updatedGenres = Array.from(new Set([...(anime.genres || []), ...animeData.genres]));
 
           await Anime.updateOne(
             { animeid: animeData.animeid },
@@ -80,9 +124,13 @@ export const syncAnime = async () => {
               categories: updatedCategories,
             }
           );
+
+          anime = await Anime.findOne({ animeid: animeData.animeid }); // refresh reference
         } else {
-          await Anime.create({ ...animeData, categories: [category] });
+          anime = await Anime.create({ ...animeData, categories: [category] });
         }
+
+        await syncEpisodesForAnime(anime); // 👈 Add episode sync per anime
       }
     } catch (error) {
       console.error(`❌ Failed syncing category "${category}":`, error.message);
@@ -95,5 +143,5 @@ export const syncAnime = async () => {
     { upsert: true }
   );
 
-  console.log("✅ Anime sync complete.");
+  console.log("✅ Anime and Episode sync complete.");
 };
