@@ -1,9 +1,9 @@
-// ✅ syncAnime.js
 import fetch from "node-fetch";
 import Anime from "../models/animeSchema.js";
 import Episode from "../models/Episode.js";
 import SyncLog from "../models/SyncLog.js";
 
+// Define category-specific Jikan API endpoints
 const CATEGORY_ENDPOINTS = {
   top: "https://api.jikan.moe/v4/top/anime?limit=25",
   trending: "https://api.jikan.moe/v4/anime?order_by=popularity&sort=desc&limit=25",
@@ -11,6 +11,7 @@ const CATEGORY_ENDPOINTS = {
   airing: "https://api.jikan.moe/v4/anime?status=airing&order_by=score&sort=desc&limit=25",
 };
 
+// Retry wrapper for fetch
 const fetchWithRetry = async (url, retries = 3, delay = 1000) => {
   for (let i = 0; i < retries; i++) {
     try {
@@ -25,6 +26,7 @@ const fetchWithRetry = async (url, retries = 3, delay = 1000) => {
   }
 };
 
+// Normalize status text
 const normalizeStatus = (status) => {
   if (!status) return "Unknown";
   const s = status.toLowerCase();
@@ -34,7 +36,7 @@ const normalizeStatus = (status) => {
   return status;
 };
 
-// 🔄 Fetch and store all episodes for a given anime
+// Sync episodes for a given anime
 const syncEpisodesForAnime = async (anime) => {
   try {
     const existingCount = await Episode.countDocuments({ animeId: anime._id });
@@ -43,10 +45,9 @@ const syncEpisodesForAnime = async (anime) => {
       return;
     }
 
-    console.log(`📥 Syncing episodes for: ${anime.anime_name}`);
-
-    let hasNextPage = true;
+    console.log(`Syncing episodes for: ${anime.anime_name}`);
     let page = 1;
+    let hasNextPage = true;
 
     while (hasNextPage) {
       const url = `https://api.jikan.moe/v4/anime/${anime.animeid}/episodes?page=${page}`;
@@ -65,9 +66,7 @@ const syncEpisodesForAnime = async (anime) => {
 
       hasNextPage = json.pagination?.has_next_page;
       page += 1;
-
-      // Respect Jikan's rate limits
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500)); // Be nice to the API
     }
 
     console.log(`✅ Episodes synced for: ${anime.anime_name}`);
@@ -76,72 +75,76 @@ const syncEpisodesForAnime = async (anime) => {
   }
 };
 
-// 🔁 Master sync function
+// Main syncAnime function
 export const syncAnime = async () => {
-  const log = await SyncLog.findOne({ source: "jikan_cache" });
-  const hoursSinceLastSync = log ? (Date.now() - log.lastSyncedAt.getTime()) / (1000 * 60 * 60) : Infinity;
+  try {
+    const log = await SyncLog.findOne({ source: "jikan_cache" });
+    const hoursSinceLastSync = log ? (Date.now() - log.lastSyncedAt.getTime()) / (1000 * 60 * 60) : Infinity;
 
-  if (hoursSinceLastSync < 0) {
-    console.log("⏩ Skipping sync (last updated recently)");
-    return;
-  }
-
-  console.log("🔄 Syncing Anime Categories...");
-
-  for (const [category, url] of Object.entries(CATEGORY_ENDPOINTS)) {
-    try {
-      const json = await fetchWithRetry(url);
-      const data = json.data || [];
-
-      for (const item of data) {
-        const animeData = {
-          animeid: item.mal_id,
-          anime_name: item.title_english || item.title || "Unknown Title",
-          genres: item.genres.map(g => g.name),
-          rating: item.score ?? 0,
-          episodes: item.episodes ?? 0,
-          popularity: item.popularity ?? 0,
-          image: item.images?.jpg?.large_image_url || "",
-          description: item.synopsis ?? "",
-          trailer: item.trailer?.images?.maximum_image_url || item.trailer?.url || "",
-          status: normalizeStatus(item.status),
-          season: item.season ?? "Unknown",
-          source: item.source ?? "Unknown",
-          characters: [],
-        };
-
-        let anime = await Anime.findOne({ animeid: animeData.animeid });
-
-        if (anime) {
-          const updatedCategories = Array.from(new Set([...(anime.categories || []), category]));
-          const updatedGenres = Array.from(new Set([...(anime.genres || []), ...animeData.genres]));
-
-          await Anime.updateOne(
-            { animeid: animeData.animeid },
-            {
-              ...animeData,
-              genres: updatedGenres,
-              categories: updatedCategories,
-            }
-          );
-
-          anime = await Anime.findOne({ animeid: animeData.animeid }); // refresh reference
-        } else {
-          anime = await Anime.create({ ...animeData, categories: [category] });
-        }
-
-        await syncEpisodesForAnime(anime); // 👈 Add episode sync per anime
-      }
-    } catch (error) {
-      console.error(`❌ Failed syncing category "${category}":`, error.message);
+    if (hoursSinceLastSync < 12) {
+      console.log("⏸️ Skipping sync (last updated recently)");
+      return;
     }
+
+    console.log("🚀 Syncing Anime Categories...");
+
+    for (const [category, url] of Object.entries(CATEGORY_ENDPOINTS)) {
+      try {
+        const json = await fetchWithRetry(url);
+        const data = json.data || [];
+
+        for (const item of data) {
+          const animeData = {
+            animeid: item.mal_id,
+            anime_name: item.title_english || item.title || "Unknown Title",
+            genres: item.genres.map(g => g.name),
+            rating: item.score ?? 0,
+            episodes: item.episodes ?? 0,
+            popularity: item.popularity ?? 0,
+            image: item.images?.jpg?.large_image_url || "",
+            description: item.synopsis ?? "",
+            trailer: item.trailer?.images?.maximum_image_url || item.trailer?.url || "",
+            status: normalizeStatus(item.status),
+            season: item.season ?? "Unknown",
+            source: item.source ?? "Unknown",
+            characters: [],
+          };
+
+          let anime = await Anime.findOne({ animeid: animeData.animeid });
+
+          if (anime) {
+            const updatedCategories = Array.from(new Set([...(anime.categories || []), category]));
+            const updatedGenres = Array.from(new Set([...(anime.genres || []), ...animeData.genres]));
+
+            await Anime.updateOne(
+              { animeid: animeData.animeid },
+              {
+                ...animeData,
+                genres: updatedGenres,
+                categories: updatedCategories,
+              }
+            );
+
+            anime = await Anime.findOne({ animeid: animeData.animeid }); // refresh
+          } else {
+            anime = await Anime.create({ ...animeData, categories: [category] });
+          }
+
+          await syncEpisodesForAnime(anime);
+        }
+      } catch (error) {
+        console.error(`⚠️ Failed syncing category "${category}":`, error.message);
+      }
+    }
+
+    await SyncLog.findOneAndUpdate(
+      { source: "jikan_cache" },
+      { lastSyncedAt: new Date() },
+      { upsert: true }
+    );
+
+    console.log("🎉 Anime and Episode sync complete.");
+  } catch (error) {
+    console.error("❌ Sync failed:", error.message);
   }
-
-  await SyncLog.findOneAndUpdate(
-    { source: "jikan_cache" },
-    { lastSyncedAt: new Date() },
-    { upsert: true }
-  );
-
-  console.log("✅ Anime and Episode sync complete.");
 };

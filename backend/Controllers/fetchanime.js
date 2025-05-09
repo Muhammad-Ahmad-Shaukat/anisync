@@ -7,38 +7,39 @@ export const fetchAnime = async (req, res) => {
     let query = {};
     let sort = {};
 
-    switch (type) {
+      switch (type) {
       case "top":
-        query.categories = "top";
+        query.categories = { $in: ["top"] };
         sort = { rating: -1 };
         break;
-
+        
       case "trending":
-        query.categories = "trending";
+        query.categories = { $in: ["trending"] };
         sort = { popularity: -1 };
         break;
-
+        
       case "new":
-        query.categories = "new";
+        query.categories = { $in: ["new"] };
         sort = { rating: -1 };
         break;
-
+        
       case "airing":
-      case "Currently Airing":
-        query.categories = "airing";
+      case "currently airing":
+        query.categories = { $in: ["airing"] };
         sort = { rating: -1 };
         break;
-
+        
       case "genre":
         if (!genre) {
           return res.status(400).json({ error: "Genre must be provided when type is 'genre'" });
         }
         query.genres = genre;
         break;
-
+      
       default:
         return res.status(400).json({ error: "Invalid type parameter" });
     }
+
 
     const animeList = await Anime.find(query).sort(sort).limit(Number(limit));
 

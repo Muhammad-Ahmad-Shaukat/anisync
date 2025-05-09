@@ -24,6 +24,7 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
 
         const res = await fetch(url);
         const data = await res.json();
+        console.log("Fetched data:", data);
 
         const uniqueAnime = data.filter(
           (anime, index, self) =>

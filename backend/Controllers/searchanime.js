@@ -1,4 +1,5 @@
 import Anime from "../models/animeSchema.js";
+import { Worker } from 'worker_threads';
 import axios from "axios";
 
 export const searchanime = async (req, res) => {
@@ -56,8 +57,18 @@ export const searchanime = async (req, res) => {
           categories: [],
         });
 
-        await newAnime.save();
-        newAnimeList.push(newAnime);
+      const worker = new Worker('./workers/searchAnimeWorker.js');
+      worker.postMessage(animeData);
+
+      worker.on('message', (message) => {
+        if (message.success) {
+          console.log(`Successfully added anime: ${message.animeid}`);
+        } else {
+          console.error(`Failed to add anime: ${message.animeid}`, message.error);
+        }
+      });
+
+      newAnimeList.push(animeData)
       }
 
       if (localResults.length + newAnimeList.length >= limit) {
