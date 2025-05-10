@@ -57,7 +57,7 @@ export const searchanime = async (req, res) => {
           categories: [],
         });
 
-      const worker = new Worker('./workers/searchAnimeWorker.js');
+      const worker = new Worker('../workers/addAnimeWorker.js');
       worker.postMessage(animeData);
 
       worker.on('message', (message) => {
