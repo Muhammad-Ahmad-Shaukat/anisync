@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./SignUp.css"; 
+import "./SignUp.css";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -8,6 +8,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const sendotp = async (e) => {
     e.preventDefault();
@@ -15,6 +16,7 @@ const Signup = () => {
       alert("Please enter email address");
       return;
     }
+    setIsLoading(true);
     try{
       const response = await fetch("http://localhost:5000/api/auth/sendotp",{
         method: "POST",
@@ -34,11 +36,14 @@ const Signup = () => {
     }catch(error){
       console.error("Email Verification Error:", error.message);
       alert(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch("http://localhost:5000/api/auth/signup", {
         method: "POST",
@@ -54,6 +59,8 @@ const Signup = () => {
     } catch (error) {
       console.error("Signup Error:", error.message);
       alert(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,6 +70,7 @@ const Signup = () => {
       alert("Please enter email and otp");
       return;
     }
+    setIsLoading(true);
     try{
       const response = await fetch ("http://localhost:5000/api/auth/verifyotp", {
         method: "POST",
@@ -73,46 +81,95 @@ const Signup = () => {
       if (!response.ok) {
         throw new Error(data.message || "OTP verification failed");
       }else{
-        alert("OTP SENT TO EMAIL");
+        alert("OTP verified successfully");
       }
     }catch(error){
       console.error("Otp Verification Error:", error.message);
       alert(error.message);
+    } finally {
+      setIsLoading(false);
     }
-
   }
 
   return (
-    <div className="signup-container">
-      <div className="signup-box">
-        <h2>Sign Up</h2>
-        <form id="signup-form" onSubmit={handleSubmit}>
-          <div className="input-group">
-          <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter Username"required />
+    <div className="signup__container">
+      <div className="signup__card">
+        <h2 className="signup__title">Create Account</h2>
+        <form className="signup__form" onSubmit={handleSubmit}>
+          <div className="signup__input-group">
+            <input 
+              type="text" 
+              className="signup__input" 
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)} 
+              placeholder="Username" 
+              required 
+            />
           </div>
           
-          <div className="input-group">
-         
-          <input type="email" id="Email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email"required />
+          <div className="signup__input-group">
+            <input 
+              type="email" 
+              className="signup__input" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              placeholder="Email" 
+              required 
+            />
           </div>
 
-          <div className="input-group">
-          
-          <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter Password"required />
+          <div className="signup__input-group">
+            <input 
+              type="password" 
+              className="signup__input" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              placeholder="Password" 
+              required 
+            />
           </div>
 
-          <button id="otp-button" onClick={sendotp}>Verify Email</button>
-          <input type="text" placeholder="Enter OTP" id="otp-text" value={otp} onChange={(e) => setOtp(e.target.value)}/>
-          <button id="otp-verify" onClick={verifyotp}>Verify OTP</button>
+          <div className="signup__otp-container">
+            <button 
+              className="signup__otp-btn" 
+              onClick={sendotp}
+              disabled={isLoading}
+            >
+              {isLoading ? "Sending..." : "Send OTP"}
+            </button>
+            <input 
+              type="text" 
+              className="signup__otp-input" 
+              value={otp} 
+              onChange={(e) => setOtp(e.target.value)} 
+              placeholder="Enter OTP" 
+            />
+            <button 
+              className="signup__otp-verify-btn" 
+              onClick={verifyotp}
+              disabled={isLoading}
+            >
+              {isLoading ? "Verifying..." : "Verify OTP"}
+            </button>
+          </div>
 
-          <button id="signup-btn" type="submit">Sign Up</button>
+          <div className="btndiv">
+             <button 
+            className="signup__submit-btn" 
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? "Creating Account..." : "Sign Up"}
+          </button>
 
-          <p className="signup-footer">
-            Already have an account? <Link to={'/login'}>Login</Link>
+          </div>
+          <p className="signup__footer">
+            Already have an account? <Link to={'/login'} className="signup__login-link">Login</Link>
           </p>
         </form>
       </div>
     </div>
   );
 };
+
 export default Signup;

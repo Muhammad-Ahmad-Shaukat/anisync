@@ -40,7 +40,7 @@ const Login = () => {
     <div className="login-container">
       <div className="login-box">
         <h2>Sign In</h2>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className="form">
           <div className="input-group">
             <input
               type="text"
