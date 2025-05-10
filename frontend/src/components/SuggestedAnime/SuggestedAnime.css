@@ -1,0 +1,52 @@
+.suggested-container {
+  margin-right: 20px;
+}
+
+.suggested-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.suggested-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin: 10px;
+}
+
+.suggested-card {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 300px;
+  border-radius: 10px;
+  width: 150px;
+  overflow:hidden;
+  padding: 10px;
+  margin: 10px;
+}
+
+.suggested-card:hover {
+  transform: scale(1.05);
+}
+
+.suggested-img {
+  width: 100%;
+  height: 200px; /* Fixed height for the image */
+  object-fit: cover; /* Ensures the image fills the space without distortion */
+  border-radius: 5px;
+}
+
+.suggested-name {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;  /* Let the text take the available space */
+  flex-grow: 1; /* Ensures the text area takes up remaining space */
+  text-align: center; /* Optional: to center align the text */
+}

@@ -1,34 +1,11 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import "./ViewDetails.css";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useNavigate } from "react-router-dom";
 
-const ViewDetails = ({ animeName }) => {
-  const [anime, setAnime] = useState(null);
-  const [loading, setLoading] = useState(true);
+const ViewDetails = ({ anime, loading }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchAnime = async () => {
-      try {
-        const res = await axios.get(`http://localhost:5000/api/auth/findanime?q=${animeName}`);
-        if (res.data.length > 0) {
-          setAnime(res.data[0]);
-        } else {
-          setAnime(null);
-        }
-      } catch (err) {
-        console.error("Error fetching anime details:", err);
-        alert("Failed to load anime details. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAnime();
-  }, [animeName]);
 
   const handlewishlist = async () => {
     if (!anime || !anime._id) {
@@ -45,7 +22,7 @@ const ViewDetails = ({ animeName }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ animeid: anime._id })
       });
@@ -63,15 +40,14 @@ const ViewDetails = ({ animeName }) => {
     }
   };
 
-const watchanime = () => {
-  if (anime?.anime_name) {
-    const slug = anime.anime_name.toLowerCase().replace(/\s+/g, "-");
-    navigate(`/watch/${slug}`);
-  } else {
-    alert("Anime name is not available.");
-  }
-};
-
+  const watchanime = () => {
+    if (anime?.anime_name) {
+      const slug = anime.anime_name.toLowerCase().replace(/\s+/g, "-");
+      navigate(`/watch/${slug}`);
+    } else {
+      alert("Anime name is not available.");
+    }
+  };
 
   if (loading) {
     return (

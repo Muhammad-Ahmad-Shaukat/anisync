@@ -19,6 +19,8 @@ import { getUser } from "../Controllers/getuser.js";
 import { getWishlist } from "../Controllers/getwishlist.js";
 import { deleteFromWishlist } from "../Controllers/removefromwishlist.js";
 import { fetchEpisodes } from "../Controllers/fetchepisodes.js";
+import { fetchSuggestedAnime } from "../Controllers/fetchSuggestedAnime.js";
+
 const router = express.Router();
 const upload = multer();
 
@@ -40,6 +42,7 @@ router.get("/getuser", verifyToken, getUser);
 router.get("/getwislist" , verifyToken, getWishlist);
 router.patch("/removefromwishlist", verifyToken, deleteFromWishlist);
 router.post("/fetchepisodes", fetchEpisodes);
+router.get('/suggestedanime',fetchSuggestedAnime)
 
 
 export default router;

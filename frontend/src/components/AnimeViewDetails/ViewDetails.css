@@ -1,45 +1,58 @@
+/* Full Page Container */
 .details-container {
   width: 100vw;
   min-height: 100vh;
-  background: radial-gradient( #130f23, #2d2d4e);
-  padding-top: 70px;
+  background: radial-gradient(#130f23, #2d2d4e);
+  padding-top: 20px;
   box-sizing: border-box;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: flex-start;
 }
 
+/* Main Content Wrapper */
 .details-card {
-  background-color: #1d1d30;
-  border-radius: 8px;
+  background-color: transparent; /* Removed card feel */
+  border-radius: 0;              /* Removed rounded corners */
   padding: 30px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+  box-shadow: none;              /* Removed box shadow */
   max-width: 1000px;
   width: 90%;
   color: #e0e0e0;
   margin-bottom: 40px;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
+/* Animation for smooth load-in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header Styling */
 .details-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #444;
   padding-bottom: 15px;
   margin-bottom: 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle line */
 }
 
+/* Title Style */
 .details-title {
   font-size: 24px;
   margin: 0;
 }
 
+/* Flex Layout for Poster and Info */
 .details-content {
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
 }
 
+/* Left Column (Poster) */
 .left-column {
   flex: 1 1 300px;
   display: flex;
@@ -47,6 +60,7 @@
   align-items: center;
 }
 
+/* Poster Image */
 .poster {
   width: 100%;
   max-width: 300px;
@@ -54,22 +68,26 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
+/* Right Column (Details) */
 .right-column {
   flex: 2 1 300px;
   font-size: 16px;
   line-height: 1.6;
 }
 
+/* Individual Info Rows */
 .info {
   margin: 8px 0;
 }
 
+/* Bold Labels */
 .label {
   font-weight: bold;
   color: #fff;
   margin-right: 8px;
 }
 
+/* Buttons */
 .actions {
   margin-top: 20px;
   display: flex;
@@ -91,12 +109,14 @@
   background-color: #b82b74;
 }
 
+/* Description Paragraph */
 .description {
   margin-top: 25px;
   font-size: 14px;
   color: #ccc;
 }
 
+/* Trailer Link Styling */
 .trailer-link {
   margin-top: 20px;
 }
@@ -110,6 +130,7 @@
   text-decoration: underline;
 }
 
+/* Loading and Error States */
 .loading,
 .not-found {
   color: #fff;

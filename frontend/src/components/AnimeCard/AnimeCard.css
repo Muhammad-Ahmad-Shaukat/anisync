@@ -14,7 +14,6 @@
   gap: 1rem;
   justify-items: center;
 }
-
 .anime-card-item {
   background: #1e1e1e;
   border-radius: 10px;
@@ -23,19 +22,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 320px; /* Set a fixed height */
-}
-
-.anime-card-item:hover {
-  transform: scale(1.05);
+  height: 320px;
+  width: 100%; /* Ensures consistency in card width */
+  max-width: 180px; /* Optional: cap width */
 }
 
 .anime-card-image {
   width: 100%;
   height: 260px;
   object-fit: cover;
-  border-bottom: 1px solid #333;
+  display: block;
 }
+.anime-card-item:hover {
+  transform: scale(1.05);
+}
+
+
 
 .anime-card-title {
   font-size: 0.9rem;
