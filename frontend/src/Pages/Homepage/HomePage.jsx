@@ -12,11 +12,11 @@ function HomePage(){
     return<>
     
  
-        {/* <AnimeList/>
+        <AnimeList/>
         <AnimeSlider type="Trending" limit={11} />
         <AnimeSlider type="top" limit={11} />
-        <AnimeSlider type="airing" limit={11} /> */}
-        <AnimeEditPage/>
+        <AnimeSlider type="airing" limit={11} />
+        {/* <AnimeEditPage/> */}
     </>
 }
 
