@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import VideoPlayer from "../../components/VideoSComponent/VideoPlayer";
+import CommentSection from "../../components/comments/CommentsSection";
 
 function WatchAnime() {
   const { animeName } = useParams();
@@ -42,7 +43,11 @@ function WatchAnime() {
   if (error) return <div>Error: {error}</div>;
   if (!anime) return <div>No anime data found.</div>;
 
-  return <VideoPlayer anime={anime} />;
+  return <>
+  <VideoPlayer anime={anime} />;
+  <CommentSection anime={anime} />
+  </>
+
 }
 
 export default WatchAnime;
