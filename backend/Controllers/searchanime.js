@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const searchanime = async (req, res) => {
   try {
-    let { q, limit } = req.query;
+    let { q, limit = 1 } = req.query;
 
     if (!q) {
       return res.status(400).json({ message: "Query parameter 'q' is required." });

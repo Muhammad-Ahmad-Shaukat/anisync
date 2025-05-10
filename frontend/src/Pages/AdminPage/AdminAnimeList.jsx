@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './AdminAnimeList.css';
 
-const SKELETON_COUNT = 5; // Number of skeleton cards to show
+const SKELETON_COUNT = 5; 
 
 const SkeletonList = () => (
   <div className="skeleton-list">

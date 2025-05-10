@@ -3,15 +3,12 @@ import Anime from "../models/animeSchema.js";
 import Episode from "../models/Episode.js";
 import SyncLog from "../models/SyncLog.js";
 
-// Define category-specific Jikan API endpoints
 const CATEGORY_ENDPOINTS = {
   top: "https://api.jikan.moe/v4/top/anime?limit=25",
   trending: "https://api.jikan.moe/v4/anime?order_by=popularity&sort=desc&limit=25",
   new: "https://api.jikan.moe/v4/seasons/now?limit=25",
   airing: "https://api.jikan.moe/v4/anime?status=airing&order_by=score&sort=desc&limit=25",
 };
-
-// Retry wrapper for fetch
 const fetchWithRetry = async (url, retries = 3, delay = 1000) => {
   for (let i = 0; i < retries; i++) {
     try {
@@ -26,7 +23,6 @@ const fetchWithRetry = async (url, retries = 3, delay = 1000) => {
   }
 };
 
-// Normalize status text
 const normalizeStatus = (status) => {
   if (!status) return "Unknown";
   const s = status.toLowerCase();
@@ -36,7 +32,6 @@ const normalizeStatus = (status) => {
   return status;
 };
 
-// Sync episodes for a given anime
 const syncEpisodesForAnime = async (anime) => {
   try {
     const existingCount = await Episode.countDocuments({ animeId: anime._id });
@@ -48,25 +43,39 @@ const syncEpisodesForAnime = async (anime) => {
     console.log(`Syncing episodes for: ${anime.anime_name}`);
     let page = 1;
     let hasNextPage = true;
+    let totalEpisodesFetched = 0;
 
     while (hasNextPage) {
       const url = `https://api.jikan.moe/v4/anime/${anime.animeid}/episodes?page=${page}`;
       const json = await fetchWithRetry(url);
       const episodes = json.data || [];
 
-      for (const ep of episodes) {
-        await Episode.create({
-          animeId: anime._id,
-          episode_number: ep.mal_id,
-          episode_title: ep.title || `Episode ${ep.mal_id}`,
-          video_src: "https://anisyncweb.s3.eu-north-1.amazonaws.com/commingsoonvideo.webm",
-          episode_pic_src: ep.images?.jpg?.image_url || anime.image,
-        });
+      if (episodes.length > 0) {
+        for (const ep of episodes) {
+          await Episode.create({
+            animeId: anime._id,
+            episode_number: ep.mal_id,
+            episode_title: ep.title || `Episode ${ep.mal_id}`,
+            video_src: "https://anisyncweb.s3.eu-north-1.amazonaws.com/commingsoonvideo.mp4",
+            episode_pic_src: ep.images?.jpg?.image_url || anime.image,
+          });
+          totalEpisodesFetched++;
+        }
       }
 
       hasNextPage = json.pagination?.has_next_page;
       page += 1;
-      await new Promise(resolve => setTimeout(resolve, 500)); // Be nice to the API
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    if (totalEpisodesFetched === 0) {
+      console.log(`⚠️ No episodes found for: ${anime.anime_name}. Adding dummy episode.`);
+      await Episode.create({
+        animeId: anime._id,
+        episode_number: 0,
+        episode_title: "Unknown",
+        video_src: "https://anisyncweb.s3.eu-north-1.amazonaws.com/commingsoonvideo.mp4",
+        episode_pic_src: anime.image,
+      });
     }
 
     console.log(`✅ Episodes synced for: ${anime.anime_name}`);
@@ -75,7 +84,7 @@ const syncEpisodesForAnime = async (anime) => {
   }
 };
 
-// Main syncAnime function
+
 export const syncAnime = async () => {
   try {
     const log = await SyncLog.findOne({ source: "jikan_cache" });
@@ -125,7 +134,7 @@ export const syncAnime = async () => {
               }
             );
 
-            anime = await Anime.findOne({ animeid: animeData.animeid }); // refresh
+            anime = await Anime.findOne({ animeid: animeData.animeid });
           } else {
             anime = await Anime.create({ ...animeData, categories: [category] });
           }

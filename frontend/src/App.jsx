@@ -13,7 +13,7 @@ import Footer from './components/Footer/Footer';
 import AnimeDetails from './Pages/AnimeDetails/AnimeDetails.jsx';
 import TrendingPage from './Pages/TrendingPage/TrendingPage.jsx';
 import TopAiringPage from './Pages/TopAiringPage/TopAiringPage.jsx';
-
+import WatchAnime from './Pages/VideoStream/watchanime.jsx';
 
  function App() {
 //   const [serveron, setServerOn] = useState(true);
@@ -54,6 +54,8 @@ import TopAiringPage from './Pages/TopAiringPage/TopAiringPage.jsx';
             <Route path='/trending' element={<TrendingPage />} />
             <Route path='/top' element={<TopAiringPage />} />
             <Route path='*' element={<NotFoundPage />} />
+            <Route path='/watch/:animeName' element={<WatchAnime />} />
+
           </Routes>
           <Footer />
         </>

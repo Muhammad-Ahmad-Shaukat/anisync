@@ -3,10 +3,12 @@ import axios from "axios";
 import "./ViewDetails.css";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useNavigate } from "react-router-dom";
 
 const ViewDetails = ({ animeName }) => {
   const [anime, setAnime] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAnime = async () => {
@@ -61,9 +63,15 @@ const ViewDetails = ({ animeName }) => {
     }
   };
 
-  const watchanime = () => {
-    console.log(anime._id);
+const watchanime = () => {
+  if (anime?.anime_name) {
+    const slug = anime.anime_name.toLowerCase().replace(/\s+/g, "-");
+    navigate(`/watch/${slug}`);
+  } else {
+    alert("Anime name is not available.");
   }
+};
+
 
   if (loading) {
     return (

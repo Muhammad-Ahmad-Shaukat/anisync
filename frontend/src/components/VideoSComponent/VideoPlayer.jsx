@@ -1,9 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import "./VideoPlayer.css";
 
-const VideoPlayer = () => {
-
+const VideoPlayer = ({ anime }) => {
   const [episodes, setEpisodes] = useState([]);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
@@ -11,93 +9,111 @@ const VideoPlayer = () => {
   const [errorEpisodes, setErrorEpisodes] = useState(null);
   const [loadingVideo, setLoadingVideo] = useState(false);
   const [errorVideo, setErrorVideo] = useState(null);
-
   const videoRef = useRef(null);
-  //const location = useLocation();
 
-  // Fetch the list of episodes from your API (dummy data is used here for illustration)
+
   useEffect(() => {
     const fetchEpisodes = async () => {
+      if (!anime || !anime._id) {
+        setErrorEpisodes("Anime ID not provided.");
+        setLoadingEpisodes(false);
+        return;
+      }
+
       setLoadingEpisodes(true);
       setErrorEpisodes(null);
+
       try {
-        // Replace this dummy data with an actual API call.
-        const dummyEpisodes = [
-          { id: 1, title: "Episode 1: The Beginning", videoName: "episode1.mp4" },
-          { id: 2, title: "Episode 2: The Continuation", videoName: "episode2.mp4" },
-          { id: 3, title: "Episode 3: The Climax", videoName: "episode3.mp4" },
-          { id: 4, title: "Episode 4: The Finale", videoName: "episode4.mp4" },
-        ];
-        setEpisodes(dummyEpisodes);
-        // Automatically select the first episode
-        setSelectedEpisode(dummyEpisodes[0]);
-        fetchEpisodeVideo(dummyEpisodes[0]);
+        const response = await fetch("http://localhost:5000/api/auth/fetchepisodes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ animeId: anime._id }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to fetch episodes.");
+        }
+
+        setEpisodes(data.episodes || []);
+        setSelectedEpisode(data.episodes?.[0] || null);
       } catch (err) {
-        setErrorEpisodes("Failed to load episodes.");
+        setErrorEpisodes(err.message);
       } finally {
         setLoadingEpisodes(false);
       }
     };
 
     fetchEpisodes();
-  }, []);
+  }, [anime]);
 
-  // Function to fetch video blob from API using a given episode's videoName
-  const fetchEpisodeVideo = async (episode) => {
+
+useEffect(() => {
+  const fetchVideoUrl = async () => {
+    if (!selectedEpisode || !selectedEpisode.videoName) {
+      setErrorVideo("No video source found for this episode.");
+      return;
+    }
+
     setLoadingVideo(true);
     setErrorVideo(null);
+
     try {
-      const response = await fetch(
-        `http://localhost:5173/anime/Nobody`
-      );
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to load video: ${errorText}`);
-      }
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      setVideoUrl(url);
-    } catch (e) {
-      setErrorVideo(e.message);
+      const key = encodeURIComponent(selectedEpisode.videoName);
+      const streamUrl = `http://localhost:5000/api/auth/video-stream?url=${key}`;
+      setVideoUrl(streamUrl);
+    } catch (error) {
+      console.error("Error fetching video URL:", error);
+      setErrorVideo("Could not load video.");
     } finally {
       setLoadingVideo(false);
     }
   };
 
-  // When an episode is clicked, update the state and fetch its video
-  const handleEpisodeClick = (episode) => {
-    setSelectedEpisode(episode);
-    fetchEpisodeVideo(episode);
-  };
+  fetchVideoUrl();
+}, [selectedEpisode]);
 
-  // Standard video control functions
-  const handleSkip = (seconds) => {
+
+console.log("Selected episode:", selectedEpisode);
+
+  useEffect(() => {
     const video = videoRef.current;
-    if (video) video.currentTime += seconds;
-  };
+    if (!video || !selectedEpisode) return;
 
-  const handleFullscreen = () => {
-    const video = videoRef.current;
-    if (video.requestFullscreen) video.requestFullscreen();
-  };
-
-  const handlePiP = async () => {
-    try {
-      if (document.pictureInPictureElement) {
-        await document.exitPictureInPicture();
-      } else {
-        await videoRef.current.requestPictureInPicture();
-      }
-    } catch (e) {
-      console.error("PiP error", e);
+    const savedTime = localStorage.getItem(`progress-${selectedEpisode._id}`);
+    if (savedTime) {
+      video.currentTime = parseFloat(savedTime);
     }
-  };
 
-  // Keyboard shortcuts for video control
+    const saveProgress = () => {
+      localStorage.setItem(`progress-${selectedEpisode._id}`, video.currentTime.toString());
+    };
+
+    video.addEventListener("timeupdate", saveProgress);
+    return () => video.removeEventListener("timeupdate", saveProgress);
+  }, [videoUrl, selectedEpisode]);
+
+  // Auto play next episode on video end
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleEnded = () => {
+      const index = episodes.findIndex((ep) => ep._id === selectedEpisode?._id);
+      const next = episodes[index + 1];
+      if (next) {
+        setSelectedEpisode(next);
+      }
+    };
+
+    video.addEventListener("ended", handleEnded);
+    return () => video.removeEventListener("ended", handleEnded);
+  }, [episodes, selectedEpisode]);
+
+  // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
-      const video = videoRef.current;
-      if (!video) return;
       switch (e.key.toLowerCase()) {
         case "arrowright":
           handleSkip(10);
@@ -115,56 +131,68 @@ const VideoPlayer = () => {
           break;
       }
     };
+
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // Utility Functions
+  const handleEpisodeClick = useCallback((episode) => {
+    setSelectedEpisode(episode);
+  }, []);
+
+  const handleSkip = (seconds) => {
+    const video = videoRef.current;
+    if (video) video.currentTime += seconds;
+  };
+
+  const handleFullscreen = () => {
+    const video = videoRef.current;
+    if (video.requestFullscreen) video.requestFullscreen();
+  };
+
+  const handlePiP = async () => {
+    try {
+      if (document.pictureInPictureElement) {
+        await document.exitPictureInPicture();
+      } else if (videoRef.current) {
+        await videoRef.current.requestPictureInPicture();
+      }
+    } catch (e) {
+      console.error("PiP error", e);
+    }
+  };
+
+  // Render
   return (
     <div className="video-episode-container">
-      {/* Left Sidebar: Episodes List */}
       <div className="episodes-list">
         {loadingEpisodes ? (
-          <div className="loading-screen">
-            <div className="waves">
-              <div className="wave wave1"></div>
-              <div className="wave wave2"></div>
-              <div className="wave wave3"></div>
-            </div>
-          </div>
+          <div className="loading-screen">Loading episodes...</div>
         ) : errorEpisodes ? (
-          <div className="error-screen">
-            <p>{errorEpisodes}</p>
-          </div>
+          <div className="error-screen">{errorEpisodes}</div>
+        ) : episodes.length === 0 ? (
+          <div className="error-screen">No episodes found.</div>
         ) : (
           episodes.map((episode) => (
             <div
-              key={episode.id}
-              className={`episode-item ${
-                selectedEpisode && selectedEpisode.id === episode.id ? "active" : ""
-              }`}
+              key={episode._id}
+              className={`episode-item ${selectedEpisode?._id === episode._id ? "active" : ""}`}
               onClick={() => handleEpisodeClick(episode)}
             >
-              <div className="episode-number">Episode {episode.id}</div>
-              <div className="episode-title">{episode.title}</div>
+              <div className="episode-info">
+                Episode {episode.episode_number} - {episode.title}
+              </div>
             </div>
           ))
         )}
       </div>
 
-      {/* Right Side: Video Player Area */}
       <div className="player-area">
         {loadingVideo ? (
-          <div className="loading-screen">
-            <div className="waves">
-              <div className="wave wave1"></div>
-              <div className="wave wave2"></div>
-              <div className="wave wave3"></div>
-            </div>
-          </div>
+          <div className="loading-screen">Loading video...</div>
         ) : errorVideo ? (
-          <div className="error-screen">
-            <p>Error: {errorVideo}</p>
-          </div>
+          <div className="error-screen">{errorVideo}</div>
         ) : (
           <div className="player-wrapper">
             <video ref={videoRef} src={videoUrl} controls className="video-player" />
