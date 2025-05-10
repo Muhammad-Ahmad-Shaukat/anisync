@@ -16,7 +16,7 @@
 
 .suggested-card {
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.3os ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

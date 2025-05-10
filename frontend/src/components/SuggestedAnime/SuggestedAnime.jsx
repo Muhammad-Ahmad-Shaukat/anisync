@@ -11,7 +11,7 @@ const SuggestedAnime = ({ anime }) => {
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/auth/suggestedanime?animeid=${anime.animeid}&limit=20`);
+        const res = await axios.get(`http://localhost:5000/api/auth/suggestedanime?animeid=${anime.animeid}&limit=27`);
         setSuggested(res.data);
       } catch (err) {
         console.error("Error fetching suggested anime:", err);

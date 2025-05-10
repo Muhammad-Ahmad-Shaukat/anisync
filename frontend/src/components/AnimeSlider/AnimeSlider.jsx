@@ -110,12 +110,13 @@ const AnimeSlider = ({ type = "trending", limit = 6, genre }) => {
               style={{ cursor: "pointer" }}
             >
               <div className="anime-info">
+                 <div className="anime-index">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
                 <div className="anime-title">
                   {anime.title.english || anime.title.romaji}
                 </div>
-                <div className="anime-index">
-                  {String(index + 1).padStart(2, "0")}
-                </div>
+               
               </div>
               <img
                 src={anime.coverImage.large}

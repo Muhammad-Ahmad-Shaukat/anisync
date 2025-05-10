@@ -10,7 +10,7 @@ function HomePage(){
 
     return<>
     
-    <AdvancedSearch/>
+ 
         <AnimeList/>
         <AnimeSlider type="Trending" limit={11} />
         <AnimeSlider type="top" limit={11} />

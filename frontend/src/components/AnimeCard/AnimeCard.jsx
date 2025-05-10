@@ -4,8 +4,9 @@ import "react-loading-skeleton/dist/skeleton.css";
 import "./AnimeCard.css";
 import { useNavigate } from "react-router-dom";
 
-const AnimeCard = ({ type = "trending", limit = 6, genre }) => {
+const AnimeCard = ({ type = "trending", limit = 6, genres = [] }) => {
   const [animeList, setAnimeList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -21,10 +22,6 @@ const AnimeCard = ({ type = "trending", limit = 6, genre }) => {
     const fetchAnime = async () => {
       try {
         let url = `http://localhost:5000/api/auth/fetchAnime?type=${type.toLowerCase()}&limit=${limit}`;
-        if (type === "genre" && genre) {
-          url += `&genre=${genre}`;
-        }
-
         const res = await fetch(url);
         const data = await res.json();
 
@@ -34,6 +31,7 @@ const AnimeCard = ({ type = "trending", limit = 6, genre }) => {
         );
 
         setAnimeList(uniqueAnime);
+        setFilteredList(uniqueAnime); // Initialize filtered list with all anime
       } catch (err) {
         console.error("Fetch error:", err);
       } finally {
@@ -42,7 +40,21 @@ const AnimeCard = ({ type = "trending", limit = 6, genre }) => {
     };
 
     fetchAnime();
-  }, [type, limit, genre]);
+  }, [type, limit]);
+
+  // Apply genre filtering whenever genres or animeList changes
+  useEffect(() => {
+    if (genres.length > 0) {
+      const filtered = animeList.filter(anime => 
+        genres.some(genre => 
+          anime.genres?.map(g => g.toLowerCase()).includes(genre.toLowerCase())
+        )
+      );
+      setFilteredList(filtered);
+    } else {
+      setFilteredList(animeList); // Show all anime if no genres selected
+    }
+  }, [genres, animeList]);
 
   const handleAnimeClick = (anime) => {
     const animeName = encodeURIComponent(anime.title.english || anime.title.romaji);
@@ -64,16 +76,16 @@ const AnimeCard = ({ type = "trending", limit = 6, genre }) => {
     );
   }
 
-  if (!animeList.length) return <div>No anime found.</div>;
+  if (!filteredList.length) return <div>No anime found matching selected genres.</div>;
 
   return (
     <div className="anime-card-wrapper">
       <h2 className="anime-card-heading">
-        {type.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+        {genres.length > 0 && ` (Filtered by: ${genres.join(", ")})`}
       </h2>
 
       <div className="anime-card-grid">
-        {animeList.map((anime) => (
+        {filteredList.map((anime) => (
           <div
             className="anime-card-item"
             key={anime.id}
@@ -88,6 +100,7 @@ const AnimeCard = ({ type = "trending", limit = 6, genre }) => {
             <div className="anime-card-title">
               {truncateTitle(anime.title.english || anime.title.romaji)}
             </div>
+           
           </div>
         ))}
       </div>

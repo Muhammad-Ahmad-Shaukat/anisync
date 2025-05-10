@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import VideoPlayer from "../../components/VideoSComponent/VideoPlayer";
 import CommentSection from "../../components/comments/CommentsSection";
-
+import {dummyComments} from '../../components/comments/dummy.js'
 function WatchAnime() {
   const { animeName } = useParams();
   const [anime, setAnime] = useState(null);
@@ -45,6 +45,7 @@ function WatchAnime() {
 
   return <>
   <VideoPlayer anime={anime} />;
+  <CommentSection comments={dummyComments}/>
   </>
 
 }

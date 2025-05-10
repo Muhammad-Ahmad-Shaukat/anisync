@@ -1,85 +1,101 @@
 .slider-wrapper {
-  overflow: hidden;
-}
-
-.slider-heading {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: #fff;
-}
-
-.slider-container {
-  position: relative;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  margin: 10px;
-}
-
-.slider-container::-webkit-scrollbar {
-  display: none;
-}
-
-.slider {
-  display: flex;
-  gap: 16px;
-  scroll-behavior: smooth;
-}
-
-.anime-card {
-  flex: 0 0 auto;
-  display: flex;
-  background-color: #1e1b2e;
-  border-radius: 12px;
-  overflow: hidden;
-  width: 200px;
-  max-width: 200px;
-  height: 300px;
-  cursor: pointer;
-  transition: transform 0.3s;
-  position: relative;
-}
-
-.anime-card:hover {
-  transform: scale(1.05);
-}
-
-.anime-info {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  justify-content: flex-end; /* Change to flex-end to align items at the bottom */
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
+    background-color: #191a2c;
+    padding: 10px;
+    border-radius: 10px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    margin-top: 10px;
+  }
   
-  color: #fff;
-  background-color: transparent;
-  font-weight: bold;
-  font-size: 1rem;
-  flex-shrink: 0;
-  position: absolute; /* Make sure it stays at the bottom */
-  bottom: 10px; /* Adjust to add some space from the bottom */
-  left: 10px; /* Add some padding from the left */
-}
-
-.anime-title {
-  transform: rotate(180deg);
-  margin-bottom: 12px;
-  text-align: left;
-  color: #fff;
-}
-
-.anime-index {
-  font-size: 1.2rem;
-  color: #ff66cc;
-  font-weight: bold;
-  transform: rotate(180deg);
-  text-align: left;
-}
-
-.anime-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+  .slider-heading {
+    color: #ff99cc;
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  
+  .slider-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .slider {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+    flex: 1;
+  }
+  
+  .slider::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .anime-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: none;
+    flex-shrink: 0;
+    max-width: 200px;
+    gap: 10px;
+    overflow: hidden;
+  }
+  
+  .anime-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    max-height: 250px;
+    text-align: center;
+  }
+  
+  .anime-title {
+    font-size: 14px;
+    color: white;
+    margin-bottom: 5px;
+    white-space: nowrap;
+  
+    text-overflow: ellipsis;
+  }
+  
+  .anime-index {
+    color: #ff99cc;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .anime-img {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 12px 12px 12px 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+  
+  .nav-buttons-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 10px;
+  }
+  
+  .nav-button {
+    background-color: #2e2f4f;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    font-size: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-button:hover {
+    background-color: #414378;
+  }
