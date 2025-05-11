@@ -10,8 +10,12 @@ export const searchFriends = async (req, res) => {
 
   try {
     // Find users that match the search term in their username or name
-    const users = await Users.find(); // Optionally, limit the number of results returned
-
+    const users = await Users.find({
+      $or: [
+        { username: { $regex: searchTerm, $options: 'i' } }, // Case-insensitive search in username
+        { name: { $regex: searchTerm, $options: 'i' } } // Case-insensitive search in name
+      ]
+    }).limit(10); // Optionally, limit the numb
     return res.status(200).json({ users });
   } catch (error) {
     console.error("Error searching users:", error);
