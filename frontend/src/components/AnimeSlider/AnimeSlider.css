@@ -22,21 +22,25 @@
     margin-bottom: 15px;
   }
   
-  .slider-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .slider {
-    display: flex;
-    overflow-x: auto;
-    gap: 20px;
-    scroll-behavior: smooth;
-    padding: 10px 0;
-    flex: 1;
-  }
+.slider-container {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin: 10px;
+}
+
+.slider-container::-webkit-scrollbar {
+  display: none;
+}
+
+.slider {
+  display: flex;
+  gap: 16px;
+  scroll-behavior: smooth;
+  max-width: 200px;
+}
   
   .slider::-webkit-scrollbar {
     display: none;
@@ -50,7 +54,6 @@
     flex-shrink: 0;
     max-width: 200px;
     gap: 10px;
-    overflow: hidden;
   }
   
   .anime-info {
@@ -106,3 +109,9 @@
   .nav-button:hover {
     background-color: #414378;
   }
+
+
+
+
+
+  
