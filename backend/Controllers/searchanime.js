@@ -28,9 +28,15 @@ export const searchanime = async (req, res) => {
       ]
     }).limit(limit);
 
-    // Early return if we have enough local results
-    if (localResults.length >= limit) {
-      return res.status(200).json(localResults);
+    // Add 'mongoid' to each local result
+    const formattedLocalResults = localResults.map(doc => {
+      const obj = doc.toObject();
+      obj.mongoid = obj._id;
+      return obj;
+    });
+
+    if (formattedLocalResults.length >= limit) {
+      return res.status(200).json(formattedLocalResults);
     }
 
     // Step 2: Fetch from Jikan API
@@ -40,15 +46,18 @@ export const searchanime = async (req, res) => {
 
     const fetchedAnimes = jikanRes.data?.data || [];
 
-    const localIds = localResults.map(a => a.animeid);
+    const localIds = formattedLocalResults.map(a => a.animeid);
     const newAnimeList = [];
 
     for (const item of fetchedAnimes) {
       if (localIds.includes(item.mal_id)) continue;
 
       const existing = await Anime.findOne({ animeid: item.mal_id });
+
       if (existing) {
-        newAnimeList.push(existing);
+        const obj = existing.toObject();
+        obj.mongoid = obj._id;
+        newAnimeList.push(obj);
       } else {
         const animeData = {
           animeid: item.mal_id,
@@ -67,17 +76,18 @@ export const searchanime = async (req, res) => {
           categories: [],
         };
 
+        // Run background worker to save this anime
         new Worker(path.join(__dirname, '../workers/addAnimeWorker.js'), {
           workerData: { animeid: item.mal_id }
         });
 
-        newAnimeList.push(animeData);
+        newAnimeList.push(animeData); // This one won’t have mongoid
       }
 
-      if ((localResults.length + newAnimeList.length) >= limit) break;
+      if ((formattedLocalResults.length + newAnimeList.length) >= limit) break;
     }
 
-    const totalResults = [...localResults, ...newAnimeList];
+    const totalResults = [...formattedLocalResults, ...newAnimeList];
 
     return res.status(totalResults.length > 0 ? 200 : 404).json(
       totalResults.length > 0

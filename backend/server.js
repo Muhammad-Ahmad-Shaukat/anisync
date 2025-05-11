@@ -1,13 +1,12 @@
 import dotenv from 'dotenv';
-import express from "express";
-import cors from "cors";
-import { createServer } from "http";
-import { Worker } from "worker_threads";
-import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
-import connectS3 from "./config/aws_s3.js";
-import { syncAnime } from "./Scripts/syncAnime.js";
-
+import express from 'express';
+import cors from 'cors';
+import { createServer } from 'http';
+import { Server as SocketIOServer } from 'socket.io';
+import connectDB from './config/db.js';
+import authRoutes from './routes/authRoutes.js';
+import connectS3 from './config/aws_s3.js'; // if you use S3
+import path from 'path';
 
 dotenv.config();
 connectDB();
@@ -15,31 +14,86 @@ connectS3();
 
 const app = express();
 const server = createServer(app);
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: 'http://localhost:5173', 
+    methods: ['GET', 'POST']
+  }
+});
 
-function runSyncWorker() {
-  const worker = new Worker("./workers/syncworker.js", { type: "module" });
+app.use(cors());
+app.use(express.json());
 
-  worker.on("message", msg => {
-    console.log(`[Worker] ${msg}`);
+// Routes
+app.use('/api/auth', authRoutes);
+
+// Sockets handling
+const rooms = {}; // { roomId: { isPlaying, time, episode } }
+
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  socket.on('join-room', ({ roomId, isHost }) => {
+    socket.join(roomId);
+    socket.data.roomId = roomId;
+    socket.data.isHost = isHost;
+    console.log(`User joined room: ${roomId} | Host: ${isHost}`);
   });
 
-  worker.on("error", err => {
-    console.error(`[Worker Error] ${err}`);
+  socket.on('request-sync', ({ roomId }) => {
+    const roomState = rooms[roomId];
+    if (roomState) {
+      io.to(socket.id).emit('sync-status', roomState);
+    }
   });
 
-  worker.on("exit", code => {
-    if (code !== 0) console.error(`Worker stopped with exit code ${code}`);
+  socket.on('video-event', ({ roomId, event }) => {
+    const videoRoom = rooms[roomId] || {};
+    if (event.type === 'play') {
+      videoRoom.isPlaying = true;
+      videoRoom.time = event.time;
+    } else if (event.type === 'pause') {
+      videoRoom.isPlaying = false;
+      videoRoom.time = event.time;
+    } else if (event.type === 'seek') {
+      videoRoom.time = event.time;
+    }
+    rooms[roomId] = { ...videoRoom };
+
+    socket.to(roomId).emit('sync-video', event);
   });
+
+  socket.on('change-episode', ({ roomId, episode }) => {
+    rooms[roomId] = {
+      ...rooms[roomId],
+      episode,
+      time: 0,
+      isPlaying: false
+    };
+    io.in(roomId).emit('sync-episode', episode);
+  });
+
+  socket.on('cancel-session', ({ roomId }) => {
+    delete rooms[roomId];
+    io.in(roomId).emit('session-ended');
+    io.in(roomId).socketsLeave(roomId);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
+});
+
+// Serve static files if in production
+if (process.env.NODE_ENV === 'production') {
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, 'client/build')));
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  );
 }
 
-
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-app.use(express.json());
-app.use("/api/auth", authRoutes);
-
-
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-runSyncWorker();
-setInterval(runSyncWorker, 12 * 60 * 60 * 1000);
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
