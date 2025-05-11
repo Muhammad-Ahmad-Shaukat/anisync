@@ -26,11 +26,12 @@ import { getSentFriendRequests } from "../Controllers/getSentRequests.js";
 import { getReceivedFriendRequests } from "../Controllers/getReceivedRequests.js";
 import { acceptfriend } from "../Controllers/accept_friend.js";
 import { getAnimeById } from "../Controllers/getanimebyid.js"
+import {createcomment} from '../Controllers/commentcontroller.js'
 const router = express.Router();
 const upload = multer();
 
 router.post("/signup", signup);
-router.get("/getcomment", getcomment);
+router.get("/comments/:episodeid", getcomment);
 router.post("/login", login);
 router.post("/verifyotp", verifyotp);
 router.post("/sendotp", sendotp);
@@ -54,4 +55,5 @@ router.get('/getSentRequests',getSentFriendRequests)
 router.get('/getReceivedFriendRequests',getReceivedFriendRequests)
 router.post('/acceptreq',acceptfriend)
 router.get('/getanimebyid', getAnimeById)
+router.post('/comments', createcomment)
 export default router;

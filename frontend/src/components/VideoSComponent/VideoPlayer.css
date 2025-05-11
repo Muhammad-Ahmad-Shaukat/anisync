@@ -1,3 +1,5 @@
+/* VideoPlayer.css */
+
 html, body {
   height: 100%;
   margin: 0;
@@ -17,7 +19,7 @@ body {
   flex-wrap: wrap;
   margin: 24px auto;
   width: 95%;
-  max-width: 1400px;
+  max-width: 1800px;
   min-height: calc(100vh - 100px);
   background: rgba(19, 22, 34, 0.3);
   -webkit-backdrop-filter: blur(15px);
@@ -26,18 +28,21 @@ body {
   padding: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   box-sizing: border-box;
+  gap: 20px;
 }
 
-/* SIDEBAR */
+/* SIDEBAR - EPISODES LIST */
 .episodes-list {
   position: relative;
-  flex: 0 0 260px;
+  flex: 0 0 280px;
   padding: 60px 12px 12px;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - 140px);
+  background: rgba(19, 22, 34, 0.6);
+  border-radius: 8px;
 }
 
 .episodes-list::before {
@@ -70,26 +75,22 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: linear-gradient(135deg, #0f172a, #1e3a8a); /* blue-black gradient */
+  background: linear-gradient(135deg, #0f172a, #1e3a8a);
   color: #d0d0d8;
 }
 
 .episode-item:hover {
   transform: scale(1.02);
-  background: linear-gradient(135deg, #1e3a8a, #3b82f6); /* brighter blue on hover */
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
   color: #46d4b1;
 }
 
 .episode-item.active {
-  background: linear-gradient(135deg, #e11d48, #ff6b81); /* pink gradient for selected */
+  background: linear-gradient(135deg, #e11d48, #ff6b81);
   color: white;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
 }
 
-.episode-item.active .episode-info {
-  color: white;
-}
-
-/* EPISODE TEXT */
 .episode-info {
   font-size: 15px;
   font-weight: 600;
@@ -101,67 +102,230 @@ body {
 
 /* PLAYER AREA */
 .player-area {
-  position: relative;
   flex: 1;
-  padding: 12px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(19, 22, 34, 0.6);
-  border-radius: 12px;
-  box-sizing: border-box;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0; /* Fixes flexbox overflow issues */
 }
 
 .player-wrapper {
-  position: relative;
   width: 100%;
-  max-width: 900px;
   background: #000;
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
 .video-player {
   width: 100%;
-  height: 100%;
-  border-radius: 12px;
+  height: auto;
+  max-height: 70vh;
+  display: block;
+  border-radius: 12px 12px 0 0;
 }
 
-/* VIDEO CONTROLS */
+/* CUSTOM CONTROLS */
 .custom-controls {
-  position: absolute;
-  bottom: 12px;
-  left: 0;
-  width: 100%;
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 15px;
+  padding: 12px;
+  background: rgba(19, 22, 34, 0.8);
+  border-radius: 0 0 12px 12px;
 }
 
-button {
+.custom-controls button {
   background: rgba(255, 255, 255, 0.2);
   color: #fff;
   border: none;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.custom-controls button:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.custom-controls button:active {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(0);
+}
+
+/* COMMENT SECTION */
+.comment-section {
+  background: rgba(19, 22, 34, 0.6);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.comment-section h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #acadcf;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+.comment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.comment-list::-webkit-scrollbar {
+  width: 6px;
+}
+.comment-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.comment-list::-webkit-scrollbar-thumb {
+  background: rgba(42, 42, 64, 0.4);
+  border-radius: 5px;
+}
+
+.comment-item {
+  background: rgba(15, 23, 42, 0.7);
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border-left: 3px solid #3b82f6;
+  transition: transform 0.2s ease;
+}
+
+.comment-item:hover {
+  transform: translateX(4px);
+}
+
+.comment-user {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.comment-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-right: 12px;
+  object-fit: cover;
+  border: 2px solid #3b82f6;
+}
+
+.comment-username {
+  color: #3b82f6;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.comment-content {
+  margin: 0 0 10px 0;
+  color: #e0e0e8;
+  line-height: 1.5;
+}
+
+.comment-date {
+  color: #9e9e9e;
+  font-size: 0.8em;
+  display: block;
+  text-align: right;
+}
+
+.comment-form {
+  margin-top: 20px;
+}
+
+.comment-form textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  color: white;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.comment-form textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.comment-form button {
+  background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
   transition: all 0.2s ease;
 }
 
-button:hover {
-  background: rgba(255, 255, 255, 0.4);
+.comment-form button:hover {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  transform: translateY(-1px);
 }
 
-button:active {
-  background: rgba(255, 255, 255, 0.6);
+.comment-form button:disabled {
+  background: #4a4a4a;
+  cursor: not-allowed;
+  transform: none;
 }
 
-/* LOADING AND ERROR SCREENS */
+/* LOADING AND ERROR STATES */
 .loading-screen, .error-screen {
-  color: #f5f5f5;
-  font-size: 18px;
-  padding: 16px;
+  padding: 40px;
   text-align: center;
+  background: rgba(19, 22, 34, 0.6);
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.loading-screen {
+  color: #3b82f6;
+}
+
+.error-screen {
+  color: #ff6b81;
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 1200px) {
+  .video-episode-container {
+    flex-direction: column;
+  }
+  
+  .episodes-list {
+    width: 100%;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .player-area {
+    width: 100%;
+  }
+  
+  .video-player {
+    max-height: 50vh;
+  }
 }

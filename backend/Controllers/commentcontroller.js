@@ -2,12 +2,14 @@ import Comment from "../models/comment.js";
 import User from "../models/User.js";
 import Episode from "../models/Episode.js";
 
-const createcomment = async (req, res) => {
+export const createcomment = async (req, res) => {
     const { userid, comment, episodeid } = req.body;
+    console.log(userid,comment,episodeid)
     if (!userid || !comment || !episodeid) {
         return res.status(400).json({ message: "All fields are required" });
     }
     try {
+        
         const userExists = await User.findById(userid);
         if (!userExists) {
             return res.status(404).json({ message: "User not found" });
@@ -31,4 +33,3 @@ const createcomment = async (req, res) => {
     }
 };
 
-export default createcomment;

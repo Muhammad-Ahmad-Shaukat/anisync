@@ -5,7 +5,7 @@ import CommentSection from "../comments/CommentsSection";
 
 const VideoPlayer = ({ anime }) => {
   const [episodes, setEpisodes] = useState([]);
-  const [selectedEpisode, setSelectedEpisode] = useState(null);
+  const [selectedEpisode, setSelectedEpisode] = useState();
   const [videoUrl, setVideoUrl] = useState(null);
   const [loadingEpisodes, setLoadingEpisodes] = useState(true);
   const [errorEpisodes, setErrorEpisodes] = useState(null);
@@ -210,8 +210,8 @@ const VideoPlayer = ({ anime }) => {
             </div>
 
             {/* Comment section updates when episode changes */}
-            {selectedEpisode && (
-              <CommentSection key={selectedEpisode._id} episodeId={selectedEpisode._id} />
+            {!loadingEpisodes && selectedEpisode && (
+              <CommentSection key={selectedEpisode.id} episodeId={selectedEpisode.id} />
             )}
           </>
         )}

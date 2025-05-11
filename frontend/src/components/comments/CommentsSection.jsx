@@ -1,61 +1,23 @@
 import React, { useEffect, useState } from "react";
 import "./CommentsSection.css";
-
-const Comment = ({ comment }) => {
-  return (
-    <div className="comment">
-      <div className="comment-header-line">
-        <span className="comment-username">{comment.userId?.username || "Unknown User"}</span>
-        <span className="comment-time">
-          {new Date(comment.createdAt).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </span>
-      </div>
-
-      <div className="comment-body">
-        <p dangerouslySetInnerHTML={{ __html: comment.comment }} />
-      </div>
-
-      <div className="comment-footer">
-        <button>↩️ Reply</button>
-        <button>👍</button>
-        <button>👎</button>
-        <button>⋯ More</button>
-      </div>
-    </div>
-  );
-};
+import axios from "axios";
 
 const CommentSection = ({ episodeId }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState([]);
+  const [commentInput, setCommentInput] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-  }, []);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchComments = async () => {
-      if (!episodeId) return;
-
-      setLoading(true);
-      setError(null);
       try {
-        const res = await fetch(`http://localhost:5000/api/auth/getcomment/${episodeId}`);
-        if (!res.ok) {
-          throw new Error("Failed to fetch comments");
-        }
-        const data = await res.json();
-        setComments(data);
+        const response = await axios.get(`http://localhost:5000/api/auth/comments/${episodeId}`);
+        console.log("response.data", response.data); // Log to inspect the structure of the response
+        // Assuming response.data is directly the array of comments
+        setComments(response.data || []); 
       } catch (err) {
-        console.error("Error fetching comments:", err);
-        setError("Could not load comments.");
+        setError(err.response?.data?.message || "Failed to load comments");
       } finally {
         setLoading(false);
       }
@@ -64,60 +26,96 @@ const CommentSection = ({ episodeId }) => {
     fetchComments();
   }, [episodeId]);
 
-  const handleCommentPost = () => {
-    if (commentText.trim()) {
-      console.log("Comment added:", commentText);
-      setCommentText("");
-      // Optional: Send to backend and refresh comments after successful post
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    if (!commentInput.trim()) return;
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      // First get the user ID
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("You need to be logged in to comment");
+      }
+
+      // Get user data
+      const userResponse = await axios.get("http://localhost:5000/api/auth/getuser", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const userId = userResponse.data.user._id;
+      console.log(userResponse.data.user._id)
+      // Post the comment
+      const commentResponse = await axios.post(
+        "http://localhost:5000/api/auth/comments",
+        {
+          userid: userId, // Adjusted for correct field name
+          comment: commentInput,
+          episodeid: episodeId
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      setComments(prev => [...prev, commentResponse.data]); // Add new comment to the list
+      setCommentInput(""); // Clear input field after submit
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || "Failed to post comment");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleLoginRedirect = () => {
-    window.location.href = "/login";
-  };
+  // Only render the comments section if comments are successfully fetched
+  if (loading) {
+    return <p>Loading comments...</p>; // Optional: you can show a spinner or a placeholder if desired
+  }
 
   return (
     <div className="comment-section">
-      <div className="comment-top-bar">
-        <h2>📺 Episode Comments</h2>
-        <h3>💬 {comments.length} Comments</h3>
-      </div>
+      <h3>Comments</h3>
 
-      <div className="comment-box">
-        <img className="avatar" src="/default-avatar.png" alt="avatar" />
-        <div className="input-block">
-          {!isLoggedIn ? (
-            <p className="login-warning">
-              You must be{" "}
-              <span className="login-link" onClick={handleLoginRedirect}>
-                login
-              </span>{" "}
-              to post a comment
-            </p>
-          ) : null}
-          <textarea
-            placeholder="Leave a comment"
-            disabled={!isLoggedIn}
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-          />
-          <button onClick={handleCommentPost} disabled={!isLoggedIn || !commentText.trim()}>
-            Post Comment
-          </button>
-        </div>
-      </div>
+      {error ? (
+        <p className="error">{error}</p>
+      ) : comments.length === 0 ? (
+        <p>No comments yet. Be the first!</p>
+      ) : (
+        <ul className="comment-list">
+          {comments.map((comment) => (
+            <li key={comment._id} className="comment-item">
+              <div className="comment-user">
+                {/* Assuming you have the user profile picture and username */}
 
-      <div className="comments-list">
-        {loading ? (
-          <p>Loading comments...</p>
-        ) : error ? (
-          <p className="error">{error}</p>
-        ) : comments.length === 0 ? (
-          <p>No comments yet. Be the first to comment!</p>
-        ) : (
-          comments.map((c) => <Comment key={c._id} comment={c} />)
-        )}
-      </div>
+                <span className="comment-username">{comment.userId?.username || "Unknown"}</span>
+              </div>
+              <p className="comment-content">{comment.comment}</p>
+              <small className="comment-date">
+                {new Date(comment.createdAt).toLocaleString()}
+              </small>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <form onSubmit={handleCommentSubmit} className="comment-form">
+        <textarea
+          placeholder="Write a comment..."
+          value={commentInput}
+          onChange={(e) => setCommentInput(e.target.value)}
+          disabled={isSubmitting}
+        />
+        <button type="submit" disabled={isSubmitting || !commentInput.trim()}>
+          {isSubmitting ? "Posting..." : "Post"}
+        </button>
+      </form>
     </div>
   );
 };

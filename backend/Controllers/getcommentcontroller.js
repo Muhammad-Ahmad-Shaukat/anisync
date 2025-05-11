@@ -11,9 +11,11 @@ export const getcomment = async (req, res) => {
         if (!episodeExists) {
             return res.status(404).json({ message: "Episode not found" });
         }
+      
         const comments = await Comment.find({ episodeId: episodeid })
             .populate("userId", "username profilePicSrc")
             .sort({ createdAt: -1 });
+             
         return res.status(200).json(comments);
     }catch (error) {
         console.error("Error checking episode existence:", error);
