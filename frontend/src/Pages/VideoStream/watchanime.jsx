@@ -45,7 +45,6 @@ function WatchAnime() {
 
   return <>
   <VideoPlayer anime={anime} />;
-  <CommentSection comments={dummyComments}/>
   </>
 
 }

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import "./VideoPlayer.css";
 
+import CommentSection from "../comments/CommentsSection";
+
 const VideoPlayer = ({ anime }) => {
   const [episodes, setEpisodes] = useState([]);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
@@ -11,7 +13,7 @@ const VideoPlayer = ({ anime }) => {
   const [errorVideo, setErrorVideo] = useState(null);
   const videoRef = useRef(null);
 
-
+  // Fetch episodes when anime prop changes
   useEffect(() => {
     const fetchEpisodes = async () => {
       if (!anime || !anime._id) {
@@ -31,8 +33,8 @@ const VideoPlayer = ({ anime }) => {
         });
 
         const data = await response.json();
-
         if (!response.ok) {
+          console.error("Error fetching episodes:", data);  // Log error details
           throw new Error(data.message || "Failed to fetch episodes.");
         }
 
@@ -45,38 +47,38 @@ const VideoPlayer = ({ anime }) => {
       }
     };
 
+    console.log("Anime prop:", anime); // Log anime prop to debug
     fetchEpisodes();
   }, [anime]);
 
+  // Fetch video URL when selected episode changes
+  useEffect(() => {
+    const fetchVideoUrl = async () => {
+      if (!selectedEpisode || !selectedEpisode.videoName) {
+        setErrorVideo("No video source found for this episode.");
+        return;
+      }
 
-useEffect(() => {
-  const fetchVideoUrl = async () => {
-    if (!selectedEpisode || !selectedEpisode.videoName) {
-      setErrorVideo("No video source found for this episode.");
-      return;
-    }
+      setLoadingVideo(true);
+      setErrorVideo(null);
 
-    setLoadingVideo(true);
-    setErrorVideo(null);
+      try {
+        const key = encodeURIComponent(selectedEpisode.videoName);
+        const streamUrl = `http://localhost:5000/api/auth/video-stream?url=${key}`;
+        setVideoUrl(streamUrl);
+      } catch (error) {
+        console.error("Error fetching video URL:", error);  // Log error details
+        setErrorVideo("Could not load video.");
+      } finally {
+        setLoadingVideo(false);
+      }
+    };
 
-    try {
-      const key = encodeURIComponent(selectedEpisode.videoName);
-      const streamUrl = `http://localhost:5000/api/auth/video-stream?url=${key}`;
-      setVideoUrl(streamUrl);
-    } catch (error) {
-      console.error("Error fetching video URL:", error);
-      setErrorVideo("Could not load video.");
-    } finally {
-      setLoadingVideo(false);
-    }
-  };
+    console.log("Selected Episode:", selectedEpisode);  // Log selected episode
+    fetchVideoUrl();
+  }, [selectedEpisode]);
 
-  fetchVideoUrl();
-}, [selectedEpisode]);
-
-
-console.log("Selected episode:", selectedEpisode);
-
+  // Save video progress in localStorage
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !selectedEpisode) return;
@@ -94,7 +96,7 @@ console.log("Selected episode:", selectedEpisode);
     return () => video.removeEventListener("timeupdate", saveProgress);
   }, [videoUrl, selectedEpisode]);
 
-  // Auto play next episode on video end
+  // Automatically play next episode when current episode ends
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -111,7 +113,7 @@ console.log("Selected episode:", selectedEpisode);
     return () => video.removeEventListener("ended", handleEnded);
   }, [episodes, selectedEpisode]);
 
-  // Keyboard shortcuts
+  // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
       switch (e.key.toLowerCase()) {
@@ -136,21 +138,24 @@ console.log("Selected episode:", selectedEpisode);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Utility Functions
+  // Handle episode selection
   const handleEpisodeClick = useCallback((episode) => {
     setSelectedEpisode(episode);
   }, []);
 
+  // Skip video by specified seconds
   const handleSkip = (seconds) => {
     const video = videoRef.current;
     if (video) video.currentTime += seconds;
   };
 
+  // Handle fullscreen mode
   const handleFullscreen = () => {
     const video = videoRef.current;
     if (video.requestFullscreen) video.requestFullscreen();
   };
 
+  // Handle Picture-in-Picture mode
   const handlePiP = async () => {
     try {
       if (document.pictureInPictureElement) {
@@ -163,7 +168,6 @@ console.log("Selected episode:", selectedEpisode);
     }
   };
 
-  // Render
   return (
     <div className="video-episode-container">
       <div className="episodes-list">
@@ -174,9 +178,9 @@ console.log("Selected episode:", selectedEpisode);
         ) : episodes.length === 0 ? (
           <div className="error-screen">No episodes found.</div>
         ) : (
-          episodes.map((episode) => (
+          episodes.map((episode, index) => (
             <div
-              key={episode._id}
+              key={episode._id || `episode-${index}`} // Ensure each item has a unique key
               className={`episode-item ${selectedEpisode?._id === episode._id ? "active" : ""}`}
               onClick={() => handleEpisodeClick(episode)}
             >
@@ -194,15 +198,22 @@ console.log("Selected episode:", selectedEpisode);
         ) : errorVideo ? (
           <div className="error-screen">{errorVideo}</div>
         ) : (
-          <div className="player-wrapper">
-            <video ref={videoRef} src={videoUrl} controls className="video-player" />
-            <div className="custom-controls">
-              <button onClick={() => handleSkip(-10)}>⏪ 10s</button>
-              <button onClick={handleFullscreen}>⛶ Fullscreen (F)</button>
-              <button onClick={handlePiP}>📺 Mini (I)</button>
-              <button onClick={() => handleSkip(10)}>10s ⏩</button>
+          <>
+            <div className="player-wrapper">
+              <video ref={videoRef} src={videoUrl} controls className="video-player" />
+              <div className="custom-controls">
+                <button onClick={() => handleSkip(-10)}>⏪ 10s</button>
+                <button onClick={handleFullscreen}>⛶ Fullscreen (F)</button>
+                <button onClick={handlePiP}>📺 Mini (I)</button>
+                <button onClick={() => handleSkip(10)}>10s ⏩</button>
+              </div>
             </div>
-          </div>
+
+            {/* Comment section updates when episode changes */}
+            {selectedEpisode && (
+              <CommentSection key={selectedEpisode._id} episodeId={selectedEpisode._id} />
+            )}
+          </>
         )}
       </div>
     </div>

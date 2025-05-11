@@ -26,7 +26,6 @@ import { getSentFriendRequests } from "../Controllers/getSentRequests.js";
 import { getReceivedFriendRequests } from "../Controllers/getReceivedRequests.js";
 import { acceptfriend } from "../Controllers/accept_friend.js";
 import { getAnimeById } from "../Controllers/getanimebyid.js"
-
 const router = express.Router();
 const upload = multer();
 
