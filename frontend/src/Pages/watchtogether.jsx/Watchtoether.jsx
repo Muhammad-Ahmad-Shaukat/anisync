@@ -18,14 +18,16 @@ const WatchTogether = () => {
   const [loadingVideo, setLoadingVideo] = useState(false);
   const [errorVideo, setErrorVideo] = useState(null);
   const [isHost, setIsHost] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
+  // Set host status from location state or session storage
   useEffect(() => {
     const hostState = location.state?.host === true;
     const hostStorage = sessionStorage.getItem('isHost') === 'true';
     setIsHost(hostState || hostStorage);
   }, [location]);
 
-
+  // Socket.io setup and event handlers
   useEffect(() => {
     const hostFlag = sessionStorage.getItem('isHost') === 'true';
     setIsHost(hostFlag);
@@ -36,16 +38,18 @@ const WatchTogether = () => {
       socket.emit('request-sync', { roomId: animeId });
     }
 
-    socket.on('sync-video', (event) => {
+    const handleSyncVideo = (event) => {
       const video = videoRef.current;
       if (!video) return;
 
       switch (event.type) {
         case 'play':
-          video.play();
+          video.play().catch(e => console.error('Play failed:', e));
+          setIsPlaying(true);
           break;
         case 'pause':
           video.pause();
+          setIsPlaying(false);
           break;
         case 'seek':
           video.currentTime = event.time;
@@ -53,36 +57,49 @@ const WatchTogether = () => {
         default:
           break;
       }
-    });
+    };
 
-    socket.on('sync-episode', (episode) => {
+    const handleSyncEpisode = (episode) => {
       setSelectedEpisode(episode);
-    });
+    };
 
-    socket.on('sync-status', (status) => {
+    const handleSyncStatus = (status) => {
       const video = videoRef.current;
       if (!video) return;
+      
       setSelectedEpisode(status.episode);
       setTimeout(() => {
         video.currentTime = status.time;
-        if (status.isPlaying) video.play();
-        else video.pause();
+        if (status.isPlaying) {
+          video.play().catch(e => console.error('Play failed:', e));
+          setIsPlaying(true);
+        } else {
+          video.pause();
+          setIsPlaying(false);
+        }
       }, 500);
-    });
+    };
 
-    socket.on('session-ended', () => {
+    const handleSessionEnded = () => {
       alert('The host has ended the session.');
       navigate('/');
-    });
+    };
+
+    socket.on('sync-video', handleSyncVideo);
+    socket.on('sync-episode', handleSyncEpisode);
+    socket.on('sync-status', handleSyncStatus);
+    socket.on('session-ended', handleSessionEnded);
 
     return () => {
-      socket.off('sync-video');
-      socket.off('sync-episode');
-      socket.off('sync-status');
-      socket.off('session-ended');
+      socket.off('sync-video', handleSyncVideo);
+      socket.off('sync-episode', handleSyncEpisode);
+      socket.off('sync-status', handleSyncStatus);
+      socket.off('session-ended', handleSessionEnded);
+      socket.emit('leave-room', { roomId: animeId });
     };
   }, [animeId, navigate]);
 
+  // Fetch episodes list
   useEffect(() => {
     const fetchEpisodes = async () => {
       if (!animeId) {
@@ -119,6 +136,7 @@ const WatchTogether = () => {
     fetchEpisodes();
   }, [animeId]);
 
+  // Fetch video URL when episode changes
   useEffect(() => {
     const fetchVideoUrl = async () => {
       if (!selectedEpisode || !selectedEpisode.videoName) {
@@ -144,6 +162,7 @@ const WatchTogether = () => {
     fetchVideoUrl();
   }, [selectedEpisode]);
 
+  // Save progress when video time updates
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !selectedEpisode) return;
@@ -159,6 +178,7 @@ const WatchTogether = () => {
     return () => video.removeEventListener('timeupdate', saveProgress);
   }, [videoUrl, selectedEpisode]);
 
+  // Handle episode ending
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -178,8 +198,11 @@ const WatchTogether = () => {
     return () => video.removeEventListener('ended', handleEnded);
   }, [episodes, selectedEpisode, isHost, animeId]);
 
+  // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (e.target.tagName === 'INPUT') return; // Ignore if typing in an input field
+
       switch (e.key.toLowerCase()) {
         case 'arrowright':
           handleSkip(10);
@@ -193,6 +216,14 @@ const WatchTogether = () => {
         case 'i':
           handlePiP();
           break;
+        case ' ':
+          e.preventDefault();
+          togglePlayPause();
+          break;
+        case 'k':
+          e.preventDefault();
+          togglePlayPause();
+          break;
         default:
           break;
       }
@@ -202,6 +233,7 @@ const WatchTogether = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Play/pause event listeners for host
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !isHost) return;
@@ -243,7 +275,15 @@ const WatchTogether = () => {
 
   const handleFullscreen = () => {
     const video = videoRef.current;
-    if (video?.requestFullscreen) video.requestFullscreen();
+    if (!video) return;
+
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      video.requestFullscreen().catch(err => {
+        console.error('Fullscreen error:', err);
+      });
+    }
   };
 
   const handlePiP = async () => {
@@ -258,25 +298,41 @@ const WatchTogether = () => {
     }
   };
 
-  const handlePlay = () => {
+  const togglePlayPause = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      video.play().then(() => {
+        if (isHost) handlePlay();
+      }).catch(e => console.error('Play failed:', e));
+    } else {
+      video.pause();
+      if (isHost) handlePause();
+    }
+  };
+
+  const handlePlay = useCallback(() => {
     const video = videoRef.current;
     if (isHost && video) {
       socket.emit('video-event', {
         roomId: animeId,
         event: { type: 'play', time: video.currentTime },
       });
+      setIsPlaying(true);
     }
-  };
+  }, [isHost, animeId]);
 
-  const handlePause = () => {
+  const handlePause = useCallback(() => {
     const video = videoRef.current;
     if (isHost && video) {
       socket.emit('video-event', {
         roomId: animeId,
         event: { type: 'pause', time: video.currentTime },
       });
+      setIsPlaying(false);
     }
-  };
+  }, [isHost, animeId]);
 
   const handleEndSession = () => {
     if (isHost) {
@@ -315,12 +371,26 @@ const WatchTogether = () => {
           <div className="error-screen">{errorVideo}</div>
         ) : (
           <div className="player-wrapper">
-            <video ref={videoRef} src={videoUrl} controls className="video-player" />
+            <video 
+              ref={videoRef} 
+              src={videoUrl} 
+              controls 
+              className="video-player"
+              onClick={togglePlayPause}
+            />
             <div className="custom-controls">
               <button onClick={() => handleSkip(-10)}>⏪ 10s</button>
+              <button onClick={togglePlayPause}>
+                {isPlaying ? '⏸ Pause' : '▶ Play'}
+              </button>
               <button onClick={handleFullscreen}>⛶ Fullscreen (F)</button>
               <button onClick={handlePiP}>📺 Mini (I)</button>
               <button onClick={() => handleSkip(10)}>10s ⏩</button>
+              {isHost && (
+                <button onClick={handleEndSession} className="end-session-btn">
+                  End Session
+                </button>
+              )}
             </div>
           </div>
         )}
