@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
 import "./CommentsSection.css";
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 const CommentSection = ({ episodeId }) => {
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token); // Convert token to boolean
+
     const fetchComments = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/auth/comments/${episodeId}`);
-        console.log("response.data", response.data); // Log to inspect the structure of the response
-        // Assuming response.data is directly the array of comments
-        setComments(response.data || []); 
+        setComments(response.data || []);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to load comments");
       } finally {
@@ -34,13 +36,11 @@ const CommentSection = ({ episodeId }) => {
     setError(null);
 
     try {
-      // First get the user ID
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("You need to be logged in to comment");
       }
 
-      // Get user data
       const userResponse = await axios.get("http://localhost:5000/api/auth/getuser", {
         headers: {
           Authorization: `Bearer ${token}`
@@ -48,12 +48,11 @@ const CommentSection = ({ episodeId }) => {
       });
 
       const userId = userResponse.data.user._id;
-      console.log(userResponse.data.user._id)
-      // Post the comment
+
       const commentResponse = await axios.post(
         "http://localhost:5000/api/auth/comments",
         {
-          userid: userId, // Adjusted for correct field name
+          userid: userId,
           comment: commentInput,
           episodeid: episodeId
         },
@@ -65,8 +64,8 @@ const CommentSection = ({ episodeId }) => {
         }
       );
 
-      setComments(prev => [...prev, commentResponse.data]); // Add new comment to the list
-      setCommentInput(""); // Clear input field after submit
+      setComments(prev => [...prev, commentResponse.data]);
+      setCommentInput("");
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Failed to post comment");
     } finally {
@@ -74,10 +73,7 @@ const CommentSection = ({ episodeId }) => {
     }
   };
 
-  // Only render the comments section if comments are successfully fetched
-  if (loading) {
-    return <p>Loading comments...</p>; // Optional: you can show a spinner or a placeholder if desired
-  }
+  if (loading) return <p>Loading comments...</p>;
 
   return (
     <div className="comment-section">
@@ -92,8 +88,6 @@ const CommentSection = ({ episodeId }) => {
           {comments.map((comment) => (
             <li key={comment._id} className="comment-item">
               <div className="comment-user">
-                {/* Assuming you have the user profile picture and username */}
-
                 <span className="comment-username">{comment.userId?.username || "Unknown"}</span>
               </div>
               <p className="comment-content">{comment.comment}</p>
@@ -105,17 +99,23 @@ const CommentSection = ({ episodeId }) => {
         </ul>
       )}
 
-      <form onSubmit={handleCommentSubmit} className="comment-form">
-        <textarea
-          placeholder="Write a comment..."
-          value={commentInput}
-          onChange={(e) => setCommentInput(e.target.value)}
-          disabled={isSubmitting}
-        />
-        <button type="submit" disabled={isSubmitting || !commentInput.trim()}>
-          {isSubmitting ? "Posting..." : "Post"}
-        </button>
-      </form>
+      {isLoggedIn ? (
+        <form onSubmit={handleCommentSubmit} className="comment-form">
+          <textarea
+            placeholder="Write a comment..."
+            value={commentInput}
+            onChange={(e) => setCommentInput(e.target.value)}
+            disabled={isSubmitting}
+          />
+          <button type="submit" disabled={isSubmitting || !commentInput.trim()}>
+            {isSubmitting ? "Posting..." : "Post"}
+          </button>
+        </form>
+      ) : (
+        <p className="login-message">
+  You must be <Link to="/login" className="login-link">logged in</Link> to comment.
+</p>
+      )}
     </div>
   );
 };
