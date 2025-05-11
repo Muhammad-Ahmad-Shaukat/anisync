@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProfileBanner from "./ProfileBanner";
 import EditProfile from "./EditProfile";
+import Wishlist from "../../components/WishList/WishList";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -45,6 +46,7 @@ const ProfilePage = () => {
           avatarUrl: user.profilePic,
         }}
       />
+      <Wishlist/>
     </>
   );
 };

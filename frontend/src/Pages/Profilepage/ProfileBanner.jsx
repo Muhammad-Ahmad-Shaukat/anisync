@@ -19,12 +19,7 @@ const ProfileBanner = ({ username }) => {
       </div>
 
       <div className={`menu ${menuOpen ? 'open' : ''}`}>
-        <div className="menu-item"><FaUser className="icon" /><span>Profile</span></div>
-        <div className="menu-item"><FaRedoAlt className="icon" /><span>Continue Watching</span></div>
         <div className="menu-item"><FaHeart className="icon" /><span>Watch List</span></div>
-        <div className="menu-item"><FaBell className="icon" /><span>Notification</span></div>
-        <div className="menu-item"><FaCog className="icon" /><span>Settings</span></div>
-        <div className="menu-item"><FaExternalLinkAlt className="icon" /><span>MAL</span></div>
       </div>
     </div>
   );

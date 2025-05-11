@@ -9,6 +9,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Check token on initial render
   useEffect(() => {
@@ -21,27 +22,40 @@ const Navbar = () => {
     dispatch(logout());
     setIsAuthenticated(false);
     navigate('/login');
+    setIsMenuOpen(false); // Close menu after logout
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isMenuOpen ? 'active' : ''}`}>
+      <div className="hamburger" onClick={toggleMenu}>
+        <div className="line"></div>
+        <div className="line"></div>
+        <div className="line"></div>
+      </div>
+      
       <div className="left-section">
-        <Link to="/" className="logo">AniSync</Link>
+        <Link to="/" className="logo" onClick={() => setIsMenuOpen(false)}>AniSync</Link>
         <SearchBar />
       </div>
+      
       <div className="nav-links center-links">
-        <Link to="/top">Top Airing</Link>
-        <Link to="/trending">Trending</Link>
-        <Link to="/friends">Friends</Link>
-        <Link to="/watchTogether">Watch Together</Link>
+        <Link to="/top" onClick={() => setIsMenuOpen(false)}>Top Airing</Link>
+        <Link to="/trending" onClick={() => setIsMenuOpen(false)}>Trending</Link>
+        <Link to="/friends" onClick={() => setIsMenuOpen(false)}>Friends</Link>
+        <Link to="/watchTogether" onClick={() => setIsMenuOpen(false)}>Watch Together</Link>
       </div>
+      
       <div className="nav-links right-links">
         {isAuthenticated ? (
           <button onClick={handleLogout} className="signout-btn">Sign Out</button>
         ) : (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">SignUp</Link>
+            <Link to="/login" onClick={() => setIsMenuOpen(false)}>Login</Link>
+            <Link to="/signup" onClick={() => setIsMenuOpen(false)}>SignUp</Link>
           </>
         )}
       </div>
