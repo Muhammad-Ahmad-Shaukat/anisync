@@ -20,6 +20,11 @@ import { getWishlist } from "../Controllers/getwishlist.js";
 import { deleteFromWishlist } from "../Controllers/removefromwishlist.js";
 import { fetchEpisodes } from "../Controllers/fetchepisodes.js";
 import { fetchSuggestedAnime } from "../Controllers/fetchSuggestedAnime.js";
+import { searchFriends } from "../Controllers/searchFriends.js";
+import { getCurrentFriends } from "../Controllers/getFriends.js";
+import { getSentFriendRequests } from "../Controllers/getSentRequests.js";
+import { getReceivedFriendRequests } from "../Controllers/getReceivedRequests.js";
+import { acceptfriend } from "../Controllers/accept_friend.js";
 
 const router = express.Router();
 const upload = multer();
@@ -32,7 +37,7 @@ router.post("/sendotp", sendotp);
 router.get("/findanime", findAnime);
 router.get("/topanime", getTopAnime);
 router.get("/video-stream", videoStream);
-router.post("/add-friend", addFriend);
+router.post("/addfriend", addFriend);
 router.get("/fetchAnime", fetchAnime)
 router.patch('/updateuser', upload.single('avatar'), updateUser);
 router.get("/health", healthCheck);
@@ -43,6 +48,9 @@ router.get("/getwislist" , verifyToken, getWishlist);
 router.patch("/removefromwishlist", verifyToken, deleteFromWishlist);
 router.post("/fetchepisodes", fetchEpisodes);
 router.get('/suggestedanime',fetchSuggestedAnime)
-
-
+router.get('/searchfriends', searchFriends)
+router.get('/getfriends', getCurrentFriends)
+router.get('/getSentRequests',getSentFriendRequests)
+router.get('/getReceivedFriendRequests',getReceivedFriendRequests)
+router.post('/acceptreq',acceptfriend)
 export default router;

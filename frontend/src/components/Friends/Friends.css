@@ -1,0 +1,260 @@
+/* Friends.css */
+.friends-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(30, 27, 46, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 102, 204, 0.1);
+  color: #fff;
+}
+
+.friends-container h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.friends-container h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #ff66cc, #ff99cc);
+  border-radius: 3px;
+}
+
+.search-bar {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #ff66cc;
+  box-shadow: 0 0 0 2px rgba(255, 102, 204, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.search-results,
+.current-friends,
+.sent-requests,
+.received-requests {
+  background: rgba(46, 42, 70, 0.6);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.search-results:hover,
+.current-friends:hover,
+.sent-requests:hover,
+.received-requests:hover {
+  border-color: rgba(255, 102, 204, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 102, 204, 0.1);
+}
+
+.search-results h3,
+.current-friends h3,
+.sent-requests h3,
+.received-requests h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #ff99cc;
+  display: flex;
+  align-items: center;
+}
+
+.search-results h3::before,
+.current-friends h3::before,
+.sent-requests h3::before,
+.received-requests h3::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #ff66cc;
+  border-radius: 50%;
+  margin-right: 0.8rem;
+}
+
+.search-results ul,
+.current-friends ul,
+.sent-requests ul,
+.received-requests ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.search-results li,
+.current-friends li,
+.sent-requests li,
+.received-requests li {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.search-results li:hover,
+.current-friends li:hover,
+.sent-requests li:hover,
+.received-requests li:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 102, 204, 0.3);
+}
+
+.search-results li {
+  cursor: pointer;
+  position: relative;
+}
+
+.search-results li::after {
+  content: '+';
+  position: absolute;
+  right: 1rem;
+  color: #ff66cc;
+  font-size: 1.2rem;
+  font-weight: bold;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.search-results li:hover::after {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.search-results li span,
+.current-friends li span,
+.sent-requests li span,
+.received-requests li span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.search-results p,
+.current-friends p,
+.sent-requests p,
+.received-requests p {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* Request status badges */
+.sent-requests li::after {
+  content: 'Pending';
+  background: rgba(255, 204, 0, 0.2);
+  color: #ffcc00;
+  font-size: 0.7rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
+  margin-left: 0.5rem;
+}
+
+/* Action buttons for received requests */
+.received-requests li {
+  position: relative;
+  padding-right: 100px;
+}
+
+.received-requests .friend-actions {
+  position: absolute;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.received-requests .accept-btn,
+.received-requests .reject-btn {
+  padding: 0.3rem 0.6rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.received-requests .accept-btn {
+  background: rgba(102, 255, 102, 0.2);
+  color: #66ff66;
+}
+
+.received-requests .reject-btn {
+  background: rgba(255, 102, 102, 0.2);
+  color: #ff6666;
+}
+
+.received-requests .accept-btn:hover {
+  background: rgba(102, 255, 102, 0.3);
+}
+
+.received-requests .reject-btn:hover {
+  background: rgba(255, 102, 102, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .friends-container {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  
+  .search-results ul,
+  .current-friends ul,
+  .sent-requests ul,
+  .received-requests ul {
+    grid-template-columns: 1fr;
+  }
+  
+  .received-requests li {
+    padding-right: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .received-requests .friend-actions {
+    position: relative;
+    right: auto;
+    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

@@ -21,12 +21,20 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
+
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
       }
+
       localStorage.setItem("token", data.token);
-      dispatch(loginSuccess({ username: data.user.username }));
+
+      // Dispatch both user and token to Redux
+      dispatch(loginSuccess({
+        user: data.user,
+        token: data.token,
+      }));
+
       navigate("/profile");
     } catch (error) {
       console.error("Login Error:", error.message);
@@ -65,7 +73,7 @@ const Login = () => {
             {loading ? "Signing In..." : "Sign In"}
           </button>
           <div className="form-footer">
-            <p>New to AniSync? <Link to={"/signup"}>Sign up now</Link></p>
+            <p>New to AniSync? <Link to="/signup">Sign up now</Link></p>
           </div>
         </form>
       </div>

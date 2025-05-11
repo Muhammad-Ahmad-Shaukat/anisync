@@ -1,66 +1,65 @@
-//import React, { useEffect } from 'react';
 import React from 'react';
-//import axios from 'axios';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './components/Redux/store.js';
 import Signup from './Pages/SignUpPage/Signup';
 import Login from './Pages/LoginPage/Login';
 import Navbar from './components/NavBar/Navbar';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import HomePage from './Pages/Homepage/HomePage';
 import ProfilePage from './Pages/Profilepage/ProfilePage';
-import NotFoundPage from "./Pages/ErrrorPages/404Page.jsx";
+import NotFoundPage from './Pages/ErrrorPages/404Page.jsx';
 import ServerCrash from './Pages/ErrrorPages/ServerCrash.jsx';
 import Footer from './components/Footer/Footer';
 import AnimeDetails from './Pages/AnimeDetails/AnimeDetails.jsx';
 import TrendingPage from './Pages/TrendingPage/TrendingPage.jsx';
 import TopAiringPage from './Pages/TopAiringPage/TopAiringPage.jsx';
 import WatchAnime from './Pages/VideoStream/watchanime.jsx';
+import RedirectIfAuth from './Pages/RedirectIfAuth.jsx';
+import Friends from './components/Friends/Friends.jsx';
 
- function App() {
-//   const [serveron, setServerOn] = useState(true);
-//   const [checked, setChecked] = useState(false);
-
-
-    //const isloogedIn = localStorage.getItem("token") ? true : false;
-//   useEffect(() => {
-//     const checkServer = async () => {
-//       try {
-//         await axios.get("http://localhost:5000/api/auth/health");
-//         setServerOn(true);
-//       } catch (err) {
-//         setServerOn(false);
-//       } finally {
-//         setChecked(true);
-//       }
-//     };
-//     checkServer();
-//   }, []);
-
-   
+function App() {
   return (
-    <BrowserRouter>
-      {/* {!checked ? (
-        <div className="loading">Checking server...</div>
-      ) : !serveron ? (
-        <ServerCrash setServerOn={setServerOn} />
-      ) : ( */}
+    <Provider store={store}>
+      <BrowserRouter>
         <>
           <Navbar />
           <Routes>
-            <Route path='/' element={<HomePage />} />
-            <Route path='/signup' element={<Signup />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/profile'element={<ProfilePage />}/>
-            <Route path='/anime/:animeName' element={<AnimeDetails />} />
-            <Route path='/trending' element={<TrendingPage />} />
-            <Route path='/top' element={<TopAiringPage />} />
-            <Route path='*' element={<NotFoundPage />} />
-            <Route path='/watch/:animeName' element={<WatchAnime />} />
-
+            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/signup"
+              element={
+                <RedirectIfAuth>
+                  <Signup />
+                </RedirectIfAuth>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <RedirectIfAuth>
+                  <Login />
+                </RedirectIfAuth>
+              }
+            />
+             <Route
+              path="/Friends"
+              element={
+                
+                  <Friends />
+              
+              }
+            />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/anime/:animeName" element={<AnimeDetails />} />
+            <Route path="/trending" element={<TrendingPage />} />
+            <Route path="/top" element={<TopAiringPage />} />
+            <Route path="/watch/:animeName" element={<WatchAnime />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
           <Footer />
         </>
-      {/* )} */}
-    </BrowserRouter>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
