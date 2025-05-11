@@ -3,7 +3,7 @@ import axios from "axios";
 import "./Friends.css";
 
 const Friends = () => {
-  const [userid, setUserId] = useState("abc");
+  const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [friends, setFriends] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
@@ -11,37 +11,53 @@ const Friends = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    const fetchCurrentFriends = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
+
+    const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/auth/getfriends?userid=${userid}`);
-        setFriends(response.data.friends);
-      } catch (error) {
-        console.error("Error fetching current friends:", error);
+        const res = await fetch("http://localhost:5000/api/auth/getuser", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch user");
+
+        const data = await res.json();
+        setUser(data.user);
+      } catch (err) {
+        console.error("Error fetching user:", err.message);
+        alert("Failed to load user data.");
       }
     };
 
-    const fetchSentRequests = async () => {
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchFriendsData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/auth/getSentRequests?userid=${userid}`);
-        setSentRequests(response.data.sentRequests);
+        const [friendsRes, sentRes, receivedRes] = await Promise.all([
+          axios.get(`http://localhost:5000/api/auth/getfriends?userid=${user._id}`),
+          axios.get(`http://localhost:5000/api/auth/getSentRequests?userid=${user._id}`),
+          axios.get(`http://localhost:5000/api/auth/getReceivedFriendRequests?userid=${user._id}`),
+        ]);
+        setFriends(friendsRes.data.friends);
+        setSentRequests(sentRes.data.sentRequests);
+        setReceivedRequests(receivedRes.data.receivedRequests);
       } catch (error) {
-        console.error("Error fetching sent requests:", error);
+        console.error("Error fetching friend data:", error);
       }
     };
 
-    const fetchReceivedRequests = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/auth/getReceivedFriendRequests?userid=${userid}`);
-        setReceivedRequests(response.data.receivedRequests);
-      } catch (error) {
-        console.error("Error fetching received requests:", error);
-      }
-    };
-
-    fetchCurrentFriends();
-    fetchSentRequests();
-    fetchReceivedRequests();
-  }, [userid]);
+    fetchFriendsData();
+  }, [user]);
 
   const handleSearchChange = async (e) => {
     const term = e.target.value;
@@ -59,50 +75,62 @@ const Friends = () => {
     }
   };
 
-  const handleAddFriend = async (friendId) => {
+const handleAddFriend = async (friendId) => {
+  try {
+    console.log(user._id, friendId);
+    const response = await axios.post("http://localhost:5000/api/auth/addfriend", {
+      userid: user._id,
+      friendid: friendId,
+    });
+    alert(response.data.message);
+    window.location.reload();
+  } catch (error) {
+    const message = error.response?.data?.message || "Failed to send friend request.";
+    console.error("Error adding friend:", message);
+    alert(message);
+  }
+};
+
+
+  const handleAcceptRequest = async (friendId) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/addfriend",
-        { userid: userid, friendid: friendId }
-      );
+      console.log(user._id,friendId)
+      const response = await axios.post("http://localhost:5000/api/auth/acceptreq", {
+        userid: user._id,
+        friendid: friendId,
+        action: "accept",
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       alert(response.data.message);
-      // Refresh the lists after adding
       window.location.reload();
     } catch (error) {
-      console.error("Error adding friend:", error);
-      alert("Failed to send friend request.");
+      console.error("Error accepting friend request:", error);
+      alert("Failed to accept friend request.");
     }
   };
-const handleAcceptRequest = async (friendId) => {
-  try {
-    const response = await axios.post("http://localhost:5000/api/auth/acceptreq", {
-      userid: userid,
-      friendid: friendId,
-      action: "accept",
-    });
-    alert(response.data.message);
-    window.location.reload();
-  } catch (error) {
-    console.error("Error accepting friend request:", error);
-    alert("Failed to accept friend request.");
-  }
-};
 
-const handleRejectRequest = async (friendId) => {
-  try {
-    const response = await axios.post("http://localhost:5000/api/auth/acceptreq", {
-      userid: userid,
-      friendid: friendId,
-      action: "reject",
-    });
-    alert(response.data.message);
-    window.location.reload();
-  } catch (error) {
-    console.error("Error rejecting friend request:", error);
-    alert("Failed to reject friend request.");
-  }
-};
-
+  const handleRejectRequest = async (friendId) => {
+    try {
+      console.log(user._id,friendId)
+      const response = await axios.post("http://localhost:5000/api/auth/acceptreq", {
+        userid: user._id,
+        friendid: friendId,
+        action: "reject",
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      alert(response.data.message);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error rejecting friend request:", error);
+      alert("Failed to reject friend request.");
+    }
+  };
 
   return (
     <div className="friends-container">
@@ -168,16 +196,10 @@ const handleRejectRequest = async (friendId) => {
               <li key={friend._id}>
                 {friend.username} <span>{friend.name}</span>
                 <div className="friend-actions">
-                  <button 
-                    className="accept-btn" 
-                    onClick={() => handleAcceptRequest(friend._id)}
-                  >
+                  <button className="accept-btn" onClick={() => handleAcceptRequest(friend._id)}>
                     Accept
                   </button>
-                  <button 
-                    className="reject-btn" 
-                    onClick={() => handleRejectRequest(friend._id)}
-                  >
+                  <button className="reject-btn" onClick={() => handleRejectRequest(friend._id)}>
                     Reject
                   </button>
                 </div>

@@ -3,7 +3,7 @@ import Users from "../models/User.js";
 
 export const addFriend = async (req, res) => {
   const { userid, friendid } = req.body;
-
+  console.log(userid,friendid)
   if (!userid || !friendid) {
     return res.status(400).json({ message: "User ID and Friend ID are required." });
   }
@@ -13,8 +13,8 @@ export const addFriend = async (req, res) => {
   }
 
   try {
-    const user = await Users.findOne({ username: userid });
-    const friend = await Users.findById(friendid); // Use _id directly
+    const user = await Users.findById(userid);
+    const friend = await Users.findById(friendid); 
 
     if (!user || !friend) {
       return res.status(404).json({ message: "User or Friend not found." });

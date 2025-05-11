@@ -1,5 +1,6 @@
 import friends from "../models/friends.js";
 import Users from "../models/User.js";
+
 export const acceptfriend = async (req, res) => {
   const { userid, friendid, action } = req.body;
 
@@ -12,18 +13,21 @@ export const acceptfriend = async (req, res) => {
   }
 
   try {
-    const user = await Users.findOne({ username: userid });
-    const friend = await Users.findOne({ username: friendid });
+    // Find users by _id instead of username
+    const user = await Users.findById(userid);
+    const friend = await Users.findById(friendid);
 
     if (!user || !friend) {
       return res.status(404).json({ message: "User or Friend not found." });
     }
 
-    const existingFriendship = await friends.findOne({
-      userId: user._id,
-      friendId: friend._id,
-      status: "pending",
-    });
+ const existingFriendship = await friends.findOne({
+  $or: [
+    { userId: user._id, friendId: friend._id },
+    { userId: friend._id, friendId: user._id },
+  ],
+});
+
 
     const act = action.toLowerCase();
 

@@ -10,7 +10,7 @@ export const getReceivedFriendRequests = async (req, res) => {
   }
 
   try {
-    const user = await Users.findOne({ username: userid });
+    const user = await Users.findById(userid);
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
