@@ -7,10 +7,15 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import connectS3 from './config/aws_s3.js'; // if you use S3
 import path from 'path';
+import removeSpoilers from './Scripts/removespoilers.js'; // if you use the removeSpoilers script
+
+
+
 
 dotenv.config();
 connectDB();
 connectS3();
+removeSpoilers();
 
 const app = express();
 const server = createServer(app);
