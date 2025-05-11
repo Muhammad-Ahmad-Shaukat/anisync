@@ -17,7 +17,7 @@ function HomePage(){
         <AnimeSlider type="top" limit={11} />
         <AnimeSlider type="airing" limit={11} />
         {/* <AnimeEditPage/> */}
-        <AdminAnimeList/>
+        {/* <AdminAnimeList/> */}
     </>
 }
 
