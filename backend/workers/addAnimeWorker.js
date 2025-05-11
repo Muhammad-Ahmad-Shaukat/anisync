@@ -1,13 +1,18 @@
 import { parentPort, workerData } from 'worker_threads';
-import { addAnimeLogic } from '../Scripts/addanime'; 
+import { addAnimeById } from '../Scripts/addanime.js';
+
 const run = async () => {
   try {
-    const { animeid } = workerData; 
-    await addAnimeLogic(animeid); 
-    parentPort.postMessage({ status: 'done' }); 
+    const result = await addAnimeById(workerData.animeid);
+    console.log(`🧵 Worker success: ${result} for animeid ${workerData.animeid}`);
+    parentPort.postMessage({ success: true, animeid: workerData.animeid });
   } catch (error) {
-    console.error("Error processing worker:", error);
-    parentPort.postMessage({ status: 'error', message: error.message });
+    console.error(`❌ Worker failed for animeid ${workerData.animeid}:`, error.message);
+    parentPort.postMessage({
+      success: false,
+      animeid: workerData.animeid,
+      error: error.message
+    });
   }
 };
 
