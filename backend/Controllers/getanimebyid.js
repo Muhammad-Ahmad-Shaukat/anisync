@@ -12,15 +12,16 @@ export const getAnimeById = async (req, res) => {
         }
         const formattedAnime = {
             id: anime._id,
-            title: anime.title,
+            title: anime.anime_name,
             description: anime.description,
             genres: anime.genres,
             status: anime.status,
             releaseDate: anime.releaseDate,
             episodes: anime.episodes,
-            imageSrc: anime.imageSrc,
-            trailerSrc: anime.trailerSrc
+            imageSrc: anime.image,
+            trailerSrc: anime.trailer
         };
+        console.log(formattedAnime)
         return res.status(200).json(formattedAnime);
     }catch (error) {
         console.error("Error fetching anime by ID:", error);

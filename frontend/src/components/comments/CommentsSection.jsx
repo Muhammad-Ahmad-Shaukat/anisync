@@ -12,7 +12,7 @@ const CommentSection = ({ episodeId }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token); // Convert token to boolean
+    setIsLoggedIn(!!token); 
 
     const fetchComments = async () => {
       try {

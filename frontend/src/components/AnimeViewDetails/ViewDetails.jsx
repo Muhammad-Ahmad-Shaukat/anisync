@@ -26,7 +26,6 @@ const ViewDetails = ({ anime, loading }) => {
         },
         body: JSON.stringify({ animeid: anime._id })
       });
-
       const data = await response.json();
 
       if (response.ok) {
