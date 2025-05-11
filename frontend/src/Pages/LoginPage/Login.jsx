@@ -29,7 +29,6 @@ const Login = () => {
 
       localStorage.setItem("token", data.token);
 
-      // Dispatch both user and token to Redux
       dispatch(loginSuccess({
         user: data.user,
         token: data.token,
