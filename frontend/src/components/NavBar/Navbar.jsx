@@ -10,11 +10,26 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
-  // Check token on initial render
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
+
+    if (token) {
+      fetch('http://localhost:5000/api/auth/getuser', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUser(data.user);
+        })
+        .catch((err) => {
+          console.error('Failed to fetch user:', err);
+        });
+    }
   }, []);
 
   const handleLogout = () => {
@@ -22,7 +37,7 @@ const Navbar = () => {
     dispatch(logout());
     setIsAuthenticated(false);
     navigate('/login');
-    setIsMenuOpen(false); // Close menu after logout
+    setIsMenuOpen(false);
   };
 
   const toggleMenu = () => {
@@ -36,22 +51,32 @@ const Navbar = () => {
         <div className="line"></div>
         <div className="line"></div>
       </div>
-      
+
       <div className="left-section">
         <Link to="/" className="logo" onClick={() => setIsMenuOpen(false)}>AniSync</Link>
         <SearchBar />
       </div>
-      
+
       <div className="nav-links center-links">
         <Link to="/top" onClick={() => setIsMenuOpen(false)}>Top Airing</Link>
         <Link to="/trending" onClick={() => setIsMenuOpen(false)}>Trending</Link>
-        <Link to="/friends" onClick={() => setIsMenuOpen(false)}>Friends</Link>
-        <Link to="/watchTogether" onClick={() => setIsMenuOpen(false)}>Watch Together</Link>
+        <Link to="/new" onClick={() => setIsMenuOpen(false)}>Newly Release</Link>
       </div>
-      
+
       <div className="nav-links right-links">
         {isAuthenticated ? (
-          <button onClick={handleLogout} className="signout-btn">Sign Out</button>
+          <>
+            {user && user.profilePic && (
+              <Link to="/profile" onClick={() => setIsMenuOpen(false)}>
+                <img
+                  src={user.profilePic}
+                  alt="User"
+                  className="nav-user-img"
+                />
+              </Link>
+            )}
+            <button onClick={handleLogout} className="signout-btn">Sign Out</button>
+          </>
         ) : (
           <>
             <Link to="/login" onClick={() => setIsMenuOpen(false)}>Login</Link>

@@ -1,20 +1,16 @@
-/* SearchBar.css */
 
-/* Container for the search bar and the dropdown */
 .search-bar-container {
     position: relative;
     width: 100%;
-    max-width: 300px; /* Adjust as needed */
+    max-width: 300px;
     margin: 0 auto;
   }
-  
-  /* Styling for the search form */
+ 
   .search-form {
     display: flex;
     align-items: center;
   }
   
-  /* Input field styling */
   .search-input {
     flex-grow: 1;
     padding: 8px 12px;
@@ -28,34 +24,31 @@
   }
   
   .search-input:focus {
-    border-color: #2980b9;
+    border-color: none;
   }
   
-  /* Search button styling */
   .search-button {
-    background-color: #2980b9;
     border: none;
     color: #fff;
     padding: 8px 12px;
     cursor: pointer;
     font-size: 16px;
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 2px 2px 0;
     display: flex;
     align-items: center;
     transition: background-color 0.3s ease;
   }
   
   .search-button:hover {
-    background-color: #1c5980;
+    background-color: #f472b6;
   }
   
-  /* Dropdown list for suggestions */
   .suggestions-list {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background: #2c3e50; /* Dark background matching your theme */
+    background: #2c3e50; 
     border: 1px solid #444;
     border-top: none;
     max-height: 250px;
@@ -67,8 +60,6 @@
     border-radius: 0 0 4px 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   }
-  
-  /* Styling for each suggestion item */
   .suggestion-item {
     display: flex;
     align-items: center;
@@ -81,7 +72,6 @@
     background-color: #34495e;
   }
   
-  /* Poster image styling in suggestions */
   .suggestion-poster {
     width: 40px;
     height: 60px;
@@ -89,14 +79,12 @@
     border-radius: 2px;
     margin-right: 10px;
   }
-  
-  /* Text styling for suggestions */
+
   .suggestion-text {
     color: #ecf0f1;
     font-size: 16px;
   }
   
-  /* Styling for "No Results found" message; non-clickable */
   .no-results {
     padding: 10px;
     text-align: center;
@@ -106,7 +94,6 @@
     pointer-events: none;
   }
   
-  /* Skeleton loader styling */
   .skeleton-item {
     display: flex;
     align-items: center;
@@ -136,7 +123,6 @@
     100% { background-color: #3a3f47; }
   }
   
-  /* Responsive adjustments */
   @media (max-width: 768px) {
     .search-bar-container {
       max-width: 100%;
@@ -153,3 +139,28 @@
     }
   }
   
+
+.search-button {
+  background: #2c3e50;       
+  border: none;           
+  outline: none;          
+  padding: 10px;    
+  min-height: 35px;         
+  margin-left: 0px;       
+  cursor: pointer;      
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-button:focus {
+  outline: none;
+}
+
+.icon {
+  color: #ccc;          
+  font-size: 16px;
+  text-decoration: none;
+}
+
+

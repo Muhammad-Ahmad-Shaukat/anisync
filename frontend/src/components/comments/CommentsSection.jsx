@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./CommentsSection.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
+
 const CommentSection = ({ episodeId }) => {
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState("");
@@ -9,10 +10,11 @@ const CommentSection = ({ episodeId }) => {
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [revealedSpoilers, setRevealedSpoilers] = useState({}); // Track spoiler visibility
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token); 
+    setIsLoggedIn(!!token);
 
     const fetchComments = async () => {
       try {
@@ -73,6 +75,13 @@ const CommentSection = ({ episodeId }) => {
     }
   };
 
+  const toggleSpoiler = (commentId) => {
+    setRevealedSpoilers(prev => ({
+      ...prev,
+      [commentId]: !prev[commentId]
+    }));
+  };
+
   if (loading) return <p>Loading comments...</p>;
 
   return (
@@ -85,17 +94,37 @@ const CommentSection = ({ episodeId }) => {
         <p>No comments yet. Be the first!</p>
       ) : (
         <ul className="comment-list">
-          {comments.map((comment) => (
-            <li key={comment._id} className="comment-item">
-              <div className="comment-user">
-                <span className="comment-username">{comment.userId?.username || "Unknown"}</span>
-              </div>
-              <p className="comment-content">{comment.comment}</p>
-              <small className="comment-date">
-                {new Date(comment.createdAt).toLocaleString()}
-              </small>
-            </li>
-          ))}
+          {comments.map((comment) => {
+            const isSpoiler = comment.isSpoiler;
+            const isRevealed = revealedSpoilers[comment._id];
+
+            return (
+              <li key={comment._id} className="comment-item">
+                <div className="comment-user">
+                  <span className="comment-username">{comment.userId?.username || "Unknown"}</span>
+                </div>
+
+                <div className="comment-content-wrapper">
+                  <p className={`comment-content ${isSpoiler && !isRevealed ? "blurred" : ""}`}>
+                    {comment.comment}
+                  </p>
+
+                  {isSpoiler && !isRevealed && (
+                    <button
+                      className="show-spoiler-button"
+                      onClick={() => toggleSpoiler(comment._id)}
+                    >
+                      Show Spoiler
+                    </button>
+                  )}
+                </div>
+
+                <small className="comment-date">
+                  {new Date(comment.createdAt).toLocaleString()}
+                </small>
+              </li>
+            );
+          })}
         </ul>
       )}
 
@@ -113,8 +142,8 @@ const CommentSection = ({ episodeId }) => {
         </form>
       ) : (
         <p className="login-message">
-  You must be <Link to="/login" className="login-link">logged in</Link> to comment.
-</p>
+          You must be <Link to="/login" className="login-link">logged in</Link> to comment.
+        </p>
       )}
     </div>
   );

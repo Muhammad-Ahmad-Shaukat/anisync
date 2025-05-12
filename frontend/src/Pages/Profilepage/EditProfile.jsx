@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './EditProfile.css';
 import { FaUser, FaKey, FaEdit, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 
-const EditProfile = ({ user }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const EditProfile = ({ user, onClose }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPasswordFields, setShowPasswordFields] = useState(false);
@@ -13,13 +12,8 @@ const EditProfile = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const toggleModal = () => {
-    setIsOpen(!isOpen);
-    // Reset form when closing
-    if (isOpen) {
-      resetForm();
-    }
-  };
+  // Initialize with modal open
+  const [isOpen, setIsOpen] = useState(true);
 
   const resetForm = () => {
     setPassword('');
@@ -75,7 +69,7 @@ const EditProfile = ({ user }) => {
       }
 
       alert("Profile updated successfully!");
-      toggleModal();
+      handleClose();
       // You might want to trigger a parent component update here
     } catch (error) {
       console.error("Error updating profile:", error.message);
@@ -98,17 +92,21 @@ const EditProfile = ({ user }) => {
     }
   };
 
+  const handleClose = () => {
+    setIsOpen(false);
+    resetForm();
+    // Call the onClose prop if provided
+    if (onClose) {
+      onClose();
+    }
+  };
+
   return (
     <>
-      {/* Button to trigger the modal */}
-      <button className="edit-profile-trigger" onClick={toggleModal}>
-        Edit Profile
-      </button>
-
-      {/* Modal overlay */}
-      <div className={`edit-profile-wrapper ${isOpen ? 'active' : ''}`} onClick={toggleModal}>
+      {/* Modal overlay - always visible when component is mounted */}
+      <div className={`edit-profile-wrapper ${isOpen ? 'active' : ''}`}>
         <div className="edit-profile-container" onClick={(e) => e.stopPropagation()}>
-          <button className="close-btn" onClick={toggleModal}>
+          <button className="close-btn" onClick={handleClose}>
             <FaTimes />
           </button>
           

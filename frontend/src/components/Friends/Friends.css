@@ -59,175 +59,170 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-.search-results,
-.current-friends,
-.sent-requests,
-.received-requests {
-  background: rgba(46, 42, 70, 0.6);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* Tab Styles - More Integrated */
+.friends-tabs {
+  display: flex;
+  margin-bottom: 0;
+  justify-content: center;
+  background: transparent;
+}
+
+.tab-button {
+  padding: 0.8rem 1.5rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  margin: 0 0.5rem;
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
+}
+
+.tab-button:hover {
+  color: #ff99cc;
+  background: rgba(255, 102, 204, 0.05);
+}
+
+.tab-button.active {
+  color: #ff66cc;
+  font-weight: bold;
+  background: rgba(255, 102, 204, 0.1);
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg, #ff66cc, #ff99cc);
+  border-radius: 3px;
+}
+
+/* Friends List Container - More Transparent */
+.friends-list-container {
+  background: transparent;
+  border-radius: 0 0 12px 12px;
+  padding: 1.5rem 0 0;
   transition: all 0.3s ease;
 }
 
-.search-results:hover,
-.current-friends:hover,
-.sent-requests:hover,
-.received-requests:hover {
-  border-color: rgba(255, 102, 204, 0.3);
-  box-shadow: 0 4px 12px rgba(255, 102, 204, 0.1);
+/* Search Results - Floating Glass Effect */
+.search-results {
+  position: absolute;
+  width: 100%;
+  background: rgba(46, 42, 70, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 0 0 12px 12px;
+  border: 1px solid rgba(255, 102, 204, 0.2);
+  border-top: none;
+  z-index: 10;
+  margin-top: -10px;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-.search-results h3,
-.current-friends h3,
-.sent-requests h3,
-.received-requests h3 {
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-  color: #ff99cc;
-  display: flex;
-  align-items: center;
-}
-
-.search-results h3::before,
-.current-friends h3::before,
-.sent-requests h3::before,
-.received-requests h3::before {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background: #ff66cc;
-  border-radius: 50%;
-  margin-right: 0.8rem;
-}
-
-.search-results ul,
-.current-friends ul,
-.sent-requests ul,
-.received-requests ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+/* Friends List Items - Subtle Cards */
+.friends-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.search-results li,
-.current-friends li,
-.sent-requests li,
-.received-requests li {
-  background: rgba(255, 255, 255, 0.05);
+.friends-list li {
+  background: rgba(255, 255, 255, 0.03);
   padding: 1rem;
   border-radius: 8px;
   transition: all 0.3s ease;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  flex-direction: column;
+  border: 1px solid rgba(255, 102, 204, 0.05);
+  backdrop-filter: blur(5px);
 }
 
-.search-results li:hover,
-.current-friends li:hover,
-.sent-requests li:hover,
-.received-requests li:hover {
-  background: rgba(255, 255, 255, 0.1);
+.friends-list li:hover {
+  background: rgba(255, 255, 255, 0.08);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-color: rgba(255, 102, 204, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 102, 204, 0.1);
+  border-color: rgba(255, 102, 204, 0.2);
 }
 
-.search-results li {
-  cursor: pointer;
-  position: relative;
-}
-
-.search-results li::after {
-  content: '+';
-  position: absolute;
-  right: 1rem;
-  color: #ff66cc;
-  font-size: 1.2rem;
-  font-weight: bold;
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.search-results li:hover::after {
-  opacity: 1;
-  transform: scale(1.2);
-}
-
-.search-results li span,
-.current-friends li span,
-.sent-requests li span,
-.received-requests li span {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
-}
-
-.search-results p,
-.current-friends p,
-.sent-requests p,
-.received-requests p {
-  color: rgba(255, 255, 255, 0.5);
-  font-style: italic;
-  text-align: center;
-  padding: 1rem;
-}
-
-/* Request status badges */
-.sent-requests li::after {
-  content: 'Pending';
-  background: rgba(255, 204, 0, 0.2);
-  color: #ffcc00;
+/* Status Badges - More Subtle */
+.status-badge {
   font-size: 0.7rem;
   padding: 0.3rem 0.6rem;
   border-radius: 50px;
-  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  align-self: flex-start;
+  backdrop-filter: blur(5px);
 }
 
-/* Action buttons for received requests */
-.received-requests li {
-  position: relative;
-  padding-right: 100px;
+.status-pending {
+  background: rgba(255, 204, 0, 0.1);
+  color: #ffcc00;
+  border: 1px solid rgba(255, 204, 0, 0.2);
 }
 
-.received-requests .friend-actions {
-  position: absolute;
-  right: 1rem;
+/* Action Buttons - Glass Morphism */
+.friend-actions {
   display: flex;
   gap: 0.5rem;
+  margin-top: 0.8rem;
 }
 
-.received-requests .accept-btn,
-.received-requests .reject-btn {
-  padding: 0.3rem 0.6rem;
-  border: none;
+.accept-btn, .reject-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
   border-radius: 4px;
   font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
 }
 
-.received-requests .accept-btn {
-  background: rgba(102, 255, 102, 0.2);
+.accept-btn {
+  background: rgba(102, 255, 102, 0.1);
   color: #66ff66;
+  border-color: rgba(102, 255, 102, 0.2);
 }
 
-.received-requests .reject-btn {
-  background: rgba(255, 102, 102, 0.2);
+.reject-btn {
+  background: rgba(255, 102, 102, 0.1);
   color: #ff6666;
+  border-color: rgba(255, 102, 102, 0.2);
 }
 
-.received-requests .accept-btn:hover {
-  background: rgba(102, 255, 102, 0.3);
+.accept-btn:hover {
+  background: rgba(102, 255, 102, 0.2);
 }
 
-.received-requests .reject-btn:hover {
-  background: rgba(255, 102, 102, 0.3);
+.reject-btn:hover {
+  background: rgba(255, 102, 102, 0.2);
+}
+
+/* Empty State - More Integrated */
+.empty-state {
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  text-align: center;
+  padding: 3rem;
+  grid-column: 1 / -1;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
 }
 
 /* Responsive Design */
@@ -235,26 +230,27 @@
   .friends-container {
     padding: 1.5rem;
     margin: 1rem;
+    backdrop-filter: blur(5px);
   }
   
-  .search-results ul,
-  .current-friends ul,
-  .sent-requests ul,
-  .received-requests ul {
+  .friends-tabs {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    justify-content: flex-start;
+  }
+  
+  .tab-button {
+    flex-shrink: 0;
+    margin: 0 0.25rem;
+    padding: 0.6rem 1rem;
+  }
+  
+  .friends-list {
     grid-template-columns: 1fr;
   }
   
-  .received-requests li {
-    padding-right: 1rem;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .received-requests .friend-actions {
-    position: relative;
-    right: auto;
-    margin-top: 0.5rem;
-    width: 100%;
-    justify-content: flex-end;
+  .friends-list li {
+    padding: 1rem;
   }
 }

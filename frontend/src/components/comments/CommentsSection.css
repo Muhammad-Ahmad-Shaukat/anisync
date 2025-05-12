@@ -222,3 +222,20 @@ textarea:disabled {
   transform: none;
   box-shadow: none;
 }
+
+.blurred {
+  filter: blur(5px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.show-spoiler-button {
+  margin-top: 4px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  background-color: #444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}

@@ -38,7 +38,12 @@ const ViewDetails = ({ anime, loading }) => {
       alert("Something went wrong while adding to wishlist.");
     }
   };
-
+   const handleWatchTogether = (anime) => {
+    const animeId = anime._id;
+    sessionStorage.setItem('isHost', 'true'); // mark this user as host
+   
+    navigate(`/watchTogether/${animeId}`, { state: { host: true } });
+  };
   const watchanime = () => {
     if (anime?.anime_name) {
       const slug = anime.anime_name.toLowerCase().replace(/\s+/g, "-");
@@ -112,6 +117,7 @@ const ViewDetails = ({ anime, loading }) => {
             <div className="actions">
               <button className="action-button" onClick={handlewishlist}>Add to List</button>
               <button className="action-button" onClick={watchanime}>Watch Now</button>
+              <button className="action-button" onClick={() => handleWatchTogether(anime)}>Watch Together</button>
             </div>
             <p className="description">{anime.description}</p>
             {anime.trailer && (

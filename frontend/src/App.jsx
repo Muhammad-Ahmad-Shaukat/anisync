@@ -17,10 +17,10 @@ import TrendingPage from './Pages/TrendingPage/TrendingPage.jsx';
 import TopAiringPage from './Pages/TopAiringPage/TopAiringPage.jsx';
 import WatchAnime from './Pages/VideoStream/watchanime.jsx';
 import RedirectIfAuth from './Pages/RedirectIfAuth.jsx';
-import Friends from './components/Friends/Friends.jsx';
 import WatchTogether from './Pages/watchtogether.jsx/Watchtoether.jsx';
 import SelectAnime from './Pages/watchtogether.jsx/selectanime.jsx';
 import './App.css';
+import NewlyReleasePage from './Pages/NewlyReleasePage/NewlyReleasePage.jsx';
 
 function App() {
   const [serveron, setServerOn] = useState(true);
@@ -72,11 +72,11 @@ function App() {
                   </RedirectIfAuth>
                 }
               />
-              <Route path="/friends" element={<Friends />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/anime/:animeName" element={<AnimeDetails />} />
               <Route path="/trending" element={<TrendingPage />} />
               <Route path="/top" element={<TopAiringPage />} />
+              <Route path="/new" element={<NewlyReleasePage />} />
               <Route path="/watch/:animeName" element={<WatchAnime />} />
               <Route path="/watchTogether" element={<SelectAnime />} />
               <Route path="/watchTogether/:animeId" element={<WatchTogether />} />

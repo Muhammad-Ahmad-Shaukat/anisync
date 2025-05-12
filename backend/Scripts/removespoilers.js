@@ -35,7 +35,7 @@ const removeSpoilers = async () => {
 
 
       if (response.data.label === "Spoiler") {
-        comment.deleted = true;
+        comment.isSpoiler = true;
         await comment.save();
         console.log(`Deleted spoiler comment: ${comment._id}`);
       }

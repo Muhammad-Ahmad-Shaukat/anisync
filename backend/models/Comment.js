@@ -7,12 +7,13 @@ const commentSchema = new mongoose.Schema(
     comment: { type: String, required: true },
     likes: { type: Number, default: 0 },
     deleted: { type: Boolean, default: false },
+    isSpoiler: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
+// Indexes
 commentSchema.index({ episodeId: 1 });
-commentSchema.index({ parentCommentId: 1 });
 
-const Comment = mongoose.model("Comment", commentSchema);
+const Comment = mongoose.models.Comment || mongoose.model("Comment", commentSchema);
 export default Comment;
