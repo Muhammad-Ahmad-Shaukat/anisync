@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import './ProfileBanner.css';
 import {
-  FaUserFriends, FaHeart, FaCog, FaBars, FaTimes
+  FaUserFriends, FaHeart, FaCog, FaBars, FaTimes,FaCommentDots
 } from 'react-icons/fa';
 import EditProfile from './EditProfile';
 import Friends from '../../components/Friends/Friends';
 import Wishlist from "../../components/WishList/WishList";
+import Chats from '../../components/Chatting/Chats';
 
 const ProfileBanner = ({ user }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -47,6 +48,14 @@ const ProfileBanner = ({ user }) => {
             <FaCog className="icon" />
             <span>Edit Profile</span>
           </div>
+
+          <div
+            className={`menu-item ${activeSection === 'chats' ? 'active' : ''}`}
+            onClick={() => setActiveSection('chats')}
+          >
+            <FaCommentDots className="icon" />
+            <span>Chats</span>
+          </div>
         </div>
       </div>
 
@@ -55,6 +64,7 @@ const ProfileBanner = ({ user }) => {
         {activeSection === 'edit-profile' && <EditProfile user={user} />}
         {activeSection === 'friends' && <Friends />}
         {activeSection === 'watchlist' && <Wishlist />}
+        {activeSection === 'chats' && <Chats/>}
       </div>
     </div>
   );
