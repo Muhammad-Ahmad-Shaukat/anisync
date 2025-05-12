@@ -1,31 +1,33 @@
 /* Friends.css */
 .friends-container {
   max-width: 1000px;
-  margin: 2rem auto;
+  margin: 0 auto;
   padding: 2rem;
-  background: rgba(30, 27, 46, 0.8);
-  backdrop-filter: blur(10px);
+  background: transparent;
+
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 102, 204, 0.1);
+
   color: #fff;
 }
 
-.friends-container h2 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  color: #fff;
-  text-align: center;
+.friends-header {
+  margin-bottom: 2rem;
   position: relative;
-  padding-bottom: 0.5rem;
 }
 
-.friends-container h2::after {
+.friends-header h2 {
+  font-size: 2rem;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.friends-header h2::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 80px;
   height: 3px;
   background: linear-gradient(90deg, #ff66cc, #ff99cc);
@@ -35,14 +37,15 @@
 .search-bar {
   margin-bottom: 2rem;
   position: relative;
+  background: transparent;
 }
 
 .search-bar input {
   width: 100%;
   padding: 1rem 1.5rem;
   background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50px;
   color: #fff;
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -59,12 +62,52 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* Tab Styles - More Integrated */
-.friends-tabs {
+.search-results {
+  position: absolute;
+  width: 70%;
+  background: rgba(46, 42, 70, 0.95);
+  border-radius: 0 0 12px 12px;
+  border: 1px solid rgba(255, 102, 204, 0.2);
+  border-top: none;
+  z-index: 10;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.search-results ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-results li {
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
   display: flex;
-  margin-bottom: 0;
-  justify-content: center;
-  background: transparent;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.search-results li:last-child {
+  border-bottom: none;
+}
+
+.search-results li:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ff99cc;
+}
+
+.search-results li span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .tab-button {
@@ -76,181 +119,152 @@
   cursor: pointer;
   position: relative;
   transition: all 0.3s ease;
-  margin: 0 0.5rem;
-  border-radius: 8px;
-  backdrop-filter: blur(5px);
+  margin-right: 0.5rem;
 }
 
 .tab-button:hover {
   color: #ff99cc;
-  background: rgba(255, 102, 204, 0.05);
 }
 
 .tab-button.active {
   color: #ff66cc;
   font-weight: bold;
-  background: rgba(255, 102, 204, 0.1);
 }
 
 .tab-button.active::after {
   content: '';
   position: absolute;
-  bottom: -3px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
+  bottom: -1px;
+  left: 0;
+  right: 0;
   height: 3px;
   background: linear-gradient(90deg, #ff66cc, #ff99cc);
-  border-radius: 3px;
+  border-radius: 3px 3px 0 0;
 }
 
-/* Friends List Container - More Transparent */
-.friends-list-container {
-  background: transparent;
-  border-radius: 0 0 12px 12px;
-  padding: 1.5rem 0 0;
-  transition: all 0.3s ease;
-}
-
-/* Search Results - Floating Glass Effect */
-.search-results {
-  position: absolute;
-  width: 100%;
-  background: rgba(46, 42, 70, 0.9);
-  backdrop-filter: blur(10px);
-  border-radius: 0 0 12px 12px;
-  border: 1px solid rgba(255, 102, 204, 0.2);
-  border-top: none;
-  z-index: 10;
-  margin-top: -10px;
-  max-height: 300px;
-  overflow-y: auto;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Friends List Items - Subtle Cards */
 .friends-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem;
+  background: transparent;
+  border-radius: 12px;
+  padding: 1.5rem;
+  min-height: 200px;
+}
+
+.friends-list ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
 }
 
 .friends-list li {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.05);
   padding: 1rem;
   border-radius: 8px;
   transition: all 0.3s ease;
   display: flex;
-  flex-direction: column;
-  border: 1px solid rgba(255, 102, 204, 0.05);
-  backdrop-filter: blur(5px);
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .friends-list li:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 102, 204, 0.1);
-  border-color: rgba(255, 102, 204, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 102, 204, 0.3);
 }
 
-/* Status Badges - More Subtle */
-.status-badge {
-  font-size: 0.7rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 50px;
-  margin-top: 0.5rem;
-  align-self: flex-start;
-  backdrop-filter: blur(5px);
+.friends-list li span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
 }
 
-.status-pending {
-  background: rgba(255, 204, 0, 0.1);
-  color: #ffcc00;
-  border: 1px solid rgba(255, 204, 0, 0.2);
-}
-
-/* Action Buttons - Glass Morphism */
 .friend-actions {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.8rem;
 }
 
 .accept-btn, .reject-btn {
   padding: 0.5rem 1rem;
-  border: 1px solid transparent;
+  border: none;
   border-radius: 4px;
   font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(5px);
 }
 
 .accept-btn {
-  background: rgba(102, 255, 102, 0.1);
+  background: rgba(102, 255, 102, 0.2);
   color: #66ff66;
-  border-color: rgba(102, 255, 102, 0.2);
 }
 
 .reject-btn {
-  background: rgba(255, 102, 102, 0.1);
+  background: rgba(255, 102, 102, 0.2);
   color: #ff6666;
-  border-color: rgba(255, 102, 102, 0.2);
 }
 
 .accept-btn:hover {
-  background: rgba(102, 255, 102, 0.2);
+  background: rgba(102, 255, 102, 0.3);
 }
 
 .reject-btn:hover {
-  background: rgba(255, 102, 102, 0.2);
+  background: rgba(255, 102, 102, 0.3);
 }
 
-/* Empty State - More Integrated */
-.empty-state {
-  color: rgba(255, 255, 255, 0.4);
+.friends-list p {
+  color: rgba(255, 255, 255, 0.5);
   font-style: italic;
   text-align: center;
-  padding: 3rem;
+  padding: 2rem;
   grid-column: 1 / -1;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 8px;
-  border: 1px dashed rgba(255, 255, 255, 0.1);
-  margin-top: 1rem;
+}
+
+/* Status badge for sent requests */
+.sent-requests li::after {
+  content: 'Pending';
+  background: rgba(255, 204, 0, 0.2);
+  color: #ffcc00;
+  font-size: 0.7rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
+  margin-left: 0.5rem;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .friends-container {
     padding: 1.5rem;
-    margin: 1rem;
-    backdrop-filter: blur(5px);
   }
   
-  .friends-tabs {
-    flex-direction: row;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    justify-content: flex-start;
+  .tabs {
+    flex-direction: column;
+    border-bottom: none;
   }
   
   .tab-button {
-    flex-shrink: 0;
-    margin: 0 0.25rem;
-    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    text-align: left;
   }
   
-  .friends-list {
+  .tab-button.active::after {
+    display: none;
+  }
+  
+  .friends-list ul {
     grid-template-columns: 1fr;
   }
   
-  .friends-list li {
-    padding: 1rem;
+  .received-requests li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .friend-actions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
   }
 }

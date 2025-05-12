@@ -72,7 +72,7 @@ const Wishlist = () => {
       ) : (
         <div className="wishlist-grid">
           {animeList.map((anime) => (
-            <div key={anime.id} className="anime-card">
+            <div key={anime.id} className="anime-cards">
               {/* Wrap each anime in a Link, encoding the title */}
               <Link to={`/anime/${encodeURIComponent(anime.title)}`}>
                 <img src={anime.imageSrc} alt={anime.title} width={200} />

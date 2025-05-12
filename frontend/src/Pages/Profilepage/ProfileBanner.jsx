@@ -4,9 +4,8 @@ import {
   FaUserFriends, FaHeart, FaCog, FaBars, FaTimes
 } from 'react-icons/fa';
 import EditProfile from './EditProfile';
-import Friends from '../../components/Friends/Friends';// Assuming you have this component
-
-import Wishlist from "../../components/WishList/WishList"; // Assuming you have this component
+import Friends from '../../components/Friends/Friends';
+import Wishlist from "../../components/WishList/WishList";
 
 const ProfileBanner = ({ user }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,8 +14,9 @@ const ProfileBanner = ({ user }) => {
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   return (
-    <>
-      <div className="profile-banner">
+    <div className="profile-banner">
+      {/* Left Sidebar */}
+      <div className="menu-container">
         <div className="top-bar">
           <button className="hamburger" onClick={toggleMenu}>
             {menuOpen ? <FaTimes /> : <FaBars />}
@@ -24,7 +24,6 @@ const ProfileBanner = ({ user }) => {
         </div>
 
         <div className={`menu ${menuOpen ? 'open' : ''}`}>
-          {/* Watch List */}
           <div
             className={`menu-item ${activeSection === 'watchlist' ? 'active' : ''}`}
             onClick={() => setActiveSection('watchlist')}
@@ -33,7 +32,6 @@ const ProfileBanner = ({ user }) => {
             <span>Watch List</span>
           </div>
 
-          {/* Friends */}
           <div
             className={`menu-item ${activeSection === 'friends' ? 'active' : ''}`}
             onClick={() => setActiveSection('friends')}
@@ -42,7 +40,6 @@ const ProfileBanner = ({ user }) => {
             <span>Friends</span>
           </div>
 
-          {/* Edit Profile */}
           <div
             className={`menu-item ${activeSection === 'edit-profile' ? 'active' : ''}`}
             onClick={() => setActiveSection('edit-profile')}
@@ -53,11 +50,13 @@ const ProfileBanner = ({ user }) => {
         </div>
       </div>
 
-      {/* Conditional Section Rendering */}
-      {activeSection === 'edit-profile' && <EditProfile user={user} />}
-      {activeSection === 'friends' && <Friends  />}
-      {activeSection === 'watchlist' && <Wishlist />}
-    </>
+      {/* Right Content Area */}
+      <div className="content-container">
+        {activeSection === 'edit-profile' && <EditProfile user={user} />}
+        {activeSection === 'friends' && <Friends />}
+        {activeSection === 'watchlist' && <Wishlist />}
+      </div>
+    </div>
   );
 };
 

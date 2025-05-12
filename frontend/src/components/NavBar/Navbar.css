@@ -83,18 +83,18 @@ html {
 }
 
 .signout-btn {
-  background: #e74c3c;
+  background: transparent;
   border: none;
   padding: 8px 12px;
   border-radius: 5px;
-  color: white;
+  color: #ccc;
   font-size: 1em;
   cursor: pointer;
   transition: background 0.3s;
 }
 
 .signout-btn:hover {
-  background: #c0392b;
+  color: #fff;
 }
 
 /* Responsive styles for smaller screens */

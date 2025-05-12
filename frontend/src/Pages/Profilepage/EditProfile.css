@@ -1,134 +1,145 @@
 /* EditProfile.css */
 
-/* Overlay styles */
-.edit-profile-wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-}
-
-.edit-profile-wrapper.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Container styles */
+/* Main container styles */
 .edit-profile-container {
-  background-color: #2a2a3a;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  width: 90%;
-  max-width: 500px;
-  padding: 25px;
-  position: relative;
-  transform: translateY(-20px);
-  transition: transform 0.3s ease;
-}
+  background:transparent;
 
-.edit-profile-wrapper.active .edit-profile-container {
-  transform: translateY(0);
+  border-radius: 16px;
+  padding: 2rem;
+  
+  max-width: 600px;
+  margin: 0 auto;
+  color: #fff;
 }
 
 /* Header styles */
 .edit-header {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  color: #fff;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.edit-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #ff66cc, #ff99cc);
+  border-radius: 3px;
 }
 
 .edit-header .icon {
-  margin-right: 10px;
-  font-size: 1.2rem;
+  margin-right: 0.8rem;
+  color: #ff99cc;
 }
 
 .edit-header h2 {
   margin: 0;
   font-size: 1.5rem;
+  font-weight: 500;
 }
 
 /* Form styles */
 .edit-form {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 }
 
 .edit-form label {
-  color: #ccc;
-  margin-bottom: 5px;
-  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  margin-bottom: -0.5rem;
 }
 
 .edit-form input {
-  background-color: #3a3a4a;
-  border: 1px solid #4a4a5a;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
   color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.edit-form input:focus {
+  outline: none;
+  border-color: #ff66cc;
+  box-shadow: 0 0 0 2px rgba(255, 102, 204, 0.3);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .email-readonly {
-  background-color: #3a3a4a;
-  border: 1px solid #4a4a5a;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 15px;
-  color: #aaa;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Password change section */
 .change-password-btn {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
   color: #4dabf7;
-  margin-bottom: 15px;
+  margin: 0.5rem 0;
   cursor: pointer;
+  font-size: 0.95rem;
   transition: color 0.2s;
+  padding: 0.5rem;
+  border-radius: 6px;
+  width: fit-content;
 }
 
 .change-password-btn:hover {
   color: #74c0fc;
+  background: rgba(77, 171, 247, 0.1);
 }
 
-.change-password-btn .icon {
-  margin-right: 8px;
-}
-
-.show-password-toggle {
+/* Password input wrapper */
+.password-input-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  color: #ccc;
-  font-size: 0.8rem;
-  margin-bottom: 15px;
 }
 
-.show-password-toggle input {
-  margin: 0 5px 0 0;
-  width: auto;
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.8rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.toggle-password:hover {
+  color: #fff;
 }
 
 /* Avatar styles */
 .profile-picture-box {
   display: flex;
-  justify-content: center;
-  margin: 20px 0;
+  flex-direction: column;
+  align-items: center;
+  margin: 1.5rem 0;
 }
 
 .avatar-wrapper {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1rem;
 }
 
 .avatar {
@@ -136,92 +147,90 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #4a4a5a;
+  border: 3px solid rgba(255, 102, 204, 0.3);
+  transition: all 0.3s ease;
+}
+
+.avatar:hover {
+  border-color: rgba(255, 102, 204, 0.6);
 }
 
 .edit-icon {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: #4dabf7;
-  width: 30px;
-  height: 30px;
+  bottom: 5px;
+  right: 5px;
+  background: rgba(30, 27, 46, 0.9);
+  border: 2px solid rgba(255, 102, 204, 0.5);
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
 }
 
 .edit-icon:hover {
-  background-color: #74c0fc;
+  background: rgba(255, 102, 204, 0.2);
+  border-color: rgba(255, 102, 204, 0.8);
 }
 
 .custom-file-upload {
-  cursor: pointer;
-  color: white;
+  color: #ff99cc;
+  font-size: 1rem;
+}
+
+.file-info {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
 }
 
 /* Button styles */
 .save-btn {
-  background-color: #4dabf7;
+  background: linear-gradient(90deg, #ff66cc, #ff99cc);
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 12px;
+  border-radius: 8px;
+  padding: 0.8rem;
   font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s;
-  margin-top: 10px;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
 }
 
 .save-btn:hover {
-  background-color: #74c0fc;
+  box-shadow: 0 4px 15px rgba(255, 102, 204, 0.4);
+  transform: translateY(-1px);
 }
 
-/* Close button (optional) */
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: none;
-  border: none;
-  color: #ccc;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: color 0.2s;
+.save-btn:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-.close-btn:hover {
-  color: #fff;
+/* Error message styles */
+.error-message {
+  color: #ff6666;
+  font-size: 0.85rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-/* Animation for dots background */
-.animated-dots-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: radial-gradient(#3a3a4a 1px, transparent 1px);
-  background-size: 15px 15px;
-  z-index: -1;
-  opacity: 0.3;
-}
-
-/* Trigger button styles */
-.edit-profile-trigger {
-  background-color: #4dabf7;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.edit-profile-trigger:hover {
-  background-color: #74c0fc;
+/* Responsive styles */
+@media (max-width: 768px) {
+  .edit-profile-container {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  
+  .avatar-wrapper {
+    width: 100px;
+    height: 100px;
+  }
 }

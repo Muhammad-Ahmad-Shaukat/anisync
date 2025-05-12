@@ -66,6 +66,7 @@ const Navbar = () => {
       <div className="nav-links right-links">
         {isAuthenticated ? (
           <>
+           <button onClick={handleLogout} className="signout-btn">Sign Out</button>
             {user && user.profilePic && (
               <Link to="/profile" onClick={() => setIsMenuOpen(false)}>
                 <img
@@ -75,7 +76,7 @@ const Navbar = () => {
                 />
               </Link>
             )}
-            <button onClick={handleLogout} className="signout-btn">Sign Out</button>
+           
           </>
         ) : (
           <>

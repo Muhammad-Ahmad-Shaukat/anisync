@@ -106,9 +106,7 @@ const EditProfile = ({ user, onClose }) => {
       {/* Modal overlay - always visible when component is mounted */}
       <div className={`edit-profile-wrapper ${isOpen ? 'active' : ''}`}>
         <div className="edit-profile-container" onClick={(e) => e.stopPropagation()}>
-          <button className="close-btn" onClick={handleClose}>
-            <FaTimes />
-          </button>
+          
           
           <div className="edit-header">
             <FaUser className="icon" />

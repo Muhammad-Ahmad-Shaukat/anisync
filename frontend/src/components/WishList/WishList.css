@@ -1,13 +1,163 @@
-.wishlist-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
+/* WishList.css */
+.wishlist-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 !important;
+  background: rgba(30, 27, 46, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 102, 204, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: #fff;
 }
 
-.anime-card {
-  border: 1px solid #ccc;
-  padding: 0.5rem;
-  border-radius: 10px;
+.wishlist-header {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.wishlist-header h2 {
+  font-size: 2rem;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.wishlist-header h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #ff66cc, #ff99cc);
+  border-radius: 3px;
+}
+
+.wishlist-grid {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: -0.75rem; /* to offset card margins */
+  padding: 0 !important;
+}
+
+.anime-cards {
+  background: rgba(46, 42, 70, 0.6) !important;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  margin: 0.75rem;
+  width: calc(25% - 1.5rem);
+  box-sizing: border-box;
+}
+
+.anime-cards:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(255, 102, 204, 0.2);
+  border-color: rgba(255, 102, 204, 0.3);
+}
+
+.anime-cards a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.anime-cards img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+ 
+}
+
+
+.anime-cards h3 {
+  font-size: 1rem;
+  margin: 0.8rem 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #fff;
+}
+
+.anime-cards p {
+  font-size: 0.8rem;
+  margin: 0 1rem 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  gap: 0.5rem;
   text-align: center;
+}
+
+.empty-wishlist {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  width: 100%;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(255, 255, 255, 0.7);
+  width: 100%;
+}
+
+/* Status badges */
+.anime-status {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .anime-cards {
+    width: calc(33.333% - 1.5rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .wishlist-container {
+    padding: 1.5rem !important;
+  }
+
+  .anime-cards {
+    width: calc(50% - 1.5rem);
+  }
+
+  .anime-cards img {
+    height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .anime-cards {
+    width: calc(100% - 1.5rem);
+  }
+
+  .anime-cards img {
+    height: 180px;
+  }
+
+  .anime-cards h3 {
+    font-size: 0.9rem;
+    margin: 0.5rem;
+  }
+
+  .anime-cards p {
+    font-size: 0.7rem;
+    margin: 0 0.5rem 0.5rem;
+  }
 }
