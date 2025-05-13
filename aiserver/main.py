@@ -4,8 +4,18 @@ from transformers import BertTokenizer, BertForSequenceClassification, BertConfi
 import torch
 from safetensors.torch import load_file
 from torch.nn.functional import softmax
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# Add CORS middleware to allow requests from your frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Replace with your frontend's URL
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 
 # Load custom config if available
 config = BertConfig.from_json_file("./config.json")  # Make sure config.json exists
@@ -52,9 +62,10 @@ async def infer(data: InferenceRequest):
         confidence = probs[0][pred].item()
 
     # Set a threshold for confidence
-    threshold = 0.96
+    threshold = 0.90
     label = "Spoiler" if pred == 1 and confidence >= threshold else "Uncertain"
-    print(confidence,label)
+    print(confidence, label)
+    
     return {
         "label": label,
         "confidence": round(confidence, 4)

@@ -169,7 +169,7 @@ const VideoPlayer = ({ anime }) => {
   };
 
   return (
-    <div className="video-episode-container">
+    <><div className="video-episode-container">
       <div className="episodes-list">
         {loadingEpisodes ? (
           <div className="loading-screen">Loading episodes...</div>
@@ -208,15 +208,20 @@ const VideoPlayer = ({ anime }) => {
                 <button onClick={() => handleSkip(10)}>10s ⏩</button>
               </div>
             </div>
-
             {/* Comment section updates when episode changes */}
-            {!loadingEpisodes && selectedEpisode && (
-              <CommentSection key={selectedEpisode.id} episodeId={selectedEpisode.id} />
-            )}
+           
           </>
         )}
       </div>
+      
     </div>
+        <div className="Divcomments">
+               {!loadingEpisodes && selectedEpisode && (
+              <CommentSection key={selectedEpisode.id} anime = {anime} episodeId={selectedEpisode.id} />
+            )}
+            </div>
+    </>
+    
   );
 };
 

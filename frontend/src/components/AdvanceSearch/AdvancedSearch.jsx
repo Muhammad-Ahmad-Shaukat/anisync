@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './AdvanceSearch.css';
 
 const genres = [
@@ -11,65 +11,39 @@ const genres = [
 ];
 
 const AdvancedSearch = ({ selectedGenres, setSelectedGenres }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
   const toggleGenre = (genre) => {
     setSelectedGenres(prev =>
       prev.includes(genre) ? prev.filter(g => g !== genre) : [...prev, genre]
     );
   };
 
-  const applyFilters = () => {
-    setIsOpen(false);
-  };
-
   return (
-    <div className="advanced-search-container">
-      <button 
-        className="filter-toggle-button"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        Filter  {selectedGenres.length > 0 ? `(${selectedGenres.length})` : ''}
-      </button>
-
-      {isOpen && (
-        <div className="filter-overlay">
-          <div className="filter-content">
-            <div className="genre-section">
-              <h3>Select Genres</h3>
-              <div className="genre-tags">
-                {genres.map(genre => (
-                  <button
-                    key={genre}
-                    className={`genre-tag ${selectedGenres.includes(genre) ? 'selected' : ''}`}
-                    onClick={() => toggleGenre(genre)}
-                  >
-                    {genre}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="filter-actions">
-              <button 
-                className="apply-button"
-                onClick={applyFilters}
+    <div className="advanced-search-container always-visible">
+      <div className="filter-content">
+        <div className="genre-section">
+          <h3>Select Genres</h3>
+          <div className="genre-tags">
+            {genres.map(genre => (
+              <button
+                key={genre}
+                className={`genre-tag ${selectedGenres.includes(genre) ? 'selected' : ''}`}
+                onClick={() => toggleGenre(genre)}
               >
-                Done
+                {genre}
               </button>
-              <button 
-                className="clear-button"
-                onClick={() => {
-                  setSelectedGenres([]);
-                  setIsOpen(false);
-                }}
-              >
-                Reset
-              </button>
-            </div>
+            ))}
           </div>
         </div>
-      )}
+
+        <div className="filter-actions">
+          <button 
+            className="clear-button"
+            onClick={() => setSelectedGenres([])}
+          >
+            Reset
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

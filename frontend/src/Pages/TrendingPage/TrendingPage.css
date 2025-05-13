@@ -1,0 +1,16 @@
+.trending-layout {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 1rem;
+}
+
+.anime-card-section {
+  flex: 3;
+}
+
+.filter-section {
+  flex: 1;
+  top: 1rem;
+  height: fit-content;
+}

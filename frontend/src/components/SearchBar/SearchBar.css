@@ -40,7 +40,7 @@
   }
   
   .search-button:hover {
-    background-color: #f472b6;
+    background-color: rgba(44, 62, 80, 0.5)
   }
   
   .suggestions-list {
@@ -48,7 +48,7 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: #2c3e50; 
+    background: rgb(44, 62, 80); 
     border: 1px solid #444;
     border-top: none;
     max-height: 250px;

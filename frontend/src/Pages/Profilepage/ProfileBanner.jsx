@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import './ProfileBanner.css';
 import {
-  FaUserFriends, FaHeart, FaCog, FaBars, FaTimes,FaCommentDots
+  FaUserFriends,
+  FaHeart,
+  FaCog,
+  FaBars,
+  FaTimes,
+  FaCommentDots,
 } from 'react-icons/fa';
 import EditProfile from './EditProfile';
 import Friends from '../../components/Friends/Friends';
-import Wishlist from "../../components/WishList/WishList";
+import Wishlist from '../../components/WishList/WishList';
 import Chats from '../../components/Chatting/Chats';
 
 const ProfileBanner = ({ user }) => {
@@ -16,7 +21,7 @@ const ProfileBanner = ({ user }) => {
 
   return (
     <div className="profile-banner">
-      {/* Left Sidebar */}
+      {/* Sidebar */}
       <div className="menu-container">
         <div className="top-bar">
           <button className="hamburger" onClick={toggleMenu}>
@@ -59,12 +64,28 @@ const ProfileBanner = ({ user }) => {
         </div>
       </div>
 
-      {/* Right Content Area */}
+      {/* Main Content Area */}
       <div className="content-container">
-        {activeSection === 'edit-profile' && <EditProfile user={user} />}
-        {activeSection === 'friends' && <Friends />}
-        {activeSection === 'watchlist' && <Wishlist />}
-        {activeSection === 'chats' && <Chats/>}
+        <div
+          style={{ display: activeSection === 'edit-profile' ? 'block' : 'none' }}
+        >
+          <EditProfile user={user} />
+        </div>
+        <div
+          style={{ display: activeSection === 'friends' ? 'block' : 'none' }}
+        >
+          <Friends />
+        </div>
+        <div
+          style={{ display: activeSection === 'watchlist' ? 'block' : 'none' }}
+        >
+          <Wishlist />
+        </div>
+        <div
+          style={{ display: activeSection === 'chats' ? 'block' : 'none' }}
+        >
+          <Chats />
+        </div>
       </div>
     </div>
   );

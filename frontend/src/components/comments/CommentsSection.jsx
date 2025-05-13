@@ -3,7 +3,7 @@ import "./CommentsSection.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const CommentSection = ({ episodeId }) => {
+const CommentSection = ({ anime , episodeId }) => {
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState("");
   const [loading, setLoading] = useState(true);
@@ -25,55 +25,69 @@ const CommentSection = ({ episodeId }) => {
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchComments();
   }, [episodeId]);
 
-  const handleCommentSubmit = async (e) => {
-    e.preventDefault();
-    if (!commentInput.trim()) return;
+ const handleCommentSubmit = async (e) => {
+  e.preventDefault();
+  if (!commentInput.trim()) return;
 
-    setIsSubmitting(true);
-    setError(null);
+  setIsSubmitting(true);
+  setError(null);
 
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("You need to be logged in to comment");
-      }
-
-      const userResponse = await axios.get("http://localhost:5000/api/auth/getuser", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      const userId = userResponse.data.user._id;
-
-      const commentResponse = await axios.post(
-        "http://localhost:5000/api/auth/comments",
-        {
-          userid: userId,
-          comment: commentInput,
-          episodeid: episodeId
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        }
-      );
-
-      setComments(prev => [...prev, commentResponse.data]);
-      setCommentInput("");
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || "Failed to post comment");
-    } finally {
-      setIsSubmitting(false);
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("You need to be logged in to comment");
     }
-  };
+
+    const userResponse = await axios.get("http://localhost:5000/api/auth/getuser", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const userId = userResponse.data.user._id;
+
+    // Step 1: Post the comment to the server
+    const commentResponse = await axios.post(
+      "http://localhost:5000/api/auth/comments",
+      {
+        userid: userId,
+        comment: commentInput,
+        episodeid: episodeId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // Step 2: Send the new comment to AI backend for spoiler detection
+    const aiResponse = await axios.post("http://127.0.0.1:8000/infer", {
+      context: anime.description || "", // Optional context: anime description (if available)
+      review: commentInput,
+    });
+
+    const isSpoiler = aiResponse.data.label === "Spoiler"; // Assuming AI response has a 'label' key
+
+    // Step 3: Update the comment with the isSpoiler value
+    const updatedComment = { ...commentResponse.data, isSpoiler };
+
+    // Step 4: Update the state with the new comment
+    setComments((prev) => [...prev, updatedComment]);
+    setCommentInput("");
+  } catch (err) {
+    setError(err.response?.data?.message || err.message || "Failed to post comment");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const toggleSpoiler = (commentId) => {
     setRevealedSpoilers(prev => ({

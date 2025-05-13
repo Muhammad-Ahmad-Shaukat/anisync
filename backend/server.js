@@ -1,3 +1,4 @@
+// ...existing imports and config
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
@@ -5,12 +6,9 @@ import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
-import connectS3 from './config/aws_s3.js'; // if you use S3
+import connectS3 from './config/aws_s3.js'; 
 import path from 'path';
-import removeSpoilers from './Scripts/removespoilers.js'; // if you use the removeSpoilers script
-
-
-
+import removeSpoilers from './Scripts/removespoilers.js';
 
 dotenv.config();
 connectDB();
@@ -21,23 +19,38 @@ const app = express();
 const server = createServer(app);
 const io = new SocketIOServer(server, {
   cors: {
-    origin: 'http://localhost:5173', 
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST']
   }
 });
 
 app.use(cors());
 app.use(express.json());
-
-// Routes
 app.use('/api/auth', authRoutes);
 
-// Sockets handling
-const rooms = {}; // { roomId: { isPlaying, time, episode } }
+const rooms = {}; // existing video sync rooms
+const userSockets = {}; // NEW: userId -> socket.id
 
 io.on('connection', (socket) => {
   console.log('A user connected');
 
+  socket.on('register-user', (userId) => {
+    userSockets[userId] = socket.id;
+    socket.data.userId = userId;
+    console.log(`Registered socket for user: ${userId}`);
+  });
+
+  socket.on('send-message', ({ to, from, text }) => {
+    const receiverSocketId = userSockets[to];
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit('receive-message', {
+        from,
+        text,
+      });
+    }
+  });
+
+  // WatchTogether events (unchanged)
   socket.on('join-room', ({ roomId, isHost }) => {
     socket.join(roomId);
     socket.data.roomId = roomId;
@@ -64,7 +77,6 @@ io.on('connection', (socket) => {
       videoRoom.time = event.time;
     }
     rooms[roomId] = { ...videoRoom };
-
     socket.to(roomId).emit('sync-video', event);
   });
 
@@ -86,10 +98,13 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('A user disconnected');
+    const userId = socket.data.userId;
+    if (userId) {
+      delete userSockets[userId];
+    }
   });
 });
 
-// Serve static files if in production
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
   app.use(express.static(path.join(__dirname, 'client/build')));
