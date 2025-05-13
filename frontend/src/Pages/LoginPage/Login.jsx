@@ -32,9 +32,7 @@ const Login = () => {
       dispatch(loginSuccess({
         user: data.user,
         token: data.token,
-      }));
-
-      navigate("/profile");
+      }));  
     } catch (error) {
       console.error("Login Error:", error.message);
       alert(error.message);

@@ -43,18 +43,22 @@ export default function Chats() {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    socket.on('receive-message', ({ from, text }) => {
-      setMessages(prev => ({
-        ...prev,
-        [from]: [...(prev[from] || []), { sender: 'Them', text }],
-      }));
-    });
+ useEffect(() => {
+  socket.on('receive-message', ({ from, text }) => {
+    setMessages(prev => ({
+      ...prev,
+      [from]: [...(prev[from] || []), { sender: getFriendUsername(from), text }],
+    }));
+  });
 
-    return () => {
-      socket.off('receive-message');
-    };
-  }, []);
+  return () => {
+    socket.off('receive-message');
+  };
+}, [friends]);
+  const getFriendUsername = (id) => {
+  const friend = friends.find(f => f._id === id);
+  return friend ? friend.username : "Unknown";
+};
 
   const handleSend = () => {
     if (!input.trim() || !selectedFriend) return;
