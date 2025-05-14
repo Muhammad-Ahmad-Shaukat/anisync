@@ -27,7 +27,6 @@
   color: #ccc;
 }
 
-/* List container styles */
 .anime-list,
 .skeleton-list {
   width: 100%;
@@ -39,7 +38,6 @@
   box-sizing: border-box;
 }
 
-/* Card styles */
 .anime-card,
 .skeleton-card {
   width: 96%;
@@ -66,7 +64,6 @@
   border-color: #d570a244;
 }
 
-/* Poster styles */
 .poster-wrapper,
 .skeleton-poster {
   width: 96px;
@@ -91,7 +88,6 @@
   box-shadow: 0 2px 8px #d570a255;
 }
 
-/* Details section */
 .anime-details,
 .skeleton-details {
   flex: 1;
@@ -111,7 +107,6 @@
   text-shadow: 0 1px 8px #23244177;
 }
 
-/* Buttons */
 .action-buttons {
   display: flex;
   gap: 14px;
@@ -139,7 +134,6 @@
   transform: scale(1.07);
 }
 
-/* Skeleton loader animations */
 .skeleton-poster {
   background: linear-gradient(90deg, #232441 25%, #2c2d44 50%, #232441 75%);
   background-size: 200% 100%;
@@ -184,7 +178,6 @@
   }
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .admin-anime-list-container {
     padding: 24px 2vw;

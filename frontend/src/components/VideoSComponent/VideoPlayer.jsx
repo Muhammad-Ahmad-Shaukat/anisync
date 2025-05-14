@@ -13,7 +13,6 @@ const VideoPlayer = ({ anime }) => {
   const [errorVideo, setErrorVideo] = useState(null);
   const videoRef = useRef(null);
 
-  // Fetch episodes when anime prop changes
   useEffect(() => {
     const fetchEpisodes = async () => {
       if (!anime || !anime._id) {
@@ -34,7 +33,7 @@ const VideoPlayer = ({ anime }) => {
 
         const data = await response.json();
         if (!response.ok) {
-          console.error("Error fetching episodes:", data);  // Log error details
+          console.error("Error fetching episodes:", data); 
           throw new Error(data.message || "Failed to fetch episodes.");
         }
 
@@ -47,11 +46,10 @@ const VideoPlayer = ({ anime }) => {
       }
     };
 
-    console.log("Anime prop:", anime); // Log anime prop to debug
+    console.log("Anime prop:", anime); 
     fetchEpisodes();
   }, [anime]);
 
-  // Fetch video URL when selected episode changes
   useEffect(() => {
     const fetchVideoUrl = async () => {
       if (!selectedEpisode || !selectedEpisode.videoName) {
@@ -67,18 +65,16 @@ const VideoPlayer = ({ anime }) => {
         const streamUrl = `http://localhost:5000/api/auth/video-stream?url=${key}`;
         setVideoUrl(streamUrl);
       } catch (error) {
-        console.error("Error fetching video URL:", error);  // Log error details
+        console.error("Error fetching video URL:", error);  
         setErrorVideo("Could not load video.");
       } finally {
         setLoadingVideo(false);
       }
     };
 
-    console.log("Selected Episode:", selectedEpisode);  // Log selected episode
+    console.log("Selected Episode:", selectedEpisode);  
     fetchVideoUrl();
   }, [selectedEpisode]);
-
-  // Save video progress in localStorage
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !selectedEpisode) return;
@@ -95,8 +91,6 @@ const VideoPlayer = ({ anime }) => {
     video.addEventListener("timeupdate", saveProgress);
     return () => video.removeEventListener("timeupdate", saveProgress);
   }, [videoUrl, selectedEpisode]);
-
-  // Automatically play next episode when current episode ends
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -113,7 +107,6 @@ const VideoPlayer = ({ anime }) => {
     return () => video.removeEventListener("ended", handleEnded);
   }, [episodes, selectedEpisode]);
 
-  // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
       switch (e.key.toLowerCase()) {
@@ -122,9 +115,6 @@ const VideoPlayer = ({ anime }) => {
           break;
         case "arrowleft":
           handleSkip(-10);
-          break;
-        case "f":
-          handleFullscreen();
           break;
         case "i":
           handlePiP();
@@ -138,24 +128,20 @@ const VideoPlayer = ({ anime }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Handle episode selection
   const handleEpisodeClick = useCallback((episode) => {
     setSelectedEpisode(episode);
   }, []);
 
-  // Skip video by specified seconds
   const handleSkip = (seconds) => {
     const video = videoRef.current;
     if (video) video.currentTime += seconds;
   };
 
-  // Handle fullscreen mode
   const handleFullscreen = () => {
     const video = videoRef.current;
     if (video.requestFullscreen) video.requestFullscreen();
   };
 
-  // Handle Picture-in-Picture mode
   const handlePiP = async () => {
     try {
       if (document.pictureInPictureElement) {
@@ -180,7 +166,7 @@ const VideoPlayer = ({ anime }) => {
         ) : (
           episodes.map((episode, index) => (
             <div
-              key={episode._id || `episode-${index}`} // Ensure each item has a unique key
+              key={episode._id || `episode-${index}`}
               className={`episode-item ${selectedEpisode?._id === episode._id ? "active" : ""}`}
               onClick={() => handleEpisodeClick(episode)}
             >
@@ -207,9 +193,7 @@ const VideoPlayer = ({ anime }) => {
                 <button onClick={handlePiP}>📺 Mini (I)</button>
                 <button onClick={() => handleSkip(10)}>10s ⏩</button>
               </div>
-            </div>
-            {/* Comment section updates when episode changes */}
-           
+            </div>           
           </>
         )}
       </div>

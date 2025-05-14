@@ -25,7 +25,7 @@ import './App.css';
 function AppRoutes() {
   const [serverOn, setServerOn] = useState(true);
   const [checked, setChecked] = useState(false);
-  const token = useSelector((state) => state.auth.token); // <-- Reacts to login
+  const token = useSelector((state) => state.auth.token); 
 
   useEffect(() => {
     const checkServer = async () => {

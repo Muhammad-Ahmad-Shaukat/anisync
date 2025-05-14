@@ -1,7 +1,6 @@
 import Friend from "../models/friends.js";
 import Users from "../models/User.js";
 
-// Fetch received friend requests (pending status only)
 export const getReceivedFriendRequests = async (req, res) => {
   const { userid } = req.query;
 
@@ -15,7 +14,6 @@ export const getReceivedFriendRequests = async (req, res) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    // Get received friend requests (pending only)
     const receivedRequests = await Friend.find({
       friendId: user._id,
       status: "pending"

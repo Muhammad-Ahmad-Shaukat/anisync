@@ -1,6 +1,5 @@
 import fetch from "node-fetch";
 
-// Retry logic function
 const fetchWithRetry = async (url, retries = 3, delay = 1000) => {
   for (let i = 0; i < retries; i++) {
     try {
@@ -10,7 +9,7 @@ const fetchWithRetry = async (url, retries = 3, delay = 1000) => {
     } catch (err) {
       console.error(`Fetch attempt ${i + 1} failed:`, err);
       if (i === retries - 1) throw new Error("All fetch attempts failed");
-      await new Promise((resolve) => setTimeout(resolve, delay)); // wait before retrying
+      await new Promise((resolve) => setTimeout(resolve, delay)); 
     }
   }
 };
@@ -19,7 +18,6 @@ export const getTopAnime = async (req, res) => {
   try {
     const url = "https://api.jikan.moe/v4/top/anime?limit=5";
     
-    // Using retry logic to fetch top anime
     const data = await fetchWithRetry(url);
 
     const animeList = data.data.map((anime) => ({

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './AdminAnimeList.css';
 
-const SKELETON_COUNT = 5; // Number of skeleton cards to show
-
+const SKELETON_COUNT = 5; 
 const SkeletonList = () => (
   <div className="skeleton-list">
     {Array.from({ length: SKELETON_COUNT }).map((_, idx) => (
@@ -22,11 +21,9 @@ const AdminAnimeList = () => {
   const [animeList, setAnimeList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Simulate API call
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
-      // Replace this with your actual API call
       setAnimeList([
         {
           id: 1,

@@ -36,7 +36,7 @@ const syncEpisodesForAnime = async (anime) => {
   try {
     const existingCount = await Episode.countDocuments({ animeId: anime._id });
     if (existingCount > 0) {
-      console.log(`⏩ Episodes already exist for: ${anime.anime_name}`);
+      console.log(`Episodes already exist for: ${anime.anime_name}`);
       return;
     }
 
@@ -68,7 +68,7 @@ const syncEpisodesForAnime = async (anime) => {
       await new Promise(resolve => setTimeout(resolve, 500));
     }
     if (totalEpisodesFetched === 0) {
-      console.log(`⚠️ No episodes found for: ${anime.anime_name}. Adding dummy episode.`);
+      console.log(`No episodes found for: ${anime.anime_name}. Adding dummy episode.`);
       await Episode.create({
         animeId: anime._id,
         episode_number: 0,
@@ -78,9 +78,9 @@ const syncEpisodesForAnime = async (anime) => {
       });
     }
 
-    console.log(`✅ Episodes synced for: ${anime.anime_name}`);
+    console.log(`Episodes synced for: ${anime.anime_name}`);
   } catch (error) {
-    console.error(`❌ Error syncing episodes for ${anime.anime_name}:`, error.message);
+    console.error(`Error syncing episodes for ${anime.anime_name}:`, error.message);
   }
 };
 
@@ -91,11 +91,11 @@ export const syncAnime = async () => {
     const hoursSinceLastSync = log ? (Date.now() - log.lastSyncedAt.getTime()) / (1000 * 60 * 60) : Infinity;
 
     if (hoursSinceLastSync < 12) {
-      console.log("⏸️ Skipping sync (last updated recently)");
+      console.log("Skipping sync (last updated recently)");
       return;
     }
 
-    console.log("🚀 Syncing Anime Categories...");
+    console.log("Syncing Anime Categories...");
 
     for (const [category, url] of Object.entries(CATEGORY_ENDPOINTS)) {
       try {
@@ -142,7 +142,7 @@ export const syncAnime = async () => {
           await syncEpisodesForAnime(anime);
         }
       } catch (error) {
-        console.error(`⚠️ Failed syncing category "${category}":`, error.message);
+        console.error(`Failed syncing category "${category}":`, error.message);
       }
     }
 
@@ -152,8 +152,8 @@ export const syncAnime = async () => {
       { upsert: true }
     );
 
-    console.log("🎉 Anime and Episode sync complete.");
+    console.log("Anime and Episode sync complete.");
   } catch (error) {
-    console.error("❌ Sync failed:", error.message);
+    console.error("Sync failed:", error.message);
   }
 };

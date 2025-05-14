@@ -1,19 +1,18 @@
-/* Anime Card Container - Matching navbar/filter background */
+
 .anime-card-container {
   margin-top: 2rem;
   padding: 0 1.5rem;
   position: relative;
   z-index: 1;
-  background: #1f2937; /* Matching your navbar/filter color */
+  background: #1f2937; 
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
   margin: 2rem auto;
   max-width: 1200px;
-  border: 1px solid #374151; /* Subtle border for separation */
+  border: 1px solid #374151; 
 }
 
-/* Card grid */
 .anime-card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -21,9 +20,8 @@
   margin-top: 1rem;
 }
 
-/* Individual cards */
 .anime-card-item {
-  background: #2d3748; /* Slightly darker than container */
+  background: #2d3748; 
   border-radius: 8px;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -36,7 +34,6 @@
   border-color: #f472b6;
 }
 
-/* Header with matching theme */
 .anime-card-heading {
   font-size: 1.5rem;
   color: #fff;
@@ -57,7 +54,6 @@
   border-radius: 3px;
 }
 
-/* Image styling */
 .anime-card-image {
   width: 100%;
   height: 250px;
@@ -69,7 +65,6 @@
   transform: scale(1.03);
 }
 
-/* Title styling */
 .anime-card-title {
   font-size: 0.9rem;
   font-weight: 500;
@@ -81,7 +76,6 @@
   text-overflow: ellipsis;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .anime-card-container {
     padding: 1rem;

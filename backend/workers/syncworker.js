@@ -11,8 +11,8 @@ connectS3();
 (async () => {
   try {
     await syncAnime();
-    parentPort.postMessage("✅ Sync complete");
+    parentPort.postMessage("Sync complete");
   } catch (err) {
-    parentPort.postMessage(`❌ Sync failed: ${err.message}`);
+    parentPort.postMessage(`Sync failed: ${err.message}`);
   }
 })();

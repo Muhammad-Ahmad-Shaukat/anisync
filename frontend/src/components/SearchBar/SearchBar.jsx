@@ -1,4 +1,3 @@
-// SearchBar.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -57,11 +56,10 @@ const SearchBar = () => {
     }
   };
 
-  // Clear both suggestions and search term to close the dropdown immediately
   const handleAnimeClick = (anime) => {
     const animeName = encodeURIComponent(anime.anime_name);
-    setSuggestions([]);  // Clear the dropdown
-    setSearchTerm('');   // Clear the search input
+    setSuggestions([]); 
+    setSearchTerm(''); 
     navigate(`/anime/${animeName}`);
   };
 
@@ -82,7 +80,6 @@ const SearchBar = () => {
         </button>
       </form>
 
-      {/* Skeleton Loader */}
       {loading && (
         <ul className="suggestions-list">
           {Array.from({ length: 5 }).map((_, index) => (
@@ -94,7 +91,7 @@ const SearchBar = () => {
         </ul>
       )}
 
-      {/* Show suggestions when not loading */}
+
       {!loading && suggestions.length > 0 && (
         <ul className="suggestions-list">
           {suggestions.map((anime, index) => (
@@ -114,7 +111,7 @@ const SearchBar = () => {
         </ul>
       )}
 
-      {/* Display "No Results found" as non-clickable */}
+
       {!loading && searchTerm.trim() !== '' && suggestions.length === 0 && (
         <ul className="suggestions-list">
           <li className="suggestion-item no-results">No Results found</li>

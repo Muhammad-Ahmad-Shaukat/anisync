@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./AnimeEditPage.css";
 
-// Dummy data for anime and episodes
 const dummyAnime = {
   _id: "1",
   name: "Naruto",
@@ -31,11 +30,8 @@ const dummyEpisodes = [
 ];
 
 const AnimeEditPage = () => {
-  // State for anime details
   const [anime, setAnime] = useState(dummyAnime);
-  // State for episodes
   const [episodes, setEpisodes] = useState(dummyEpisodes);
-  // State for new episode form
   const [newEpisode, setNewEpisode] = useState({
     episode_number: "",
     episode_title: "",
@@ -43,24 +39,20 @@ const AnimeEditPage = () => {
     episode_pic_src: "",
   });
 
-  // Handle anime field change
   const handleAnimeChange = (e) => {
     setAnime({ ...anime, [e.target.name]: e.target.value });
   };
 
-  // Handle episode field change
   const handleEpisodeChange = (index, e) => {
     const updated = [...episodes];
     updated[index][e.target.name] = e.target.value;
     setEpisodes(updated);
   };
 
-  // Handle new episode field change
   const handleNewEpisodeChange = (e) => {
     setNewEpisode({ ...newEpisode, [e.target.name]: e.target.value });
   };
 
-  // Add new episode
   const handleAddEpisode = (e) => {
     e.preventDefault();
     if (!newEpisode.episode_number || !newEpisode.episode_title) return;
@@ -81,12 +73,10 @@ const AnimeEditPage = () => {
     });
   };
 
-  // Delete episode
   const handleDeleteEpisode = (id) => {
     setEpisodes(episodes.filter((ep) => ep._id !== id));
   };
 
-  // Save handler (dummy)
   const handleSave = (e) => {
     e.preventDefault();
     alert("Anime and episodes saved (dummy action)!");

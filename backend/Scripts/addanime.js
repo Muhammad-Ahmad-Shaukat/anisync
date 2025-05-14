@@ -44,7 +44,7 @@ const syncEpisodesForAnimeId = async (animeDoc, animeid) => {
     await new Promise(resolve => setTimeout(resolve, 500));
   }
 
-  console.log(`✅ Synced ${episodeCount} episodes for anime: ${animeDoc.anime_name} (${animeid})`);
+  console.log(`Synced ${episodeCount} episodes for anime: ${animeDoc.anime_name} (${animeid})`);
 };
 
 export const addAnimeById = async (animeid) => {
@@ -53,13 +53,13 @@ export const addAnimeById = async (animeid) => {
   let anime = await Anime.findOne({ animeid });
 
   if (anime) {
-    console.log(`ℹ️ Anime already exists in DB: ${anime.anime_name} (${animeid})`);
+    console.log(`ℹAnime already exists in DB: ${anime.anime_name} (${animeid})`);
     const existingEpisodes = await Episode.countDocuments({ animeId: anime._id });
     if (existingEpisodes === 0) {
       console.log(`📥 No episodes found. Syncing episodes for ${anime.anime_name}...`);
       await syncEpisodesForAnimeId(anime, animeid);
     } else {
-      console.log(`✅ Episodes already exist for ${anime.anime_name} (${existingEpisodes} episodes)`);
+      console.log(`Episodes already exist for ${anime.anime_name} (${existingEpisodes} episodes)`);
     }
     return "Anime and episodes already exist or synced";
   }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import AdvancedSearch from "../../components/AdvanceSearch/AdvancedSearch";
 import AnimeCard from "../../components/AnimeCard/AnimeCard";
-import './TopAiringPage.css'; // Create this CSS file
+import './TopAiringPage.css'; 
 
 function TopAiringPage() {
     const [selectedGenres, setSelectedGenres] = useState([]);

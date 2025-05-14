@@ -6,7 +6,6 @@ body {
   color: #d0d0d8;
 }
 
-/* MAIN CONTAINER */
 .video-episode-container {
   display: flex;
   flex-wrap: wrap;
@@ -23,7 +22,7 @@ body {
   gap: 20px;
 }
 
-/* SIDEBAR - EPISODES LIST */
+
 .episodes-list {
   position: relative;
   flex: 0 0 280px;
@@ -49,7 +48,7 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* SCROLLBAR */
+
 .episodes-list::-webkit-scrollbar {
   width: 6px;
 }
@@ -61,7 +60,7 @@ body {
   border-radius: 5px;
 }
 
-/* EPISODE ITEM */
+
 .episode-item {
   padding: 12px 16px;
   margin: 6px 0;
@@ -94,13 +93,13 @@ body {
   transition: transform 0.2s ease, color 0.3s ease;
 }
 
-/* PLAYER AREA */
+
 .player-area {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  min-width: 0; /* Fixes flexbox overflow issues */
+  min-width: 0; 
 }
 
 .player-wrapper {
@@ -119,7 +118,6 @@ body {
   border-radius: 12px 12px 0 0;
 }
 
-/* CUSTOM CONTROLS */
 .custom-controls {
   display: flex;
   justify-content: center;
@@ -154,7 +152,6 @@ body {
   transform: translateY(0);
 }
 
-/* COMMENT SECTION */
 .comment-section {
   background: rgba(19, 22, 34, 0.6);
   padding: 20px;
@@ -164,11 +161,6 @@ body {
 
 
 
-
-
-
-
-/* LOADING AND ERROR STATES */
 .loading-screen, .error-screen {
   padding: 40px;
   text-align: center;
@@ -185,7 +177,6 @@ body {
   color: #ff6b81;
 }
 
-/* RESPONSIVE ADJUSTMENTS */
 @media (max-width: 1200px) {
   .video-episode-container {
     flex-direction: column;

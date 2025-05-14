@@ -15,15 +15,13 @@ export const fetchSuggestedAnime = async (req, res) => {
     }
 
     const { anime_name, genres } = originalAnime;
-
-    // Build query to find suggestions by genre or similar name
     const query = {
       $and: [
-        { animeid: { $ne: animeid } }, // Exclude the current anime
+        { animeid: { $ne: animeid } }, 
         {
           $or: [
             { genres: { $in: genres } },
-            { anime_name: { $regex: anime_name.split(" ")[0], $options: "i" } } // Partial name match
+            { anime_name: { $regex: anime_name.split(" ")[0], $options: "i" } } 
           ]
         }
       ]

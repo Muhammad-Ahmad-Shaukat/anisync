@@ -20,14 +20,12 @@ const WatchTogether = () => {
   const [isHost, setIsHost] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Set host status from location state or session storage
   useEffect(() => {
     const hostState = location.state?.host === true;
     const hostStorage = sessionStorage.getItem('isHost') === 'true';
     setIsHost(hostState || hostStorage);
   }, [location]);
 
-  // Socket.io setup and event handlers
   useEffect(() => {
     const hostFlag = sessionStorage.getItem('isHost') === 'true';
     setIsHost(hostFlag);
@@ -99,7 +97,6 @@ const WatchTogether = () => {
     };
   }, [animeId, navigate]);
 
-  // Fetch episodes list
   useEffect(() => {
     const fetchEpisodes = async () => {
       if (!animeId) {
@@ -136,7 +133,6 @@ const WatchTogether = () => {
     fetchEpisodes();
   }, [animeId]);
 
-  // Fetch video URL when episode changes
   useEffect(() => {
     const fetchVideoUrl = async () => {
       if (!selectedEpisode || !selectedEpisode.videoName) {
@@ -162,7 +158,6 @@ const WatchTogether = () => {
     fetchVideoUrl();
   }, [selectedEpisode]);
 
-  // Save progress when video time updates
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !selectedEpisode) return;
@@ -198,11 +193,9 @@ const WatchTogether = () => {
     return () => video.removeEventListener('ended', handleEnded);
   }, [episodes, selectedEpisode, isHost, animeId]);
 
-  // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.target.tagName === 'INPUT') return; // Ignore if typing in an input field
-
+      if (e.target.tagName === 'INPUT') return; 
       switch (e.key.toLowerCase()) {
         case 'arrowright':
           handleSkip(10);
@@ -233,7 +226,6 @@ const WatchTogether = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Play/pause event listeners for host
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !isHost) return;

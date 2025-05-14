@@ -10,7 +10,6 @@ const Signup = () => {
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // UI control state
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
 
@@ -101,7 +100,6 @@ const Signup = () => {
       <div className="signup__card">
         <h2 className="signup__title">Create Account</h2>
         <form className="signup__form" onSubmit={handleSubmit}>
-          {/* Show inputs before OTP is sent */}
           {!otpSent && (
             <>
               <div className="signup__input-group">
@@ -146,7 +144,6 @@ const Signup = () => {
             </>
           )}
 
-          {/* OTP input visible after sending OTP and before verifying */}
           {otpSent && !otpVerified && (
             <div className="signup__otp-container">
               <input
@@ -166,7 +163,6 @@ const Signup = () => {
             </div>
           )}
 
-          {/* Final Sign Up Button after OTP is verified */}
           {otpVerified && (
             <div className="btndiv">
               <button

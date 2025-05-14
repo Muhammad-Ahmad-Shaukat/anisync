@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // Import Link from React Router
+import { Link } from "react-router-dom"; 
 import './WishList.css';
 
 const Wishlist = () => {
@@ -15,7 +15,6 @@ const Wishlist = () => {
 
     const fetchUser = async () => {
       try {
-        // Step 1: Get the logged-in user (get the user ID)
         const userRes = await fetch("http://localhost:5000/api/auth/getuser", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -25,23 +24,20 @@ const Wishlist = () => {
         if (!userRes.ok) throw new Error("Failed to fetch user");
 
         const userData = await userRes.json();
-        const userId = userData.user._id || userData.user.id; // Adjust based on your response shape
+        const userId = userData.user._id || userData.user.id; 
 
-        // Step 2: Get the wishlist anime IDs for that user
         const wishlistRes = await fetch("http://localhost:5000/api/auth/wishlistanime", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId }), // Sending userId in body
+          body: JSON.stringify({ userId }), 
         });
 
         if (!wishlistRes.ok) throw new Error("Failed to fetch wishlist");
 
         const { animeIds } = await wishlistRes.json();
-
-        // Step 3: Get full anime details
         const animeDetails = await Promise.all(
           animeIds.map(async (id) => {
             const animeRes = await fetch(`http://localhost:5000/api/auth/getanimebyid/${id}`);
@@ -73,7 +69,6 @@ const Wishlist = () => {
         <div className="wishlist-grid">
           {animeList.map((anime) => (
             <div key={anime.id} className="anime-cards">
-              {/* Wrap each anime in a Link, encoding the title */}
               <Link to={`/anime/${encodeURIComponent(anime.title)}`}>
                 <img src={anime.imageSrc} alt={anime.title} width={200} />
                 <h3>{anime.title}</h3>

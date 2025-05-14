@@ -73,12 +73,10 @@ const CommentSection = ({ anime , episodeId }) => {
       review: commentInput,
     });
 
-    const isSpoiler = aiResponse.data.label === "Spoiler"; // Assuming AI response has a 'label' key
+    const isSpoiler = aiResponse.data.label === "Spoiler"; 
 
-    // Step 3: Update the comment with the isSpoiler value
     const updatedComment = { ...commentResponse.data, isSpoiler };
 
-    // Step 4: Update the state with the new comment
     setComments((prev) => [...prev, updatedComment]);
     setCommentInput("");
   } catch (err) {

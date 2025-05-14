@@ -15,7 +15,6 @@ export const videoStream = async (req, res) => {
   }
 
   try {
-    // Decode and extract key from full S3 URL
     url = decodeURIComponent(url.trim());
 
     if (url.startsWith("http")) {

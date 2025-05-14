@@ -4,7 +4,6 @@ import axios from "axios";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Convert ES module path to __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -19,7 +18,6 @@ export const searchanime = async (req, res) => {
 
     const regex = new RegExp(q, "i");
 
-    // Step 1: Search local DB
     const localResults = await Anime.find({
       $or: [
         { anime_name: regex },
@@ -28,7 +26,6 @@ export const searchanime = async (req, res) => {
       ]
     }).limit(limit);
 
-    // Add 'mongoid' to each local result
     const formattedLocalResults = localResults.map(doc => {
       const obj = doc.toObject();
       obj.mongoid = obj._id;
@@ -39,7 +36,6 @@ export const searchanime = async (req, res) => {
       return res.status(200).json(formattedLocalResults);
     }
 
-    // Step 2: Fetch from Jikan API
     const jikanRes = await axios.get(`https://api.jikan.moe/v4/anime`, {
       params: { q, limit },
     });
@@ -76,12 +72,11 @@ export const searchanime = async (req, res) => {
           categories: [],
         };
 
-        // Run background worker to save this anime
         new Worker(path.join(__dirname, '../workers/addAnimeWorker.js'), {
           workerData: { animeid: item.mal_id }
         });
 
-        newAnimeList.push(animeData); // This one won’t have mongoid
+        newAnimeList.push(animeData);
       }
 
       if ((formattedLocalResults.length + newAnimeList.length) >= limit) break;

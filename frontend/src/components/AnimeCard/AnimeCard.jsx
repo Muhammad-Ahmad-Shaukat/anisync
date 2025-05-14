@@ -31,7 +31,7 @@ const AnimeCard = ({ type = "trending", limit = 6, genres = [] }) => {
         );
 
         setAnimeList(uniqueAnime);
-        setFilteredList(uniqueAnime); // Initialize filtered list with all anime
+        setFilteredList(uniqueAnime); 
       } catch (err) {
         console.error("Fetch error:", err);
       } finally {
@@ -42,7 +42,7 @@ const AnimeCard = ({ type = "trending", limit = 6, genres = [] }) => {
     fetchAnime();
   }, [type, limit]);
 
-  // Apply genre filtering whenever genres or animeList changes
+  
   useEffect(() => {
     if (genres.length > 0) {
       const filtered = animeList.filter(anime => 
@@ -52,7 +52,7 @@ const AnimeCard = ({ type = "trending", limit = 6, genres = [] }) => {
       );
       setFilteredList(filtered);
     } else {
-      setFilteredList(animeList); // Show all anime if no genres selected
+      setFilteredList(animeList); 
     }
   }, [genres, animeList]);
 

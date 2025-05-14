@@ -12,7 +12,6 @@ const EditProfile = ({ user, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Initialize with modal open
   const [isOpen, setIsOpen] = useState(true);
 
   const resetForm = () => {
@@ -70,7 +69,6 @@ const EditProfile = ({ user, onClose }) => {
 
       alert("Profile updated successfully!");
       handleClose();
-      // You might want to trigger a parent component update here
     } catch (error) {
       console.error("Error updating profile:", error.message);
       alert(error.message || "Error updating profile. Please try again.");
@@ -83,7 +81,6 @@ const EditProfile = ({ user, onClose }) => {
     const file = e.target.files[0];
     if (file) {
       setAvatarFile(file);
-      // Create preview URL
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarPreview(reader.result);
@@ -95,7 +92,6 @@ const EditProfile = ({ user, onClose }) => {
   const handleClose = () => {
     setIsOpen(false);
     resetForm();
-    // Call the onClose prop if provided
     if (onClose) {
       onClose();
     }
@@ -103,7 +99,6 @@ const EditProfile = ({ user, onClose }) => {
 
   return (
     <>
-      {/* Modal overlay - always visible when component is mounted */}
       <div className={`edit-profile-wrapper ${isOpen ? 'active' : ''}`}>
         <div className="edit-profile-container" onClick={(e) => e.stopPropagation()}>
           

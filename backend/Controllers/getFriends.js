@@ -1,7 +1,6 @@
 import Friend from "../models/friends.js";
 import Users from "../models/User.js";
 
-// Fetch current friends (accepted status only)
 export const getCurrentFriends = async (req, res) => {
   const { userid } = req.query;
 
@@ -14,8 +13,6 @@ export const getCurrentFriends = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
-
-    // Get friends with "accepted" status
     const friendships = await Friend.find({
       $or: [
         { userId: user._id, status: "accepted" },

@@ -13,7 +13,6 @@ export const acceptfriend = async (req, res) => {
   }
 
   try {
-    // Find users by _id instead of username
     const user = await Users.findById(userid);
     const friend = await Users.findById(friendid);
 

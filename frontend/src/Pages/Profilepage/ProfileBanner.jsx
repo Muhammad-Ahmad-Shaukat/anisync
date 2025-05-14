@@ -21,7 +21,6 @@ const ProfileBanner = ({ user }) => {
 
   return (
     <div className="profile-banner">
-      {/* Sidebar */}
       <div className="menu-container">
         <div className="top-bar">
           <button className="hamburger" onClick={toggleMenu}>
@@ -64,7 +63,6 @@ const ProfileBanner = ({ user }) => {
         </div>
       </div>
 
-      {/* Main Content Area */}
       <div className="content-container">
         <div
           style={{ display: activeSection === 'edit-profile' ? 'block' : 'none' }}

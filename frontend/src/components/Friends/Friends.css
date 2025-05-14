@@ -1,4 +1,3 @@
-/* Friends.css */
 .friends-container {
   max-width: 1000px;
   margin: 0 auto;
@@ -221,7 +220,6 @@
   grid-column: 1 / -1;
 }
 
-/* Status badge for sent requests */
 .sent-requests li::after {
   content: 'Pending';
   background: rgba(255, 204, 0, 0.2);
@@ -232,7 +230,7 @@
   margin-left: 0.5rem;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .friends-container {
     padding: 1.5rem;

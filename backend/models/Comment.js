@@ -12,7 +12,6 @@ const commentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Indexes
 commentSchema.index({ episodeId: 1 });
 
 const Comment = mongoose.models.Comment || mongoose.model("Comment", commentSchema);

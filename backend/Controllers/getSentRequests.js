@@ -14,8 +14,6 @@ export const getSentFriendRequests = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
-
-    // Get sent friend requests (pending only)
     const sentRequests = await Friend.find({
       userId: user._id,
       status: "pending"

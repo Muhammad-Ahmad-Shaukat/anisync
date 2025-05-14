@@ -1,6 +1,4 @@
-/* EditProfile.css */
 
-/* Main container styles */
 .edit-profile-container {
   background:transparent;
 
@@ -12,7 +10,6 @@
   color: #fff;
 }
 
-/* Header styles */
 .edit-header {
   display: flex;
   align-items: center;
@@ -43,7 +40,6 @@
   font-weight: 500;
 }
 
-/* Form styles */
 .edit-form {
   display: flex;
   flex-direction: column;
@@ -81,7 +77,6 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* Password change section */
 .change-password-btn {
   display: flex;
   align-items: center;
@@ -101,7 +96,6 @@
   background: rgba(77, 171, 247, 0.1);
 }
 
-/* Password input wrapper */
 .password-input-wrapper {
   position: relative;
   display: flex;
@@ -127,7 +121,6 @@
   color: #fff;
 }
 
-/* Avatar styles */
 .profile-picture-box {
   display: flex;
   flex-direction: column;
@@ -187,7 +180,6 @@
   margin-top: 0.5rem;
 }
 
-/* Button styles */
 .save-btn {
   background: linear-gradient(90deg, #ff66cc, #ff99cc);
   color: white;
@@ -214,7 +206,6 @@
   box-shadow: none;
 }
 
-/* Error message styles */
 .error-message {
   color: #ff6666;
   font-size: 0.85rem;
@@ -222,7 +213,6 @@
   margin-bottom: 0.5rem;
 }
 
-/* Responsive styles */
 @media (max-width: 768px) {
   .edit-profile-container {
     padding: 1.5rem;
