@@ -10,7 +10,7 @@ function TrendingPage() {
         <div className="trending-layout">
             <div className="anime-card-section">
                 <AnimeCard 
-                    type="top" 
+                    type="trending" 
                     limit={30}
                     genres={selectedGenres}
                 />

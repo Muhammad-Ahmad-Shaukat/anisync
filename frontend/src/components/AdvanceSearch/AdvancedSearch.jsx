@@ -21,7 +21,7 @@ const AdvancedSearch = ({ selectedGenres, setSelectedGenres }) => {
     <div className="advanced-search-container always-visible">
       <div className="filter-content">
         <div className="genre-section">
-          <h3>Select Genres</h3>
+          <h3>Filter By Genres</h3>
           <div className="genre-tags">
             {genres.map(genre => (
               <button
