@@ -52,12 +52,26 @@ const CommentSection = ({ anime , episodeId }) => {
     const userId = userResponse.data.user._id;
 
     // Step 1: Post the comment to the server
+    
+    // Step 2: Send the new comment to AI backend for spoiler detection
+    const aiResponse = await axios.post("http://127.0.0.1:8000/infer", {
+      context: anime.description || "", // Optional context: anime description (if available)
+      review: commentInput,
+    });
+    let isSpoiler = false
+    if (aiResponse.data.label === "Spoiler"){
+      isSpoiler = true
+    }
+    else {
+      isSpoiler = false
+    }
     const commentResponse = await axios.post(
       "http://localhost:5000/api/auth/comments",
       {
         userid: userId,
         comment: commentInput,
         episodeid: episodeId,
+        isSpoiler:isSpoiler
       },
       {
         headers: {
@@ -66,14 +80,6 @@ const CommentSection = ({ anime , episodeId }) => {
         },
       }
     );
-
-    // Step 2: Send the new comment to AI backend for spoiler detection
-    const aiResponse = await axios.post("http://127.0.0.1:8000/infer", {
-      context: anime.description || "", // Optional context: anime description (if available)
-      review: commentInput,
-    });
-
-    const isSpoiler = aiResponse.data.label === "Spoiler"; 
 
     const updatedComment = { ...commentResponse.data, isSpoiler };
 

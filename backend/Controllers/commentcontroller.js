@@ -3,7 +3,7 @@ import User from "../models/User.js";
 import Episode from "../models/Episode.js";
 
 export const createcomment = async (req, res) => {
-    const { userid, comment, episodeid} = req.body;
+    const { userid, comment, episodeid,isSpoiler} = req.body;
     console.log(userid,comment,episodeid)
     if (!userid || !comment || !episodeid) {
         return res.status(400).json({ message: "All fields are required" });
@@ -22,7 +22,7 @@ export const createcomment = async (req, res) => {
             userId: userid,
             episodeId: episodeid,
             comment: comment,
-            isSpoiler:false
+            isSpoiler:isSpoiler
         });
         const savedComment = await newComment.save();
         const populatedComment = await Comment.findById(savedComment._id)

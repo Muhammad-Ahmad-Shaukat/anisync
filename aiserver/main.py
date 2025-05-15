@@ -52,7 +52,7 @@ async def infer(data: InferenceRequest):
 
     threshold = 0.90
     label = "Spoiler" if pred == 1 and confidence >= threshold else "Uncertain"
-    print(confidence, label)
+    print(f"{data.review}: ,{label}")
     
     return {
         "label": label,
