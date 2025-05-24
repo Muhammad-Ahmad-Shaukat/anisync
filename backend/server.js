@@ -9,12 +9,12 @@ import authRoutes from './routes/authRoutes.js';
 import connectS3 from './config/aws_s3.js'; 
 import path from 'path';
 import removeSpoilers from './Scripts/removespoilers.js';
-
+import { syncAnime } from './Scripts/syncAnime.js';
 dotenv.config();
 connectDB();
 connectS3();
 removeSpoilers();
-
+syncAnime()
 const app = express();
 const server = createServer(app);
 const io = new SocketIOServer(server, {

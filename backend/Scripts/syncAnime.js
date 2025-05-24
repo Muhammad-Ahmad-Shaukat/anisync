@@ -90,7 +90,7 @@ export const syncAnime = async () => {
     const log = await SyncLog.findOne({ source: "jikan_cache" });
     const hoursSinceLastSync = log ? (Date.now() - log.lastSyncedAt.getTime()) / (1000 * 60 * 60) : Infinity;
 
-    if (hoursSinceLastSync < 12) {
+    if (hoursSinceLastSync < 0) {
       console.log("Skipping sync (last updated recently)");
       return;
     }

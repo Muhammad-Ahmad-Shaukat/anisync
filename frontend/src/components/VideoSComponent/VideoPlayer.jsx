@@ -117,7 +117,6 @@ const VideoPlayer = ({ anime }) => {
           handleSkip(-10);
           break;
         case "i":
-          handlePiP();
           break;
         default:
           break;
